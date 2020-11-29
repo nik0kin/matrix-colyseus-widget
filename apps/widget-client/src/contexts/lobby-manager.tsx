@@ -56,6 +56,14 @@ const startGame = async () => {
   return [room.sessionId] as const;
 };
 
+const joinGame = async (roomId: string) => {
+  const room = await client.joinById(roomId);
+
+  console.log('Room joined: ' + room.id + ' ' + room.name);
+
+  return [room.sessionId] as const;
+};
+
 interface LobbyManagerType {
   lobbyRoomId: string;
   sessionId: string;
@@ -63,6 +71,7 @@ interface LobbyManagerType {
   rooms: Rooms;
 
   startGame: () => void;
+  joinGame: (roomId: string) => void;
 }
 
 const LobbyContext = createContext<LobbyManagerType>(null as any);
@@ -75,6 +84,10 @@ export const LobbyManager: FC = ({ children }) => {
 
   const _startGame = useCallback(async () => {
     const [sessionId] = await startGame();
+    setSessionId(sessionId);
+  }, []);
+  const _joinGame = useCallback(async (roomId: string) => {
+    const [sessionId] = await joinGame(roomId);
     setSessionId(sessionId);
   }, []);
 
@@ -93,7 +106,11 @@ export const LobbyManager: FC = ({ children }) => {
 
   if (!isConnected) return null;
 
-  return <LobbyContext.Provider value={{ lobbyRoomId, sessionId, rooms, startGame: _startGame }}>{children}</LobbyContext.Provider>
+  return <LobbyContext.Provider value={{
+    lobbyRoomId, sessionId,
+    rooms,
+    startGame: _startGame, joinGame: _joinGame,
+  }}>{children}</LobbyContext.Provider>
 };
 
 export const useLobbyState = () => {

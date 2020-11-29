@@ -6,7 +6,7 @@ import { useLobbyState } from '../../contexts';
 // import './style.css';
 
 export const LobbyScreen: FC = () => {
-  const { sessionId, rooms } = useLobbyState();
+  const { sessionId, rooms, joinGame } = useLobbyState();
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {
       return !room.metadata?.players.includes(sessionId);
@@ -31,7 +31,9 @@ export const LobbyScreen: FC = () => {
         <ul>
           {joinableGames.map((room) => (
             <li key={room.roomId}>
-              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button>join</button>
+              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button onClick={() => {
+                joinGame(room.roomId);
+              }}>join</button>
             </li>
           ))}
         </ul>
@@ -41,7 +43,7 @@ export const LobbyScreen: FC = () => {
         <ul>
           {activeGames.map((room) => (
             <li key={room.roomId}>
-              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button>play</button>
+              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button disabled={room.clients === room.maxClients}>play</button>
             </li>
           ))}
         </ul>
