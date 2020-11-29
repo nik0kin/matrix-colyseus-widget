@@ -1,1 +1,1 @@
-export * from './server-manager';
+export * from './lobby-manager';

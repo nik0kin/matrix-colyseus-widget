@@ -1,0 +1,7 @@
+
+ X- start game
+  - join game
+ X- list joinable games
+ X- list active games
+  - play game
+  - reconnects

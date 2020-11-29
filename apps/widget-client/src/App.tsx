@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 
 import './App.css';
-// import { ServerManager } from './contexts';
+import { LobbyManager } from './contexts';
 import { LobbyScreen } from './screens/lobby';
 
 const App: FC = () => {
   return (
     <div className="App">
-      {/* <ServerManager> */}
-      <LobbyScreen />
-      {/* </ServerManager> */}
+      <LobbyManager>
+        <LobbyScreen />
+      </LobbyManager>
     </div>
   );
 }

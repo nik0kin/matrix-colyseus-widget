@@ -1,14 +1,11 @@
 import { Room, Client } from 'colyseus';
 import { Dispatcher } from '@colyseus/command';
+import { updateLobby } from 'colyseus';
 
 import { GameState } from 'common';
 
-
-// const GAME_START_TIME = 2 * 1000 * 60; // 2min
-const GAME_START_TIME = 30 * 1000;
-
 export class GameRoom extends Room {
-  maxClients = 20;
+  maxClients = 2;
   dispatcher = new Dispatcher(this);
 
   onCreate(options: any) {
@@ -17,6 +14,11 @@ export class GameRoom extends Room {
 
   onJoin(client: Client, options: any) {
     // this.dispatcher.dispatch(new OnJoinCommand(), { sessionId: client.sessionId, client });
+
+    const meta = this.metadata || { game: 'TicTacToe', players: [] };
+    meta.players.push(client.sessionId);
+
+    this.setMetadata(meta).then(() => updateLobby(this));
   }
 
   async onLeave(client: Client, consented: boolean) {

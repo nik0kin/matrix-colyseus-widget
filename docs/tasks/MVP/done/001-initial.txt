@@ -1,6 +1,6 @@
 
 X- clean out repo
- - setup git repo
+X- setup git repo
  - setup local test matrix server
+ X- or setup local ssl so that tgp chat can be used
 X- setup simple frontend for widget to hit
- - setup dockerfile for server, lobby FE
