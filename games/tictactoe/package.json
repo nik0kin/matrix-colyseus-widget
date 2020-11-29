@@ -21,12 +21,17 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
-    "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "react-scripts": "3.4.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.0.4",
+    "typescript": "~3.7.2",
+    "webpack-cli": "^3.3.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-backend": "webpack --config webpack.backend.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

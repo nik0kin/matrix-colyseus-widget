@@ -1,0 +1,8 @@
+  - move to games folder structure
+  - widget Play screen w/ iframe
+  - draw:
+    - board
+    - tokens
+  - action: placement
+  - check win condition
+  - dont hardcode tictactoe in server code

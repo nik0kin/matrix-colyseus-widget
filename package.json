@@ -6,6 +6,7 @@
   "name": "matrix-colyseus-widget",
   "workspaces": [
     "apps/*",
+    "games/*",
     "packages/*"
   ],
   "scripts": {
