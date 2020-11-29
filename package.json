@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "engines": {
+    "yarn": ">=1.17.3"
+  },
+  "name": "matrix-colyseus-widget",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build-packages": "cd packages/utils && yarn build; cd ../common && yarn build",
+    "cloc": "cloc apps/**/src packages/**/src"
+  },
+  "devDependencies": {
+    "lerna": "latest"
+  }
+}

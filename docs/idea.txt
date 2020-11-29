@@ -1,0 +1,42 @@
+Matrix Colyseus project
+
+----------
+Parts
+
+Widget
+  - on creation options:
+    - lobby (multiple games) or existing game (single specific game)
+    - if lobby: matrix-room or matrix-server
+
+Docker Server
+  - Colyseus BE
+  - Queues FE
+  - Games FE
+
+Games
+ - TicTacToe
+
+
+-----------
+Questions
+
+Do we want the user to exit matrix? no
+
+Matchmaking queue vs game lobby?
+
+-----------
+Screens
+
+Lobby
+  - Start New game button w/ dropdown of supported games (and options?)
+  - list of joinable games
+  - list of active games the user is in
+
+Game
+  - playable view
+  - has an appbar with a backbutton to get to the lobby
+
+------
+MVP
+
+Non-persisted games to start

@@ -1,0 +1,14 @@
+
+1. Admin enables lobby widget in "gaming" chat room
+
+2. Player 1 opens colyseus lobby widget and clicks start game (game:tictactoe, name: Game1)
+
+3. Player 2 opens colyseus lobby widget and clicks join game for "Game1"
+
+4. Since tictactoe requires 2 players and Player 2 was the second player, the game starts. Player 2 is shown the "Game" screen
+
+5. Player 1 refreshes the screen and sees the game in progress and clicks "play game", then see the "Game" screen
+
+6. Both players play the game until it's conclusion
+
+7. Players are shown results in Game view and return to lobby view after clicking "done"
