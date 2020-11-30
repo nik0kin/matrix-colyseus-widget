@@ -24,7 +24,7 @@ const getRoom = async () => {
     }
   }
 
-  const room = await client.joinOrCreate<GameState>('game_room', { name: 'Nikki' });
+  const room = await client.joinOrCreate<GameState>('TicTacToe', { name: 'Nikki' });
   setReconnectData(room);
   return room;
 };

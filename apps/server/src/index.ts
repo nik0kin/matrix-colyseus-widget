@@ -5,7 +5,8 @@ import { Server, LobbyRoom } from 'colyseus';
 import { monitor } from '@colyseus/monitor';
 // import socialRoutes from '@colyseus/social/express'
 
-import { GameRoom } from './game-room';
+// @ts-ignore
+import ticTacToe from '../../../games/tictactoe/backend-dist';
 
 const port = Number(process.env.PORT || 2567);
 const app = express()
@@ -21,7 +22,7 @@ const gameServer = new Server({
 gameServer.define('lobby', LobbyRoom);
 
 // register your room handlers
-gameServer.define('game_room', GameRoom)
+gameServer.define(ticTacToe.name, ticTacToe.GameRoom)
   .enableRealtimeListing();
 
 /**

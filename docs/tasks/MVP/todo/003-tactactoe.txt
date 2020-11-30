@@ -1,4 +1,4 @@
-  - move to games folder structure
+ X- move to games folder structure
   - widget Play screen w/ iframe
   - draw:
     - board

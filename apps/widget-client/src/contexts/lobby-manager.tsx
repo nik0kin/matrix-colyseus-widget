@@ -49,7 +49,7 @@ const initConnection = async (
 }
 
 const startGame = async () => {
-  const room = await client.joinOrCreate('game_room');
+  const room = await client.joinOrCreate('TicTacToe'); // TODO create new game even if one exists
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
@@ -92,8 +92,6 @@ export const LobbyManager: FC = ({ children }) => {
   }, []);
 
   const onRoomsUpdate = useCallback((rooms: Rooms) => setRooms(rooms), []);
-
-  console.log('LobbyManager rerender')
 
   useEffect(() => {
     initConnection(onRoomsUpdate)

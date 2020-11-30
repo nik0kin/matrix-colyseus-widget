@@ -9,7 +9,7 @@ export const LobbyScreen: FC = () => {
   const { sessionId, rooms, joinGame } = useLobbyState();
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {
-      return !room.metadata?.players.includes(sessionId);
+      return !room.metadata?.players.includes(sessionId) && room.clients !== room.maxClients;
     });
   }, [rooms, sessionId]);
   const activeGames = useMemo(() => {
@@ -17,8 +17,6 @@ export const LobbyScreen: FC = () => {
       return room.metadata?.players.includes(sessionId);
     });
   }, [rooms, sessionId]);
-
-  console.log('LobbyScreen rerender', sessionId);
 
   return (
     <div>
@@ -43,7 +41,7 @@ export const LobbyScreen: FC = () => {
         <ul>
           {activeGames.map((room) => (
             <li key={room.roomId}>
-              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button disabled={room.clients === room.maxClients}>play</button>
+              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button disabled={room.clients !== room.maxClients}>play</button>
             </li>
           ))}
         </ul>
