@@ -1,8 +1,8 @@
  X- move to games folder structure
   - widget Play screen w/ iframe
-  - draw:
-    - board
-    - tokens
+ X- draw:
+   X- board
+   X- tokens
   - action: placement
   - check win condition
   - dont hardcode tictactoe in server code
