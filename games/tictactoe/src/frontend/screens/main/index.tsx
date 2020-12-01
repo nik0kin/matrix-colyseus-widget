@@ -7,13 +7,23 @@ import { GameStatus } from 'common';
 // import './style.css';
 
 export const MainScreen: FC = () => {
-  const { serverRoomId, gameStatus } = useServerState();
+  const { serverRoomId, gameStatus, isPlayerX, isPlayersTurn, winner } = useServerState();
   return (
     <div>
-      <h4>Connected({serverRoomId}) - {getGameStatusString(gameStatus)} </h4>
+      <h2>{getGameStatusString(gameStatus)} </h2>
       <div>
         <Playfield />
       </div>
+      {!winner && <h3>
+        {isPlayersTurn ? 'Your Turn' : 'Opponent\'s Turn'}
+      </h3>}
+      <h3>
+        You are <strong>{isPlayerX ? 'X' : 'O'}</strong>
+      </h3>
+      {winner && <h3>
+        {(winner === 'X' && isPlayerX) || (winner === 'O' && !isPlayerX) ? 'You Won' : 'You Lost'}
+      </h3>}
+      <p>RoomId: {serverRoomId}</p>
     </div>
   )
 };

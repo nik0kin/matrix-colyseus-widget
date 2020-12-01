@@ -34,8 +34,8 @@ const getRoom = async () => {
 const initConnection = async (
   onGameStatusUpdate: (gameStatus: GameStatus) => void,
   onSpotsUpdate: (spots: string[]) => void,
-  onNextTurnUpdate: (nextTurn: string) => void,
-  onXPlayerUpdate: (xPlayer: string) => void,
+  onIsPlayersTurnUpdate: (isPlayersTurn: boolean) => void,
+  onIsPlayerXUpdate: (isPlayerX: boolean) => void,
   onWinnerUpdate: (winner: string) => void,
 ) => {
   try {
@@ -49,8 +49,8 @@ const initConnection = async (
       console.log("this is the first room state!", state);
       onGameStatusUpdate(state.status);
       onSpotsUpdate(state.spots);
-      onNextTurnUpdate(state.nextTurn);
-      onXPlayerUpdate(state.xPlayer);
+      onIsPlayersTurnUpdate(state.nextTurn === room.sessionId);
+      onIsPlayerXUpdate(state.xPlayer === room.sessionId);
       onWinnerUpdate(state.winner);
     });
 
@@ -64,7 +64,7 @@ const initConnection = async (
           onSpotsUpdate(change.value);
         }
         if (change.field === 'nextTurn') {
-          onNextTurnUpdate(change.value);
+          onIsPlayersTurnUpdate(change.value === room.sessionId);
         }
         if (change.field === 'status') {
           onGameStatusUpdate(change.value);
@@ -103,8 +103,8 @@ interface ServerManagerType {
   serverRoomId: string;
   gameStatus: GameStatus;
   spots: string[];
-  nextTurn: string;
-  xPlayer: string;
+  isPlayersTurn: boolean;
+  isPlayerX: boolean;
   winner: string;
 
   sendMessage: (type: string | number, payload?: any) => void;
@@ -116,20 +116,20 @@ export const ServerManager: FC = ({ children }) => {
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.PreGame);
   const [spots, setSpots] = useState<string[]>([]);
   const [serverRoomId, setServerRoomId] = useState('');
-  const [nextTurn, setNextTurn] = useState('');
-  const [xPlayer, setXPlayer] = useState('');
+  const [isPlayersTurn, setIsPlayersTurn] = useState(false);
+  const [isPlayerX, setIsPlayerX] = useState(false);
   const [winner, setWinner] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [sendMessage, setSendMessage] = useState<(type: string | number, payload?: any) => void>(() => () => null);
 
   const onGameStatusUpdate = useCallback((gameStatus: GameStatus) => setGameStatus(gameStatus), []);
   const onSpotsUpdate = useCallback((spots: string[]) => setSpots(spots), []);
-  const onNextTurnUpdate = useCallback((nextTurn: string) => setNextTurn(nextTurn), []);
-  const onXPlayerUpdate = useCallback((xPlayer: string) => setXPlayer(xPlayer), []);
+  const onIsPlayersTurnUpdate = useCallback((isPlayersTurn: boolean) => setIsPlayersTurn(isPlayersTurn), []);
+  const onIsPlayerXUpdate = useCallback((isPlayerX: boolean) => setIsPlayerX(isPlayerX), []);
   const onWinnerUpdate = useCallback((winner: string) => setWinner(winner), []);
 
   useEffect(() => {
-    initConnection(onGameStatusUpdate, onSpotsUpdate, onNextTurnUpdate, onXPlayerUpdate, onWinnerUpdate)
+    initConnection(onGameStatusUpdate, onSpotsUpdate, onIsPlayersTurnUpdate, onIsPlayerXUpdate, onWinnerUpdate)
       .then(([roomId, sendMessage]) => {
         setIsConnected(true);
         setServerRoomId(roomId);
@@ -141,7 +141,7 @@ export const ServerManager: FC = ({ children }) => {
   if (!isConnected) return null;
 
   return <ServerContext.Provider value={{
-    serverRoomId, gameStatus, spots, nextTurn, xPlayer, winner,
+    serverRoomId, gameStatus, spots, isPlayersTurn, isPlayerX, winner,
     sendMessage
   }}>{children}</ServerContext.Provider>
 };
