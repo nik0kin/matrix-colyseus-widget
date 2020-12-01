@@ -9,6 +9,7 @@ import { checkWin } from './check-win';
 
 export class GameRoom extends Room<GameState> {
   maxClients = 2;
+  autoDispose = false;
 
   onCreate(options: any) {
     const state = new GameState();
@@ -49,6 +50,10 @@ export class GameRoom extends Room<GameState> {
       if (winner) {
         this.state.status = GameStatus.Finished;
         this.state.winner = winner;
+
+        setTimeout(() => {
+          this.disconnect();
+        }, 1000 * 60 * 60 * 24);
       }
     });
   }

@@ -49,7 +49,7 @@ const initConnection = async (
 }
 
 const startGame = async () => {
-  const room = await client.joinOrCreate('TicTacToe'); // TODO create new game even if one exists
+  const room = await client.create('TicTacToe');
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 

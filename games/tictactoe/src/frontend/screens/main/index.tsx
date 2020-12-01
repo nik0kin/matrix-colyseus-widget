@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
 
 import { Playfield } from '../../components';
 import { useServerState } from '../../contexts';
@@ -14,15 +14,17 @@ export const MainScreen: FC = () => {
       <div>
         <Playfield />
       </div>
-      {!winner && <h3>
-        {isPlayersTurn ? 'Your Turn' : 'Opponent\'s Turn'}
-      </h3>}
-      <h3>
-        You are <strong>{isPlayerX ? 'X' : 'O'}</strong>
-      </h3>
-      {winner && <h3>
-        {(winner === 'X' && isPlayerX) || (winner === 'O' && !isPlayerX) ? 'You Won' : 'You Lost'}
-      </h3>}
+      {gameStatus !== GameStatus.PreGame && <Fragment>
+        {!winner && <h3>
+          {isPlayersTurn ? 'Your Turn' : 'Opponent\'s Turn'}
+        </h3>}
+        <h3>
+          You are <strong>{isPlayerX ? 'X' : 'O'}</strong>
+        </h3>
+        {winner && <h3>
+          {(winner === 'X' && isPlayerX) || (winner === 'O' && !isPlayerX) ? 'You Won' : 'You Lost'}
+        </h3>}
+      </Fragment>}
       <p>RoomId: {serverRoomId}</p>
     </div>
   )

@@ -66,6 +66,9 @@ const initConnection = async (
         if (change.field === 'nextTurn') {
           onIsPlayersTurnUpdate(change.value === room.sessionId);
         }
+        if (change.field === 'xPlayer') {
+          onIsPlayerXUpdate(change.value === room.sessionId);
+        }
         if (change.field === 'status') {
           onGameStatusUpdate(change.value);
         }
