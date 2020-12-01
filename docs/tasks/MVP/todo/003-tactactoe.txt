@@ -1,5 +1,5 @@
  X- move to games folder structure
-  - widget Play screen w/ iframe
+ X- widget Play screen w/ iframe
  X- draw:
    X- board
    X- tokens

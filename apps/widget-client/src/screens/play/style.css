@@ -1,0 +1,13 @@
+.PlayScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.PlayScreen nav {
+  height: 5vh;
+}
+
+.PlayScreen iframe {
+  flex-grow: 2;
+}

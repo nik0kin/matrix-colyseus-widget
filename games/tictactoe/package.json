@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "PUBLIC_URL=/games/tictactoe react-scripts build",
     "build-backend": "webpack --config webpack.backend.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

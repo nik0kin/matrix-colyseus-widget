@@ -1,7 +1,8 @@
 import React, { FC, useMemo, Fragment } from 'react';
 
 import { StartButton } from './start-button';
-import { useLobbyState } from '../../contexts';
+import { useLobbyState, useSetRoute } from '../../contexts';
+import { RoomAvailable } from 'colyseus.js';
 
 // import './style.css';
 
@@ -17,6 +18,11 @@ export const LobbyScreen: FC = () => {
       return room.metadata?.players.includes(sessionId);
     });
   }, [rooms, sessionId]);
+  const setRoute = useSetRoute();
+
+  const playGame = (room: RoomAvailable<any>) => {
+    setRoute('play');
+  };
 
   return (
     <div>
@@ -41,7 +47,8 @@ export const LobbyScreen: FC = () => {
         <ul>
           {activeGames.map((room) => (
             <li key={room.roomId}>
-              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button disabled={room.clients !== room.maxClients}>play</button>
+              {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients}
+              <button disabled={room.clients !== room.maxClients} onClick={() => playGame(room)}>play</button>
             </li>
           ))}
         </ul>
