@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "loadtest": "colyseus-loadtest loadtest/example.ts --room TicTacToe --numClients 10",
+    "loadtest": "colyseus-loadtest loadtest/example.ts --room TicTacToe --numClients 2",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nikokin",

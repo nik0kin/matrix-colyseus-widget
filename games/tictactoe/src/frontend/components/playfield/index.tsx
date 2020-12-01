@@ -9,15 +9,15 @@ export const Playfield: FC = () => {
     <div className="Playfield">
       <div className="container">
         <div className="inner">
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
-          <Spot />
+          <Spot x={0} y={0} />
+          <Spot x={1} y={0} />
+          <Spot x={2} y={0} />
+          <Spot x={0} y={1} />
+          <Spot x={1} y={1} />
+          <Spot x={2} y={1} />
+          <Spot x={0} y={2} />
+          <Spot x={1} y={2} />
+          <Spot x={2} y={2} />
         </div>
       </div>
     </div>

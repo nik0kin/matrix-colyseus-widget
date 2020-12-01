@@ -32,3 +32,7 @@ export function toCoord(coordString: string) {
   const [x, y] = coordString.split(',');
   return { x: Number(x), y: Number(y) };
 }
+
+export function toArrayIndex(coord: Coord) {
+  return coord.y * 3 + coord.x;
+}

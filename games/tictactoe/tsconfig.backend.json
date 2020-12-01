@@ -8,6 +8,7 @@
     "noEmit": false
   },
   "include": [
-    "src/backend"
+    "src/backend",
+    "src/common"
   ]
 }

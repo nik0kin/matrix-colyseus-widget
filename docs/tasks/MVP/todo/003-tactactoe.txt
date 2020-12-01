@@ -3,6 +3,10 @@
  X- draw:
    X- board
    X- tokens
-  - action: placement
-  - check win condition
+  - ui:
+    - whos turn?
+    - what mark the player is
+    - who won?
+ X- action: placement
+ X- check win condition
   - dont hardcode tictactoe in server code

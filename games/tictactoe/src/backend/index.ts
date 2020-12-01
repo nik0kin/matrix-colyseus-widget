@@ -1,5 +1,5 @@
+import { gameName } from '../common';
 import { GameRoom } from './game-room';
-import { gameName } from './name';
 
 const config = {
   name: gameName,
