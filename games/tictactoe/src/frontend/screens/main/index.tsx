@@ -7,7 +7,7 @@ import { GameStatus } from 'common';
 // import './style.css';
 
 export const MainScreen: FC = () => {
-  const { serverRoomId, gameStatus, isPlayerX, isPlayersTurn, winner } = useServerState();
+  const { serverRoomId, sessionId, gameStatus, isPlayerX, isPlayersTurn, winner } = useServerState();
   return (
     <div>
       <h2>{getGameStatusString(gameStatus)} </h2>
@@ -26,6 +26,7 @@ export const MainScreen: FC = () => {
         </h3>}
       </Fragment>}
       <p>RoomId: {serverRoomId}</p>
+      <p>SessionId: {sessionId}</p>
     </div>
   )
 };

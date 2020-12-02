@@ -90,6 +90,7 @@ const initConnection = async (
 
     return [
       room.id,
+      room.sessionId,
       (type: string | number, payload?: any) => {
         console.log(type, payload);
         room.send(type, payload);
@@ -104,6 +105,7 @@ const initConnection = async (
 
 interface ServerManagerType {
   serverRoomId: string;
+  sessionId: string;
   gameStatus: GameStatus;
   spots: string[];
   isPlayersTurn: boolean;
@@ -119,6 +121,7 @@ export const ServerManager: FC = ({ children }) => {
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.PreGame);
   const [spots, setSpots] = useState<string[]>([]);
   const [serverRoomId, setServerRoomId] = useState('');
+  const [sessionId, setSessionId] = useState('');
   const [isPlayersTurn, setIsPlayersTurn] = useState(false);
   const [isPlayerX, setIsPlayerX] = useState(false);
   const [winner, setWinner] = useState('');
@@ -133,9 +136,10 @@ export const ServerManager: FC = ({ children }) => {
 
   useEffect(() => {
     initConnection(onGameStatusUpdate, onSpotsUpdate, onIsPlayersTurnUpdate, onIsPlayerXUpdate, onWinnerUpdate)
-      .then(([roomId, sendMessage]) => {
+      .then(([roomId, sessionId, sendMessage]) => {
         setIsConnected(true);
         setServerRoomId(roomId);
+        setSessionId(sessionId);
         setSendMessage(() => sendMessage);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,7 +148,8 @@ export const ServerManager: FC = ({ children }) => {
   if (!isConnected) return null;
 
   return <ServerContext.Provider value={{
-    serverRoomId, gameStatus, spots, isPlayersTurn, isPlayerX, winner,
+    serverRoomId, sessionId, gameStatus,
+    spots, isPlayersTurn, isPlayerX, winner,
     sendMessage
   }}>{children}</ServerContext.Provider>
 };

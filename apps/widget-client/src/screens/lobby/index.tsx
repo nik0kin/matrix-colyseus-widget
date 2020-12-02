@@ -26,7 +26,8 @@ export const LobbyScreen: FC = () => {
 
   return (
     <div>
-      <h1>Lobby {sessionId && <Fragment>- {sessionId}</Fragment>}</h1>
+      <h1>Lobby</h1>
+      {sessionId && <p>SessionId: {sessionId}</p>}
       <div>
         <StartButton />
       </div>
