@@ -1,12 +1,14 @@
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
+import { resolve } from 'path';
 import { Server, LobbyRoom } from 'colyseus';
 import { monitor } from '@colyseus/monitor';
 // import socialRoutes from '@colyseus/social/express'
 
-// @ts-ignore
-import ticTacToe from '../../../games/tictactoe/backend-dist';
+import { McwConfig, BackendGameConfig } from './config'
+
+const mcwConfig: McwConfig = require('../mcw.config');
 
 const port = Number(process.env.PORT || 2567);
 const app = express()
@@ -22,8 +24,13 @@ const gameServer = new Server({
 gameServer.define('lobby', LobbyRoom);
 
 // register your room handlers
-gameServer.define(ticTacToe.name, ticTacToe.GameRoom)
-  .enableRealtimeListing();
+
+mcwConfig.gamesSupported.forEach((gameConfig) => {
+  const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
+  gameServer.define(backendConfig.name, backendConfig.GameRoom as any)
+    .enableRealtimeListing();
+});
+
 
 /**
  * Register @colyseus/social routes

@@ -9,5 +9,5 @@
    X- who won?
  X- action: placement
  X- check win condition
-  - dont hardcode tictactoe in server code
+ X- dont hardcode tictactoe in server code
   - make ui prettier
