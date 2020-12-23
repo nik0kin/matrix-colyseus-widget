@@ -3,5 +3,5 @@
  X- join game
  X- list joinable games
  X- list active games
-  - play game
+ X- play game
   - reconnects

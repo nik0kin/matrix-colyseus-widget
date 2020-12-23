@@ -1,4 +1,4 @@
-import React, { FC, useMemo, Fragment } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { StartButton } from './start-button';
 import { useLobbyState, useSetRoute } from '../../contexts';
