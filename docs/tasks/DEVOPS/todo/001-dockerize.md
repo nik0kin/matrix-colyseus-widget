@@ -1,0 +1,3 @@
+ - [x] basic dockerfile (server)
+ - serve lobby & games
+ - deploy to test env
