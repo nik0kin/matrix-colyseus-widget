@@ -29,6 +29,8 @@ mcwConfig.gamesSupported.forEach((gameConfig) => {
   const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
   gameServer.define(backendConfig.name, backendConfig.GameRoom as any)
     .enableRealtimeListing();
+
+  app.use(`/games/${gameConfig.id}`, express.static(resolve('../', gameConfig.frontendFiles)));
 });
 
 
@@ -42,6 +44,8 @@ mcwConfig.gamesSupported.forEach((gameConfig) => {
 
 // register colyseus monitor AFTER registering your room handlers
 app.use('/colyseus', monitor());
+
+app.use('/widget', express.static('../widget-client/build'));
 
 gameServer.listen(port);
 console.log(`Listening on ws://localhost:${port}`)
