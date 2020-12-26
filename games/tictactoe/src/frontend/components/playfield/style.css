@@ -9,17 +9,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 10px;
+  grid-gap: 1.5vh;
+  background-color: black;
 }
 
 .Playfield .Spot {
   width: 20vh;
   height: 20vh;
-  border: 10px solid black;
+  background-color: white;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 10vh;
+  font-size: 13vh;
 }

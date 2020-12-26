@@ -13,14 +13,15 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY lerna.json ./
 
-RUN pwd && ls && ls apps && ls apps/server
-
 RUN yarn install
 
+# Build packages, games, & widget
 RUN (cd packages/utils && yarn build)
 RUN (cd packages/common && yarn build)
 
 RUN (cd games/tictactoe && yarn build && yarn build-backend)
+
+RUN (cd apps/widget-client && yarn build)
 
 EXPOSE 2567
 

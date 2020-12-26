@@ -1,3 +1,4 @@
 import { Client } from 'colyseus.js';
 
-export const client = new Client('ws://localhost:2567');
+// eslint-disable-next-line no-restricted-globals
+export const client = new Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://localhost:2567`);
