@@ -1,0 +1,8 @@
+mcw.tgp.io:2567 {
+    @websockets {
+      header Connection *Upgrade*
+      header Upgrade websocket
+    }
+    reverse_proxy @websockets localhost:2560
+    reverse_proxy localhost:2560
+}
