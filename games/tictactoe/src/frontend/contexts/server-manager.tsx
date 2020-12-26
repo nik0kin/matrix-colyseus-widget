@@ -5,7 +5,7 @@ import { GameStatus } from 'common';
 import { GameState, gameName } from '../../common';
 
 // eslint-disable-next-line no-restricted-globals
-const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.host}:2567`);
+const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.hostname}:2567`);
 
 const setReconnectData = (room: Colyseus.Room) => {
   sessionStorage.setItem('lastRoomId', room.id);
