@@ -4,7 +4,10 @@ export interface GameConfig {
   id: string;
   displayName: string;
   backendModule?: string;
-  frontendFiles: string;
+
+  // One or the other
+  frontendFiles?: string;
+  frontendIframe?: string;
 }
 
 export interface McwConfig {

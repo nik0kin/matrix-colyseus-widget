@@ -29,7 +29,7 @@ const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
   const feGameConfig: FeGameConfig = {
     id: gameConfig.id,
     colyseus: !!gameConfig.backendModule,
-    frontend: `/games/${gameConfig.id}`,
+    frontend: gameConfig.frontendIframe || `/games/${gameConfig.id}`,
     displayName: gameConfig.displayName
   };
   return feGameConfig;
@@ -49,7 +49,9 @@ mcwConfig.gamesSupported.forEach((gameConfig) => {
       .enableRealtimeListing();
   }
 
-  app.use(`/games/${gameConfig.id}`, express.static(resolve('../', gameConfig.frontendFiles)));
+  if (gameConfig.frontendFiles) {
+    app.use(`/games/${gameConfig.id}`, express.static(resolve('../', gameConfig.frontendFiles)));
+  }
 });
 
 

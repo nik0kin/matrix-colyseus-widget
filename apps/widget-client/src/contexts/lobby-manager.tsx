@@ -1,12 +1,9 @@
 import { RoomAvailable } from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
 
-import { client } from '../colyseus-client';
+import { RoomMetadata } from 'common';
 
-interface RoomMetadata {
-  game: string;
-  players: string[];
-}
+import { client } from '../colyseus-client';
 
 export type Rooms = RoomAvailable<RoomMetadata>[];
 

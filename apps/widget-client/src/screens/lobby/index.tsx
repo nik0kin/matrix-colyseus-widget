@@ -56,7 +56,7 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
           <ul>
             {joinableGames.map((room) => (
               <li key={room.roomId}>
-                {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients} <button onClick={() => {
+                {room.roomId} - {room.metadata?.gameId} - {room.clients}/{room.maxClients} <button onClick={() => {
                   joinGame(room.roomId);
                 }}>join</button>
               </li>
@@ -68,8 +68,8 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
           <ul>
             {activeGames.map((room) => (
               <li key={room.roomId}>
-                {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients}
-                <button disabled={room.clients !== room.maxClients} onClick={() => playGame(room, room.metadata!.game)}>play</button>
+                {room.roomId} - {room.metadata?.gameId} - {room.clients}/{room.maxClients}
+                <button disabled={room.clients !== room.maxClients} onClick={() => playGame(room, room.metadata!.gameId)}>play</button>
               </li>
             ))}
           </ul>

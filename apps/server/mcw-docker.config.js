@@ -21,6 +21,11 @@ module.exports = {
       id: 'puzzles',
       displayName: 'Puzzle Collection',
       frontendFiles: '../games/puzzles-menu'
+    },
+    {
+      id: 'tetris',
+      displayName: 'Tetris',
+      frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en'
     }
   ]
 };
