@@ -11,7 +11,9 @@
   ],
   "scripts": {
     "build-packages": "cd packages/utils && yarn build; cd ../common && yarn build",
-    "cloc": "cloc apps/**/src packages/**/src"
+    "build-docker": "docker build -t niko/mcw .",
+    "cloc": "cloc apps/**/src packages/**/src",
+    "run-dev-docker": "docker run -p 2567:2567 -d niko/mcw"
   },
   "devDependencies": {
     "lerna": "latest"

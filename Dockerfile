@@ -16,11 +16,12 @@ COPY lerna.json ./
 RUN yarn install
 
 # Build packages, games, & widget
-RUN (cd packages/utils && yarn build)
-RUN (cd packages/common && yarn build)
+RUN yarn build-packages
 
 RUN (cd games/tictactoe && yarn build && yarn build-backend)
 RUN (cd games && git clone https://github.com/cyanharlow/solitaire)
+
+RUN (cd games && git clone https://github.com/baruchel/sudoku-js && mv sudoku-js/sudoku.html sudoku-js/index.html)
 
 RUN (cd apps/widget-client && yarn build)
 

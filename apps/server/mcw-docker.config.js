@@ -11,6 +11,11 @@ module.exports = {
       id: 'solitaire',
       displayName: 'Solitaire',
       frontendFiles: '../games/solitaire'
+    },
+    {
+      id: 'sudoku',
+      displayName: 'Sudoku',
+      frontendFiles: '../games/sudoku-js'
     }
   ]
 };
