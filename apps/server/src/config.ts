@@ -2,7 +2,7 @@ import { Room } from 'colyseus';
 
 export interface GameConfig {
   id: string;
-  backendModule: string;
+  backendModule?: string;
   frontendFiles: string;
 }
 

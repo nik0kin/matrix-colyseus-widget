@@ -3,3 +3,4 @@ Support other "arcade" usecases:
  - local game w/o using colyseus backend - host the game but not the backend
   - games using matrix widget api
   - random html5 single player games?
+

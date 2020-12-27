@@ -6,10 +6,10 @@ import { LobbyScreen } from './screens/lobby';
 import { PlayScreen } from './screens/play';
 
 const Routes: FC = () => {
-  const route = useRoute();
+  const [route, playGame] = useRoute();
 
   if (route === 'play') {
-    return <PlayScreen />;
+    return <PlayScreen playGame={playGame!} />;
   } else {
     return <LobbyScreen />;
   }

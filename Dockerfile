@@ -20,8 +20,11 @@ RUN (cd packages/utils && yarn build)
 RUN (cd packages/common && yarn build)
 
 RUN (cd games/tictactoe && yarn build && yarn build-backend)
+RUN (cd games && git clone https://github.com/cyanharlow/solitaire)
 
 RUN (cd apps/widget-client && yarn build)
+
+RUN (cd apps/server && mv mcw-docker.config.js mcw.config.js)
 
 EXPOSE 2567
 

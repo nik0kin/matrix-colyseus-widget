@@ -26,9 +26,11 @@ gameServer.define('lobby', LobbyRoom);
 // register your room handlers
 
 mcwConfig.gamesSupported.forEach((gameConfig) => {
-  const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
-  gameServer.define(backendConfig.name, backendConfig.GameRoom as any)
-    .enableRealtimeListing();
+  if (gameConfig.backendModule) {
+    const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
+    gameServer.define(backendConfig.name, backendConfig.GameRoom as any)
+      .enableRealtimeListing();
+  }
 
   app.use(`/games/${gameConfig.id}`, express.static(resolve('../', gameConfig.frontendFiles)));
 });
