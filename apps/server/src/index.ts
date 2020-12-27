@@ -6,6 +6,8 @@ import { Server, LobbyRoom } from 'colyseus';
 import { monitor } from '@colyseus/monitor';
 // import socialRoutes from '@colyseus/social/express'
 
+import { FeGameConfig } from 'common';
+
 import { McwConfig, BackendGameConfig } from './config'
 
 const mcwConfig: McwConfig = require('../mcw.config');
@@ -23,12 +25,27 @@ const gameServer = new Server({
 
 gameServer.define('lobby', LobbyRoom);
 
-// register your room handlers
+const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
+  const feGameConfig: FeGameConfig = {
+    id: gameConfig.id,
+    colyseus: !!gameConfig.backendModule,
+    frontend: `/games/${gameConfig.id}`,
+    displayName: gameConfig.displayName
+  };
+  return feGameConfig;
+});
+
+app.use('/config/games', (req, res) => {
+  res.json({
+    gamesSupported
+  });
+});
 
 mcwConfig.gamesSupported.forEach((gameConfig) => {
   if (gameConfig.backendModule) {
     const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
-    gameServer.define(backendConfig.name, backendConfig.GameRoom as any)
+    (backendConfig.GameRoom as any).gameId = gameConfig.id;
+    gameServer.define(gameConfig.id, backendConfig.GameRoom as any)
       .enableRealtimeListing();
   }
 

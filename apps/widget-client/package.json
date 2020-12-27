@@ -21,6 +21,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
+    "react-query": "^3.5.5",
     "react-scripts": "3.4.1",
     "typescript": "~3.7.2"
   },
@@ -30,6 +31,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:2567",
   "eslintConfig": {
     "extends": "react-app"
   },

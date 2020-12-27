@@ -48,8 +48,8 @@ const initConnection = async (
   }
 }
 
-const startGame = async () => {
-  const room = await client.create('TicTacToe');
+const startGame = async (gameId: string) => {
+  const room = await client.create(gameId);
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
@@ -70,7 +70,7 @@ interface LobbyManagerType {
 
   rooms: Rooms;
 
-  startGame: () => void;
+  startGame: (gameId: string) => void;
   joinGame: (roomId: string) => void;
 }
 
@@ -82,8 +82,8 @@ export const LobbyManager: FC = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [rooms, setRooms] = useState<Rooms>([])
 
-  const _startGame = useCallback(async () => {
-    const [sessionId] = await startGame();
+  const _startGame = useCallback(async (gameId: string) => {
+    const [sessionId] = await startGame(gameId);
     setSessionId(sessionId);
   }, []);
   const _joinGame = useCallback(async (roomId: string) => {

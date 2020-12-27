@@ -2,6 +2,7 @@ import { Room } from 'colyseus';
 
 export interface GameConfig {
   id: string;
+  displayName: string;
   backendModule?: string;
   frontendFiles: string;
 }
@@ -12,6 +13,5 @@ export interface McwConfig {
 
 
 export interface BackendGameConfig {
-  name: string;
   GameRoom: Room;
 }

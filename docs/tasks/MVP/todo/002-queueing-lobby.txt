@@ -6,5 +6,5 @@
  X- play game
   - reconnects
   - support multiple games
-   - query backend for what games are supported
+  X- query backend for what games are supported
    - add dropdown to frontend

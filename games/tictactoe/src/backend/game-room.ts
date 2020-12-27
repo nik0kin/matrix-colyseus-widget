@@ -3,7 +3,7 @@ import { Room, Client, updateLobby } from 'colyseus';
 import { GameStatus } from 'common';
 import { getRandomArrayElement, Coord, toArrayIndex } from 'utils';
 
-import { gameName, PLACE_MARK, PlaceMarkMessage, GameState } from '../common';
+import { PLACE_MARK, PlaceMarkMessage, GameState } from '../common';
 import { checkWin } from './check-win';
 
 
@@ -59,7 +59,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   onJoin(client: Client, options: any) {
-    const meta = this.metadata || { game: gameName, players: [] };
+    const meta = this.metadata || { gameId: (GameRoom as any).gameId, players: [] };
     meta.players.push(client.sessionId);
 
     this.setMetadata(meta).then(() => updateLobby(this));

@@ -2,7 +2,7 @@ import * as Colyseus from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
 import { GameStatus } from 'common';
 
-import { GameState, gameName } from '../../common';
+import { GameState } from '../../common';
 
 // eslint-disable-next-line no-restricted-globals
 const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.hostname}:2567`);
@@ -27,7 +27,7 @@ const getRoom = async () => {
     }
   }
 
-  const room = await client.joinOrCreate<GameState>(gameName);
+  const room = await client.joinOrCreate<GameState>('tictactoe'); // matches id in mcw.config.js TODO pass in via env var?
   setReconnectData(room);
   return room;
 };

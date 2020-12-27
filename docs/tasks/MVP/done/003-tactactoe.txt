@@ -10,4 +10,4 @@
  X- action: placement
  X- check win condition
  X- dont hardcode tictactoe in server code
-  - make ui prettier
+ X- make ui prettier

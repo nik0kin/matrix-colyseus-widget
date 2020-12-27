@@ -1,12 +1,14 @@
+import { RoomAvailable } from 'colyseus.js';
 import React, { FC, useMemo } from 'react';
+
+import { FeGameConfig } from 'common';
 
 import { StartButton } from './start-button';
 import { useLobbyState, useSetPlayGame } from '../../contexts';
-import { RoomAvailable } from 'colyseus.js';
 
 // import './style.css';
 
-export const LobbyScreen: FC = () => {
+export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }) => {
   const { sessionId, rooms, joinGame } = useLobbyState();
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {
@@ -24,21 +26,31 @@ export const LobbyScreen: FC = () => {
     setPlayGame(playGame);
   };
 
+  const [singlePlayerGames, multiPlayerGames] = useMemo(() => {
+    const singlePlayerGames = gamesConfig.filter((game) => !game.colyseus);
+    const multiPlayerGames = gamesConfig.filter((game) => !!game.colyseus);
+    return [singlePlayerGames, multiPlayerGames];
+  }, [gamesConfig]);
+
   return (
     <div>
       <h1>Lobby</h1>
       {sessionId && <p>SessionId: {sessionId}</p>}
-      <div>
+      {!!singlePlayerGames.length && <div>
         <h2>SinglePlayer Games</h2>
         <div>
-          <button onClick={() => playGame(null as any, 'solitaire')}>Play Solitaire</button>
+          {singlePlayerGames.map((gameConfig) =>
+            <button key={gameConfig.id} onClick={() => playGame(null as any, gameConfig.id)}>
+              Play {gameConfig.displayName}
+            </button>
+          )}
         </div>
-      </div>
-      <div>
+      </div>}
+      {!!multiPlayerGames.length && <div>
         <div>
           <h2>MultiPlayer Games</h2>
           <div>
-            <StartButton />
+            {multiPlayerGames.map((gameConfig) => <StartButton key={gameConfig.id} gameConfig={gameConfig} />)}
           </div>
           <h3>Joinable Games</h3>
           <ul>
@@ -57,12 +69,12 @@ export const LobbyScreen: FC = () => {
             {activeGames.map((room) => (
               <li key={room.roomId}>
                 {room.roomId} - {room.metadata?.game} - {room.clients}/{room.maxClients}
-                <button disabled={room.clients !== room.maxClients} onClick={() => playGame(room, 'TicTacToe')}>play</button>
+                <button disabled={room.clients !== room.maxClients} onClick={() => playGame(room, room.metadata!.game)}>play</button>
               </li>
             ))}
           </ul>
         </div>
-      </div>
+      </div>}
     </div>
   )
 };
