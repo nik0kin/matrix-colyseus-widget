@@ -11,6 +11,11 @@ module.exports = {
       id: 'tetris',
       displayName: 'Tetris',
       frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en'
+    },
+    {
+      id: 'skifree',
+      displayName: 'SkiFree',
+      frontendIframe: 'http://basicallydan.github.io/skifree.js/'
     }
   ]
 };
