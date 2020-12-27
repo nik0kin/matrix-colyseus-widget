@@ -16,6 +16,11 @@ module.exports = {
       id: 'sudoku',
       displayName: 'Sudoku',
       frontendFiles: '../games/sudoku-js'
+    },
+    {
+      id: 'puzzles',
+      displayName: 'Puzzle Collection',
+      frontendFiles: '../games/puzzles-menu'
     }
   ]
 };
