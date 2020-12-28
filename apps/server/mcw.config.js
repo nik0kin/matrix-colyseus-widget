@@ -15,7 +15,12 @@ module.exports = {
     {
       id: 'skifree',
       displayName: 'SkiFree',
-      frontendIframe: 'http://basicallydan.github.io/skifree.js/'
+      frontendIframe: 'https://basicallydan.github.io/skifree.js/',
+      attribution: {
+        creator: 'Dan Hough <daniel.hough@gmail.com>',
+        license: 'MIT',
+        source: 'https://github.com/basicallydan/skifree.js'
+      }
     }
   ]
 };

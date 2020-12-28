@@ -5,7 +5,7 @@
  X- list active games
  X- play game
   - reconnects
-  - support multiple games
+ X- support multiple games
   X- query backend for what games are supported
-   - add dropdown to frontend
+   /- add dropdown to frontend
   - license/attribution for games
