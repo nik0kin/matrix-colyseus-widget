@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@colyseus/schema": "^0.5.5",
+    "@colyseus/schema": "^1.0.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -15,7 +15,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-modal": "^3.10.5",
     "classnames": "^2.2.6",
-    "colyseus.js": "^0.13.1",
+    "colyseus.js": "^0.14.0",
     "common": "0.0.0",
     "lodash": "^4.17.15",
     "react": "^16.13.1",

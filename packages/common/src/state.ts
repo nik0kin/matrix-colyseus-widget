@@ -1,4 +1,4 @@
-import { ArraySchema, Schema, MapSchema, type } from '@colyseus/schema';
+import { Schema, MapSchema, type } from '@colyseus/schema';
 import { Coord } from 'utils';
 
 import { Player } from './player';
@@ -44,6 +44,6 @@ export class GameState extends Schema {
   @type('number') // TODO enum?
   status: GameStatus = GameStatus.PreGame;
 
-  @type([CoordSchema])
-  roomsInBattle = new ArraySchema<CoordSchema>();
+  // @type([CoordSchema])
+  // roomsInBattle = new ArraySchema<CoordSchema>();
 }

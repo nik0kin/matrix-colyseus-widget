@@ -11,7 +11,7 @@
   "author": "Nikokin",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@colyseus/schema": "^0.5.5",
+    "@colyseus/schema": "^1.0.6",
     "rollup": "^2.16.1",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.4.5",
@@ -20,7 +20,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "@colyseus/schema": "^0.5.5",
+    "@colyseus/schema": "^1.0.6",
     "lodash": "^4.17.15",
     "utils": "0.0.0"
   }
