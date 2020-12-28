@@ -2,6 +2,7 @@
   "packages": [
     "apps/*",
     "games/*",
+    "games/connectx/backend",
     "packages/*"
   ],
   "version": "0.1.0",

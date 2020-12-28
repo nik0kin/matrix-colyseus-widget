@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-modal": "^3.10.5",
     "classnames": "^2.2.6",
+    "colyseus": "^0.14.0",
     "colyseus.js": "^0.14.0",
     "common": "0.0.0",
     "lodash": "^4.17.15",

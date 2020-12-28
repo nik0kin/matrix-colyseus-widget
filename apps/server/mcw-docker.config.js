@@ -2,6 +2,12 @@
 module.exports = {
   gamesSupported: [
     {
+      id: 'connectx',
+      displayName: 'ConnectX',
+      backendModule: '../games/connectx/backend/dist',
+      frontendFiles: '../games/connectx/frontend'
+    },
+    {
       id: 'tictactoe',
       displayName: 'TicTacToe',
       backendModule: '../games/tictactoe/backend-dist',

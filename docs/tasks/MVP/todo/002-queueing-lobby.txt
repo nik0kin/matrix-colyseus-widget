@@ -9,3 +9,4 @@
   X- query backend for what games are supported
    /- add dropdown to frontend
   - license/attribution for games
+  - lobby doesnt open specific game when "play" is clicked
