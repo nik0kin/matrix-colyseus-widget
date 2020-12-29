@@ -7,6 +7,8 @@ import { client } from '../colyseus-client';
 
 export type Rooms = RoomAvailable<RoomMetadata>[];
 
+interface SlimRoom { id: string; sessionId: string; }
+
 const setReconnectData = (room: Room) => {
   sessionStorage.setItem('lastLobbyRoomId', room.id);
   sessionStorage.setItem('lastSessionId', room.sessionId);
@@ -32,6 +34,10 @@ const getLobbyRoom = async () => {
   const room = await client.joinOrCreate('lobby');
   setReconnectData(room);
   return room;
+};
+
+const saveJoinedGames = (joinedGames: Array<SlimRoom>) => {
+  sessionStorage.setItem('joinedGames', JSON.stringify(joinedGames));
 };
 
 const initConnection = async (
@@ -93,7 +99,7 @@ interface LobbyManagerType {
   sessionId: string;
 
   rooms: Rooms;
-  joinedRooms: Room[];
+  joinedRooms: Array<SlimRoom>;
 
   startGame: (gameId: string, customOptions?: any) => void;
   joinGame: (roomId: string) => void;
@@ -106,7 +112,10 @@ export const LobbyManager: FC = ({ children }) => {
   const [sessionId, setSessionId] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [rooms, setRooms] = useState<Rooms>([]);
-  const [joinedRooms, setJoinedRooms] = useState<Room[]>([]);
+  const [joinedRooms, setJoinedRooms] = useState<Room[]>(() => {
+    const value = sessionStorage.getItem('joinedGames');
+    return value ? JSON.parse(value) : [];
+  });
 
   const _startGame = useCallback(async (gameId: string, customOptions?: any) => {
     const room = await startGame(gameId, customOptions);
@@ -118,6 +127,10 @@ export const LobbyManager: FC = ({ children }) => {
     setJoinedRooms((jr) => [...jr, room]);
     room.leave();
   }, []);
+
+  useEffect(() => {
+    saveJoinedGames(joinedRooms);
+  }, [joinedRooms]);
 
   const onRoomsUpdate = useCallback((rooms: Rooms) => setRooms(rooms), []);
 

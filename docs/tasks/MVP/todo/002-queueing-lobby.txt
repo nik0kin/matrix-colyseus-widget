@@ -4,12 +4,13 @@
  X- list joinable games
  X- list active games
  X- play game
- ?- reconnects
+ /- reconnects
     - is it possible to reconnect to a lobby room?
     - is LobbyRoom extendedable? then we could override the appropriate hook?
+      - seems like both above solutions might not be needed. we can save the roomId/sessionId to sessionStorage
  X- support multiple games
   X- query backend for what games are supported
    /- add dropdown to frontend
   - license/attribution for games
  X- lobby doesnt open specific game when "play" is clicked
-  - support CustomSettings for games
+ /- support CustomSettings for games
