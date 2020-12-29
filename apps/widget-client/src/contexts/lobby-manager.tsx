@@ -111,10 +111,12 @@ export const LobbyManager: FC = ({ children }) => {
   const _startGame = useCallback(async (gameId: string, customOptions?: any) => {
     const room = await startGame(gameId, customOptions);
     setJoinedRooms((jr) => [...jr, room]);
+    room.leave(); // leave the room so that the play screen iframe can reconnect
   }, []);
   const _joinGame = useCallback(async (roomId: string) => {
     const room = await joinGame(roomId);
     setJoinedRooms((jr) => [...jr, room]);
+    room.leave();
   }, []);
 
   const onRoomsUpdate = useCallback((rooms: Rooms) => setRooms(rooms), []);
