@@ -103,4 +103,7 @@ define(['connectX', 'colyseus-shim'],
     initGame();
   });
 
-// TODO missing "start game" transition if game is opened before gamestatus changes to in-progress
+// TODO-fork missing "start game" transition if game is opened before gamestatus changes to in-progress
+//   - fixable by reloading (back->play) but thats not great UX
+
+// TODO-fork player always is red?

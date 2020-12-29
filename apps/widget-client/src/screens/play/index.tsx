@@ -6,9 +6,13 @@ import { useSetRoute } from '../../contexts';
 
 import './style.css';
 
-export const PlayScreen: FC<{ gameConfig: FeGameConfig }> = ({ gameConfig }) => {
+export const PlayScreen: FC<{ gameConfig: FeGameConfig, room?: { id: string, sessionId: string; } | null }> = ({ gameConfig, room }) => {
   const setRoute = useSetRoute();
   const ref = useRef<HTMLIFrameElement | null>(null);
+
+  const src = !gameConfig.colyseus || !room ?
+    gameConfig.frontend :
+    gameConfig.frontend + `?s=${room.sessionId}&r=${room.id}`;
 
   // Focus iframe onLoad so that it recieves keyboard events
   const focusIframe = () => {
@@ -22,7 +26,7 @@ export const PlayScreen: FC<{ gameConfig: FeGameConfig }> = ({ gameConfig }) => 
       <nav>
         <button className="backBtn" onClick={() => setRoute('lobby')}>Back</button>
       </nav>
-      <iframe title="Game" src={gameConfig.frontend} ref={ref} onLoad={focusIframe}></iframe>
+      <iframe title="Game" src={src} ref={ref} onLoad={focusIframe}></iframe>
     </div>
   )
 };

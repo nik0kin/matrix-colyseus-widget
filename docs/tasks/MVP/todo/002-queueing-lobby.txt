@@ -5,8 +5,10 @@
  X- list active games
  X- play game
   - reconnects
+    - is it possible to reconnect to a lobby room?
  X- support multiple games
   X- query backend for what games are supported
    /- add dropdown to frontend
   - license/attribution for games
-  - lobby doesnt open specific game when "play" is clicked
+ X- lobby doesnt open specific game when "play" is clicked
+  - support CustomSettings for games

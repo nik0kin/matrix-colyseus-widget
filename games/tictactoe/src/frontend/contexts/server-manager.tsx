@@ -13,8 +13,10 @@ const setReconnectData = (room: Colyseus.Room) => {
 };
 
 const getRoom = async () => {
-  const lastRoomId = sessionStorage.getItem('lastRoomId');
-  const lastSessionId = sessionStorage.getItem('lastSessionId');
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const lastRoomId = urlParams.get('r') || sessionStorage.getItem('lastRoomId');
+  const lastSessionId = urlParams.get('s') || sessionStorage.getItem('lastSessionId');
 
   // Attempt reconnect
   if (lastRoomId && lastSessionId) {

@@ -2,38 +2,38 @@ import React, { FC, useState, createContext, useContext, useCallback } from 'rea
 
 interface RoutingContextType {
   route: 'lobby' | 'play';
-  playGame: string | null;
+  playRoomGame: [string, string | null] | null; // TODO rename?
   setRoute: (route: 'lobby' | 'play') => void;
-  setPlayGame: (playGame: string) => void;
+  gotoPlayGame: (gameId: string, roomId?: string) => void;
 }
 
 const RoutingContext = createContext<RoutingContextType>(null as any);
 
 export const RoutingManager: FC = ({ children }) => {
   const [route, setRoute] = useState<'lobby' | 'play'>('lobby');
-  const [playGame, _setPlayGame] = useState<string | null>(null);
+  const [playRoomGame, _setPlayRoomGame] = useState<[string, string | null] | null>(null);
 
-  const setPlayGame = useCallback((playGame: string) => {
+  const gotoPlayGame = useCallback((gameId: string, roomId?: string) => {
     setRoute('play');
-    _setPlayGame(playGame);
+    _setPlayRoomGame([gameId, roomId || null]);
   }, []);
 
   return <RoutingContext.Provider value={{
     route,
-    playGame,
+    playRoomGame,
     setRoute,
-    setPlayGame
+    gotoPlayGame
   }}>{children}</RoutingContext.Provider>
 };
 
 export const useRoute = () => {
-  return [useContext(RoutingContext).route, useContext(RoutingContext).playGame];
+  return [useContext(RoutingContext).route, useContext(RoutingContext).playRoomGame] as const;
 };
 
 export const useSetRoute = () => {
   return useContext(RoutingContext).setRoute;
 };
 
-export const useSetPlayGame = () => {
-  return useContext(RoutingContext).setPlayGame;
+export const useGotoPlayGame = () => {
+  return useContext(RoutingContext).gotoPlayGame;
 };

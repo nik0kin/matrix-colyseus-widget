@@ -1,4 +1,4 @@
-import { RoomAvailable } from 'colyseus.js';
+import { RoomAvailable, Room } from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
 
 import { RoomMetadata } from 'common';
@@ -7,11 +7,38 @@ import { client } from '../colyseus-client';
 
 export type Rooms = RoomAvailable<RoomMetadata>[];
 
+const setReconnectData = (room: Room) => {
+  sessionStorage.setItem('lastLobbyRoomId', room.id);
+  sessionStorage.setItem('lastSessionId', room.sessionId);
+};
+
+const getLobbyRoom = async () => {
+  const lastLobbyRoomId = sessionStorage.getItem('lastLobbyRoomId');
+  const lastSessionId = sessionStorage.getItem('lastSessionId');
+
+  // RECONNECT TO LOBBY NOT CURRENT SUPPORTED?
+
+  // Attempt reconnect
+  if (lastLobbyRoomId && lastSessionId) {
+    try {
+      const room = await client.reconnect(lastLobbyRoomId, lastSessionId);
+      setReconnectData(room);
+      return room;
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  const room = await client.joinOrCreate('lobby');
+  setReconnectData(room);
+  return room;
+};
+
 const initConnection = async (
   onRoomsUpdate: (gameStatus: Rooms) => void,
 ) => {
   try {
-    const lobby = await client.joinOrCreate('lobby');
+    const lobby = await getLobbyRoom();
 
     let allRooms: Rooms = [];
 
@@ -37,7 +64,7 @@ const initConnection = async (
       onRoomsUpdate(allRooms);
     });
 
-    return [lobby.id] as const;
+    return [lobby.sessionId, lobby.id] as const;
   } catch (e) {
     console.log('Could not join!');
     console.error(e);
@@ -50,7 +77,7 @@ const startGame = async (gameId: string) => {
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
-  return [room.sessionId] as const;
+  return room;
 };
 
 const joinGame = async (roomId: string) => {
@@ -58,7 +85,7 @@ const joinGame = async (roomId: string) => {
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
-  return [room.sessionId] as const;
+  return room;
 };
 
 interface LobbyManagerType {
@@ -66,6 +93,7 @@ interface LobbyManagerType {
   sessionId: string;
 
   rooms: Rooms;
+  joinedRooms: Room[];
 
   startGame: (gameId: string) => void;
   joinGame: (roomId: string) => void;
@@ -77,23 +105,25 @@ export const LobbyManager: FC = ({ children }) => {
   const [lobbyRoomId, setLobbyRoomId] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [isConnected, setIsConnected] = useState(false);
-  const [rooms, setRooms] = useState<Rooms>([])
+  const [rooms, setRooms] = useState<Rooms>([]);
+  const [joinedRooms, setJoinedRooms] = useState<Room[]>([]);
 
   const _startGame = useCallback(async (gameId: string) => {
-    const [sessionId] = await startGame(gameId);
-    setSessionId(sessionId);
+    const room = await startGame(gameId);
+    setJoinedRooms((jr) => [...jr, room]);
   }, []);
   const _joinGame = useCallback(async (roomId: string) => {
-    const [sessionId] = await joinGame(roomId);
-    setSessionId(sessionId);
+    const room = await joinGame(roomId);
+    setJoinedRooms((jr) => [...jr, room]);
   }, []);
 
   const onRoomsUpdate = useCallback((rooms: Rooms) => setRooms(rooms), []);
 
   useEffect(() => {
     initConnection(onRoomsUpdate)
-      .then(([roomId]) => {
+      .then(([sessionId, roomId]) => {
         setIsConnected(true);
+        setSessionId(sessionId);
         setLobbyRoomId(roomId);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,7 +133,7 @@ export const LobbyManager: FC = ({ children }) => {
 
   return <LobbyContext.Provider value={{
     lobbyRoomId, sessionId,
-    rooms,
+    rooms, joinedRooms,
     startGame: _startGame, joinGame: _joinGame,
   }}>{children}</LobbyContext.Provider>
 };
@@ -111,3 +141,11 @@ export const LobbyManager: FC = ({ children }) => {
 export const useLobbyState = () => {
   return useContext(LobbyContext);
 };
+
+export const useGetJoinedRoom = () => {
+  const { joinedRooms } = useContext(LobbyContext);
+  return (roomId: string) => {
+    return joinedRooms.find((r) => roomId === r.id);
+  };
+};
+
