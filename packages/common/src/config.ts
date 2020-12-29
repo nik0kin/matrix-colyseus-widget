@@ -1,3 +1,4 @@
+export type CustomOptions = Record<string, string | number | boolean>;
 
 export interface FeGameConfig {
   id: string;
@@ -5,6 +6,6 @@ export interface FeGameConfig {
   frontend: string;
   displayName: string;
 
-  // customSettings: {}
-  quickSettings: Record<string, string | number | boolean>;
+  // customOptions: {}
+  quickOptions?: CustomOptions;
 }

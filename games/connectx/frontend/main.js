@@ -12,7 +12,7 @@ define(['connectX', 'colyseus-shim'],
     };
 
     const onGameStatusUpdate = () => { };
-    const onInitialState = (spaces, pieces, p1Player, isPlayersTurn) => {
+    const onInitialState = (spaces, pieces, p1Player, isPlayersTurn, customOptions) => {
       userPlayerRel = sessionId === p1Player ? 'p1' : 'p2';
       opponentRel = sessionId !== p1Player ? 'p1' : 'p2';
 
@@ -21,7 +21,7 @@ define(['connectX', 'colyseus-shim'],
       populatePlayersLabel();
       populateTurnStatusLabel();
 
-      connectX.initBoard({ spaces, pieces }, { width: 5, height: 5 }, userPlayerRel, p1Player);
+      connectX.initBoard({ spaces, pieces }, customOptions, userPlayerRel, p1Player);
     };
     const onSpotsUpdate = () => { };
     const onTokensUpdate = (isPlayersTurn, lastTokenDropped) => {

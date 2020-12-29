@@ -5,13 +5,15 @@ module.exports = {
       id: 'connectx',
       displayName: 'ConnectX',
       backendModule: '../games/connectx/backend/dist',
-      frontendFiles: '../games/connectx/frontend'
+      frontendFiles: '../games/connectx/frontend',
+      quickOptions: { width: 7, height: 6, connectLength: 4 }
     },
     {
       id: 'tictactoe',
       displayName: 'TicTacToe',
       backendModule: '../games/tictactoe/backend-dist',
-      frontendFiles: '../games/tictactoe/build'
+      frontendFiles: '../games/tictactoe/build',
+      quickOptions: {}
     },
     {
       id: 'solitaire',

@@ -72,8 +72,8 @@ const initConnection = async (
   }
 }
 
-const startGame = async (gameId: string) => {
-  const room = await client.create(gameId);
+const startGame = async (gameId: string, customOptions?: any) => {
+  const room = await client.create(gameId, customOptions);
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
@@ -95,7 +95,7 @@ interface LobbyManagerType {
   rooms: Rooms;
   joinedRooms: Room[];
 
-  startGame: (gameId: string) => void;
+  startGame: (gameId: string, customOptions?: any) => void;
   joinGame: (roomId: string) => void;
 }
 
@@ -108,8 +108,8 @@ export const LobbyManager: FC = ({ children }) => {
   const [rooms, setRooms] = useState<Rooms>([]);
   const [joinedRooms, setJoinedRooms] = useState<Room[]>([]);
 
-  const _startGame = useCallback(async (gameId: string) => {
-    const room = await startGame(gameId);
+  const _startGame = useCallback(async (gameId: string, customOptions?: any) => {
+    const room = await startGame(gameId, customOptions);
     setJoinedRooms((jr) => [...jr, room]);
   }, []);
   const _joinGame = useCallback(async (roomId: string) => {

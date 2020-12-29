@@ -1,15 +1,15 @@
 import * as _ from 'lodash';
-import { TokenPiece, CustomSettings, SpotSpace } from './common';
+import { TokenPiece, CustomOptions, SpotSpace } from './common';
 import { ArraySchema } from '@colyseus/schema';
 import { Coord } from 'utils';
 
 export const winConditionHook = function (
   spots: ArraySchema<SpotSpace>, tokens: ArraySchema<TokenPiece>,
-  { width, height, connectAmount }: CustomSettings,
+  { width, height, connectLength }: CustomOptions,
   lastPlayer: string,
   { droppedToLocation: lastDroppedCoord }: { droppedToLocation: Coord }
 ): 'tie' | string | undefined {
-  const board = getBoardArray({ width, height, connectAmount }, tokens);
+  const board = getBoardArray({ width, height, connectLength }, tokens);
 
   const getWhoOccupysSpace = function (pos: Coord) {
     if (pos.x < 1 || pos.y < 1
@@ -37,8 +37,8 @@ export const winConditionHook = function (
     leftDiag = 1 + checkRecurs(lastDroppedCoord, -1, 1) + checkRecurs(lastDroppedCoord, 1, -1),
     rightDiag = 1 + checkRecurs(lastDroppedCoord, -1, -1) + checkRecurs(lastDroppedCoord, 1, 1);
 
-  if (leftRight >= connectAmount || topBottom >= connectAmount ||
-    leftDiag >= connectAmount || rightDiag >= connectAmount) {
+  if (leftRight >= connectLength || topBottom >= connectLength ||
+    leftDiag >= connectLength || rightDiag >= connectLength) {
     return lastPlayer;
   }
 
@@ -47,7 +47,7 @@ export const winConditionHook = function (
   }
 };
 
-const getBoardArray = function (customBoardSettings: CustomSettings, tokens: ArraySchema<TokenPiece>): Array<Array<{ occupied?: string }>> {
+const getBoardArray = function (customBoardSettings: CustomOptions, tokens: ArraySchema<TokenPiece>): Array<Array<{ occupied?: string }>> {
   var board: Array<Array<{ occupied?: string }>> = [];
   _.times(customBoardSettings.width, function () {
     var row: Array<{ occupied?: string }> = [];

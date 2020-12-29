@@ -1,22 +1,27 @@
 import { ArraySchema } from '@colyseus/schema';
 import { Room, Client, updateLobby } from 'colyseus';
-import { GameStatus, RoomMetadata } from 'common';
+import { CustomOptions, GameStatus, RoomMetadata } from 'common';
 import { getRandomArrayElement, Coord, toArrayIndex } from 'utils';
 
-import { DROP_TOKEN, DropTokenMessage, GameState, SpotSpace, TokenPiece } from './common';
+import { DROP_TOKEN, DropTokenMessage, GameState, TokenPiece } from './common';
 import { winConditionHook } from './winCondition';
 import { validateQ, doQ } from './actions/DropToken';
 import { boardGeneratorHook } from './boardGenerator';
-
-const customBoardSettings = { width: 5, height: 5, connectAmount: 4 };
 
 export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
-  onCreate(options: any) {
+  onCreate(options?: CustomOptions) {
     const state = new GameState();
-    state.spots.push(...boardGeneratorHook(customBoardSettings));
+
+    console.log('options supplied: ', options);
+
+    if (options && Object.keys(options).length !== 3) throw new Error('options missing');
+
+    state.customOptions.assign(options);
+
+    state.spots.push(...boardGeneratorHook(state.customOptions));
 
     this.setState(state);
 
@@ -28,7 +33,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
       }
 
       try {
-        validateQ(this.state.spots, customBoardSettings, '', message);
+        validateQ(this.state.spots, state.customOptions, '', message);
       } catch (e) {
         // Invalid message
         console.log('ConnectX client attempting invalid move: ', message);
@@ -41,13 +46,13 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
         this.state.tokens.push(newToken);
       };
 
-      const result = doQ(this.state.spots, customBoardSettings, addToken, client.sessionId, message);
+      const result = doQ(this.state.spots, state.customOptions, addToken, client.sessionId, message);
 
       this.state.nextTurn = client.sessionId === this.metadata.players[0]
         ? this.metadata.players[1]
         : this.metadata.players[0];
 
-      const winner = winConditionHook(this.state.spots, this.state.tokens, customBoardSettings, client.sessionId, result);
+      const winner = winConditionHook(this.state.spots, this.state.tokens, state.customOptions, client.sessionId, result);
       if (winner) {
         this.state.status = GameStatus.Finished;
         this.state.winner = winner;
@@ -84,6 +89,3 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   // }
 }
 
-function modifySpot(array: ArraySchema<string>, val: string, coord: Coord) {
-  array[toArrayIndex(coord)] = val;
-}

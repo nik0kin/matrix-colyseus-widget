@@ -6,14 +6,14 @@ module.exports = {
       displayName: 'ConnectX',
       backendModule: '../games/connectx/backend/dist',
       frontendFiles: '../games/connectx/frontend',
-      quickSettings: { width: 7, height: 6, connectLength: 4 }
+      quickOptions: { width: 7, height: 6, connectLength: 4 }
     },
     {
       id: 'tictactoe',
       displayName: 'TicTacToe',
       backendModule: '../games/tictactoe/backend-dist',
       frontendFiles: '../games/tictactoe/build',
-      quickSettings: {}
+      quickOptions: {}
     },
     {
       id: 'tetris',

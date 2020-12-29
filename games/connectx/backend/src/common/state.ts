@@ -1,5 +1,5 @@
 import { Schema, type, ArraySchema } from '@colyseus/schema';
-import { GameStatus } from 'common';
+import { McwGameState } from 'common';
 
 export class SpotSpace extends Schema {
   @type('number')
@@ -23,13 +23,18 @@ export class TokenPiece extends Schema {
   ownerId: string;
 }
 
-export class GameState extends Schema {
-  @type('number') // TODO enum?
-  status: GameStatus = GameStatus.PreGame;
+export class CustomOptionsSchema extends Schema {
+  @type('number')
+  width: number = -1;
 
-  @type('string')
-  winner: string = '';
+  @type('number')
+  height: number = -1;
 
+  @type('number')
+  connectLength: number = -1;
+}
+
+export class GameState extends McwGameState {
   @type('string')
   nextTurn: string = '';
 
@@ -41,4 +46,7 @@ export class GameState extends Schema {
 
   @type([TokenPiece])
   tokens = new ArraySchema<TokenPiece>();
+
+  @type(CustomOptionsSchema)
+  customOptions = new CustomOptionsSchema();
 }

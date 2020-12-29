@@ -1,5 +1,5 @@
-export interface CustomSettings {
+export interface CustomOptions {
   width: number;
   height: number;
-  connectAmount: number;
+  connectLength: number;
 }

@@ -47,7 +47,9 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
         <div>
           <h2>MultiPlayer Games</h2>
           <div>
-            {multiPlayerGames.map((gameConfig) => <StartButton key={gameConfig.id} gameConfig={gameConfig} />)}
+            {multiPlayerGames
+              .filter((gameConfig) => gameConfig.quickOptions)
+              .map((gameConfig) => <StartButton key={gameConfig.id} gameConfig={gameConfig} />)}
             {' '}
             <OpenCreateGameModal>Create Custom Game</OpenCreateGameModal>
           </div>

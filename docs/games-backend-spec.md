@@ -1,5 +1,5 @@
 
-node.js umd library which exports "config" as default
+## node.js umd package which exports "config" as default
 
 ```
 import { GameRoom } from './game-room';
@@ -10,3 +10,5 @@ const config = {
 
 export default config;
 ```
+
+## GameRoom must extend `McwGameState` class

@@ -1,13 +1,7 @@
-import { Schema, type, ArraySchema } from '@colyseus/schema';
-import { GameStatus } from 'common';
+import { type, ArraySchema } from '@colyseus/schema';
+import { McwGameState } from 'common';
 
-export class GameState extends Schema {
-  @type('number') // TODO enum?
-  status: GameStatus = GameStatus.PreGame;
-
-  @type('string')
-  winner: string = '';
-
+export class GameState extends McwGameState {
   @type('string')
   nextTurn: string = '';
 

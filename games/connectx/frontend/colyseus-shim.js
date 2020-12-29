@@ -20,11 +20,14 @@ define(function () {
         setReconnectData(room);
         return room;
       } catch (e) {
+        console.log('reconnect failed: ', e)
         // ignore
       }
     }
 
-    const room = await client.joinOrCreate('connectx'); // matches id in mcw.config.js
+    // TODO turn this into a error case since we should always be reconnecting??
+
+    const room = await client.joinOrCreate('connectx', { width: 5, height: 5, connectLength: 3 }); // matches id in mcw.config.js
     setReconnectData(room);
     return room;
   };
@@ -48,7 +51,7 @@ define(function () {
 
       room.onStateChange.once((state) => {
         console.log("this is the first room state!", state);
-        onInitialState(state.spots, state.tokens, state.p1Player, state.nextTurn === room.sessionId);
+        onInitialState(state.spots, state.tokens, state.p1Player, state.nextTurn === room.sessionId, state.customOptions);
         onSpotsUpdate(state.spots);
         onGameStatusUpdate(state.status);
         onWinnerUpdate(state.winner);

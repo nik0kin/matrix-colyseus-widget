@@ -1,9 +1,9 @@
 import { ArraySchema } from '@colyseus/schema';
 
 import { SpotSpace, DropTokenMessage } from '../common';
-import { CustomSettings } from '../common/custom-settings';
+import { CustomOptions } from '../common/custom-settings';
 
-export const validateQ = function (spots: ArraySchema<SpotSpace>, customSettings: CustomSettings, actionOwnerRel: string, actionParams: DropTokenMessage) {
+export const validateQ = function (spots: ArraySchema<SpotSpace>, customSettings: CustomOptions, actionOwnerRel: string, actionParams: DropTokenMessage) {
   const xDropLocation = actionParams.xDropLocation,
     width = customSettings.width;
 
@@ -18,7 +18,7 @@ export const validateQ = function (spots: ArraySchema<SpotSpace>, customSettings
   }
 };
 
-export const doQ = function (spots: ArraySchema<SpotSpace>, customSettings: CustomSettings, addToken: (x: number, y: number, ownerId: string) => void, actionOwnerRel: string, actionParams: DropTokenMessage) {
+export const doQ = function (spots: ArraySchema<SpotSpace>, customSettings: CustomOptions, addToken: (x: number, y: number, ownerId: string) => void, actionOwnerRel: string, actionParams: DropTokenMessage) {
   const xDropLocation = actionParams.xDropLocation,
     height = customSettings.height;
 

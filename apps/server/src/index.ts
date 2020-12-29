@@ -30,7 +30,8 @@ const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
     id: gameConfig.id,
     colyseus: !!gameConfig.backendModule,
     frontend: gameConfig.frontendIframe || `/games/${gameConfig.id}`,
-    displayName: gameConfig.displayName
+    displayName: gameConfig.displayName,
+    quickOptions: gameConfig.quickOptions
   };
   return feGameConfig;
 });

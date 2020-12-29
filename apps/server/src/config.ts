@@ -1,5 +1,7 @@
 import { Room } from 'colyseus';
 
+import { CustomOptions } from 'common';
+
 export interface GameConfig {
   id: string;
   displayName: string;
@@ -8,6 +10,8 @@ export interface GameConfig {
   // One or the other
   frontendFiles?: string;
   frontendIframe?: string;
+
+  quickOptions: CustomOptions;
 }
 
 export interface McwConfig {

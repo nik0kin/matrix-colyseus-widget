@@ -29,21 +29,19 @@ export class CoordSchema extends Schema implements Coord {
 
   @type('number')
   y: number;
-
-  constructor(coord: Coord) {
-    super();
-    this.x = coord.x;
-    this.y = coord.y;
-  }
 }
 
-export class GameState extends Schema {
-  @type({ map: PlayerSchema })
-  players = new MapSchema<PlayerSchema>();
+export interface WithCustomOptions {
+  customOptions: Schema;
+}
 
+export class McwGameState extends Schema {
   @type('number') // TODO enum?
   status: GameStatus = GameStatus.PreGame;
 
-  // @type([CoordSchema])
-  // roomsInBattle = new ArraySchema<CoordSchema>();
+  @type({ map: PlayerSchema })
+  players = new MapSchema<PlayerSchema>();
+
+  @type('string')
+  winner: string = '';
 }

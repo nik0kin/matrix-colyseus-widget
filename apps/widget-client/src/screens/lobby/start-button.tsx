@@ -4,5 +4,5 @@ import { useLobbyState } from '../../contexts';
 
 export const StartButton: FC<{ gameConfig: FeGameConfig }> = ({ gameConfig }) => {
   const { startGame } = useLobbyState();
-  return <button onClick={() => startGame(gameConfig.id)}>Start new {gameConfig.displayName} game</button>;
+  return <button onClick={() => startGame(gameConfig.id, gameConfig.quickOptions)}>Start new {gameConfig.displayName} game</button>;
 };
