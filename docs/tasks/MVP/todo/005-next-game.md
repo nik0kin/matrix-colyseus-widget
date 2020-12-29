@@ -1,3 +1,5 @@
+X- ConnectX fork/conversion
+
 Contenders:
  - chess
  - checkers

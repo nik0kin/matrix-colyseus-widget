@@ -4,8 +4,9 @@
  X- list joinable games
  X- list active games
  X- play game
-  - reconnects
+ ?- reconnects
     - is it possible to reconnect to a lobby room?
+    - is LobbyRoom extendedable? then we could override the appropriate hook?
  X- support multiple games
   X- query backend for what games are supported
    /- add dropdown to frontend

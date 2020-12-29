@@ -4,4 +4,7 @@ export interface FeGameConfig {
   colyseus: boolean;
   frontend: string;
   displayName: string;
+
+  // customSettings: {}
+  quickSettings: Record<string, string | number | boolean>;
 }

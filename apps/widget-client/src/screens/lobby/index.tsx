@@ -4,6 +4,7 @@ import { FeGameConfig } from 'common';
 
 import { StartButton } from './start-button';
 import { useLobbyState, useGotoPlayGame, useGetJoinedRoom } from '../../contexts';
+import { OpenCreateGameModal } from '../create-game';
 
 // import './style.css';
 
@@ -47,6 +48,8 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
           <h2>MultiPlayer Games</h2>
           <div>
             {multiPlayerGames.map((gameConfig) => <StartButton key={gameConfig.id} gameConfig={gameConfig} />)}
+            {' '}
+            <OpenCreateGameModal>Create Custom Game</OpenCreateGameModal>
           </div>
           <h3>Joinable Games</h3>
           <ul>
