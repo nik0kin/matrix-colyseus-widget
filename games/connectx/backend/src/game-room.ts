@@ -1,19 +1,49 @@
-import { ArraySchema } from '@colyseus/schema';
 import { Room, Client, updateLobby } from 'colyseus';
-import { CustomOptions, GameStatus, RoomMetadata } from 'common';
-import { getRandomArrayElement, Coord, toArrayIndex } from 'utils';
+
+// @ts-ignore
+import fetch from 'node-fetch';
+
+import { GameStatus, RoomMetadata, PlayerSchema } from 'common';
+import { getRandomArrayElement } from 'utils';
 
 import { DROP_TOKEN, DropTokenMessage, GameState, TokenPiece } from './common';
 import { winConditionHook } from './winCondition';
 import { validateQ, doQ } from './actions/DropToken';
 import { boardGeneratorHook } from './boardGenerator';
 
+const cache: Record<string, string> = {};
+
 export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
+  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }) {
+    if (cache[matrixOpenIdAccessToken]) {
+      // Already been authed
+      return cache[matrixOpenIdAccessToken];
+    }
+
+    try {
+      const resp = await (fetch as typeof window.fetch)('https://matrix.tgp.io' + '/_matrix/federation/v1/openid/userinfo' + '?access_token=' + matrixOpenIdAccessToken);
+      const data = await resp.json();
+
+      if (data.error || data.errcode) {
+        throw data;
+      }
+
+      console.log('matrix lookup success', data);
+
+      cache[matrixOpenIdAccessToken] = data.sub;
+
+      return data.sub;
+    } catch (e) {
+      console.error('matrix lookup failed', e);
+      return false;
+    }
+  }
+
   onCreate(options: any) {
-    const { roomName, ...customOptions } = options;
+    const { roomName, matrixOpenIdAccessToken, ...customOptions } = options;
     console.log('onCreate options supplied: ', options);
     if (customOptions && Object.keys(customOptions).length !== 3) throw new Error('options missing');
 
@@ -72,10 +102,11 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     });
   }
 
-  onJoin(client: Client, options: any) {
+  onJoin(client: Client, options: any, matrixName: string) {
     const meta: RoomMetadata = this.metadata!;
 
-    meta.players.push({ id: client.sessionId, name: client.sessionId });
+    meta.players.push({ id: client.sessionId, name: matrixName });
+    this.state.players.push(new PlayerSchema().assign({ id: client.sessionId, name: matrixName }));
 
     if (meta.players.length === 2) {
       this.state.status = meta.gameStatus = GameStatus.InProgress;

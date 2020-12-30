@@ -51,7 +51,7 @@ define(function () {
 
       room.onStateChange.once((state) => {
         console.log("this is the first room state!", state);
-        onInitialState(state.spots, state.tokens, state.p1Player, state.nextTurn === room.sessionId, state.customOptions);
+        onInitialState(state.spots, state.tokens, state.p1Player, state.nextTurn === room.sessionId, state.customOptions, state.players);
         onSpotsUpdate(state.spots);
         onGameStatusUpdate(state.status);
         onWinnerUpdate(state.winner);

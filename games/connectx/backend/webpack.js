@@ -42,7 +42,8 @@ module.exports = (env) => {
     externals: {
       colyseus: 'colyseus',
       '@colyseus/command': '@colyseus/command',
-      '@colyseus/schema': '@colyseus/schema'
+      '@colyseus/schema': '@colyseus/schema',
+      "node-fetch": "node-fetch"
     },
     plugins: plugins,
     resolve: {

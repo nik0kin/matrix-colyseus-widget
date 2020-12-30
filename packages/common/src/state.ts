@@ -1,4 +1,4 @@
-import { Schema, MapSchema, type } from '@colyseus/schema';
+import { Schema, ArraySchema, type } from '@colyseus/schema';
 import { Coord } from 'utils';
 
 import { Player } from './player';
@@ -6,6 +6,9 @@ import { Player } from './player';
 export class PlayerSchema extends Schema implements Player {
   @type('string')
   id: string;
+
+  @type('string')
+  name: string;
 
   @type('boolean')
   connected: boolean = true;
@@ -35,8 +38,8 @@ export class McwGameState extends Schema {
   @type('number') // TODO enum?
   status: GameStatus = GameStatus.PreGame;
 
-  @type({ map: PlayerSchema })
-  players = new MapSchema<PlayerSchema>();
+  @type([PlayerSchema])
+  players = new ArraySchema<PlayerSchema>();
 
   @type('string')
   winner: string = '';

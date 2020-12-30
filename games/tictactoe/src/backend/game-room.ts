@@ -1,6 +1,6 @@
 import { ArraySchema } from '@colyseus/schema';
 import { Room, Client, updateLobby } from 'colyseus';
-import { GameStatus, RoomMetadata } from 'common';
+import { GameStatus, RoomMetadata, PlayerSchema } from 'common';
 import { getRandomArrayElement, Coord, toArrayIndex } from 'utils';
 
 import { PLACE_MARK, PlaceMarkMessage, GameState } from '../common';
@@ -71,10 +71,11 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     });
   }
 
-  onJoin(client: Client, options: any) {
+  onJoin(client: Client, options: any, matrixName: string) {
     const meta: RoomMetadata = this.metadata!;
 
     meta.players.push({ id: client.sessionId, name: client.sessionId });
+    this.state.players.push(new PlayerSchema().assign({ id: client.sessionId, name: matrixName }));
 
     if (meta.players.length === 2) {
       this.state.status = meta.gameStatus = GameStatus.InProgress;

@@ -6,15 +6,21 @@ define(['connectX', 'colyseus-shim'],
       userPlayerRel,
       opponentRel;
 
+    const playerMap = {};
+
     const current = {
       whosTurn: undefined,
       isGameOver: false
     };
 
     const onGameStatusUpdate = () => { };
-    const onInitialState = (spaces, pieces, p1Player, isPlayersTurn, customOptions) => {
+    const onInitialState = (spaces, pieces, p1Player, isPlayersTurn, customOptions, players) => {
       userPlayerRel = sessionId === p1Player ? 'p1' : 'p2';
       opponentRel = sessionId !== p1Player ? 'p1' : 'p2';
+
+      players.forEach((p) => {
+        playerMap[p.id === p1Player ? 'p1' : 'p2'] = p;
+      });
 
       current.whosTurn = isPlayersTurn ? userPlayerRel : opponentRel;
 
@@ -65,11 +71,8 @@ define(['connectX', 'colyseus-shim'],
     };
 
     const populatePlayersLabel = function () {
-      // TODO-fork support matrix names
-      // const p1Name = playerMap['p1'].name;
-      // const p2Name = playerMap['p2'].name;
-      let p1Name = 'p1';
-      let p2Name = 'p2';
+      let p1Name = playerMap['p1'].name;
+      let p2Name = playerMap['p2'].name;
 
       if (userPlayerRel === 'p1') {
         p1Name = '<b>' + p1Name + '</b>';

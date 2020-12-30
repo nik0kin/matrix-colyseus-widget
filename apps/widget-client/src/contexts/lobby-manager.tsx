@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState, useCallback, createContext, useContext 
 import { RoomMetadata } from 'common';
 
 import { client } from '../colyseus-client';
+import { useOpenIdAccessToken } from './matrix-widget-manager';
 
 export type Rooms = RoomAvailable<RoomMetadata>[];
 
@@ -88,8 +89,8 @@ const startGame = async (gameId: string, customOptions?: any) => {
   return room;
 };
 
-const joinGame = async (roomId: string) => {
-  const room = await client.joinById(roomId);
+const joinGame = async (roomId: string, customOptions?: any) => {
+  const room = await client.joinById(roomId, customOptions);
 
   console.log('Room joined: ' + room.id + ' ' + room.name);
 
@@ -110,6 +111,8 @@ interface LobbyManagerType {
 const LobbyContext = createContext<LobbyManagerType>(null as any);
 
 export const LobbyManager: FC = ({ children }) => {
+  const matrixOpenIdAccessToken = useOpenIdAccessToken();
+
   const [lobbyRoomId, setLobbyRoomId] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [isConnected, setIsConnected] = useState(false);
@@ -120,13 +123,13 @@ export const LobbyManager: FC = ({ children }) => {
   });
 
   const _startGame = useCallback(async (gameId: string, customOptions?: any) => {
-    const room = await startGame(gameId, customOptions);
+    const room = await startGame(gameId, { ...customOptions, matrixOpenIdAccessToken });
     setJoinedRooms((jr) => [...jr, room]);
-  }, []);
+  }, [matrixOpenIdAccessToken]);
   const _joinGame = useCallback(async (roomId: string) => {
-    const room = await joinGame(roomId);
+    const room = await joinGame(roomId, { matrixOpenIdAccessToken });
     setJoinedRooms((jr) => [...jr, room]);
-  }, []);
+  }, [matrixOpenIdAccessToken]);
 
   useEffect(() => {
     saveJoinedGames(joinedRooms);

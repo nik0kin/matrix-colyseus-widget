@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import './App.css';
-import { LobbyManager, RoutingManager, useRoute, useGetJoinedRoom, GameConfigsManager } from './contexts';
+import { LobbyManager, RoutingManager, useRoute, useGetJoinedRoom, GameConfigsManager, MatrixWidgetManager } from './contexts';
 import { LobbyScreen } from './screens/lobby';
 import { PlayScreen } from './screens/play';
 
@@ -22,17 +22,19 @@ const Routes: FC = () => {
 
 const App: FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <GameConfigsManager>
-        <div className="App">
-          <RoutingManager>
-            <LobbyManager>
-              <Routes />
-            </LobbyManager>
-          </RoutingManager>
-        </div>
-      </GameConfigsManager>
-    </QueryClientProvider>
+    <MatrixWidgetManager>
+      <QueryClientProvider client={queryClient}>
+        <GameConfigsManager>
+          <div className="App">
+            <RoutingManager>
+              <LobbyManager>
+                <Routes />
+              </LobbyManager>
+            </RoutingManager>
+          </div>
+        </GameConfigsManager>
+      </QueryClientProvider>
+    </MatrixWidgetManager>
   );
 }
 
