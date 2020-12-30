@@ -37,9 +37,9 @@ export const GameCard: FC<Props> = ({ children, roomAvailable, room }) => {
     <div className="GamePanel">
       <div className="firstRow">
         {roomAvailable.metadata && getGameStatusString(roomAvailable.metadata?.gameStatus)}{' '}
-        {roomAvailable.metadata?.name && <strong> - {roomAvailable.metadata.name}</strong>}{' '}
-        - {roomAvailable.clients}/{roomAvailable.maxClients}{' '}
-        <span style={{ flexGrow: 2 }}> - {roomAvailable.metadata?.gameId && getGameConfig(roomAvailable.metadata!.gameId)?.displayName}</span>{' '}
+        {roomAvailable.metadata?.name && <strong>&nbsp;- {roomAvailable.metadata.name}</strong>}&nbsp;
+        - {roomAvailable.clients}/{roomAvailable.maxClients}&nbsp;
+        <span style={{ flexGrow: 2 }}> - {roomAvailable.metadata?.gameId && getGameConfig(roomAvailable.metadata!.gameId)?.displayName}</span>&nbsp;
         {children}
       </div>
       <button onClick={() => setCollapsed(!collapsed)}>{collapsed ? '^' : 'V'}</button>{' '}

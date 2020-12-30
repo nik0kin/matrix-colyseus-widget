@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, Fragment } from 'react';
 
 import { GameStatus } from 'common';
 
@@ -52,9 +52,12 @@ export const LobbyScreen: FC = () => {
         <h2>SinglePlayer Games</h2>
         <div>
           {singlePlayerGames.map((gameConfig) =>
-            <button key={gameConfig.id} onClick={() => gotoPlayGame(gameConfig.id)}>
-              Play {gameConfig.displayName}
-            </button>
+            <Fragment>
+              <button key={gameConfig.id} onClick={() => gotoPlayGame(gameConfig.id)}>
+                Play {gameConfig.displayName}
+              </button>
+              {' '}
+            </Fragment>
           )}
         </div>
       </div>}
