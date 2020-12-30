@@ -1,9 +1,7 @@
 import { Room } from 'colyseus.js';
 import React, { FC, useRef, useEffect, useState } from 'react';
 
-import { FeGameConfig } from 'common';
-
-import { useSetRoute, SlimRoom } from '../../contexts';
+import { useSetRoute, SlimRoom, useGetGameConfig } from '../../contexts';
 
 import './style.css';
 
@@ -11,8 +9,9 @@ const displayNone = { 'display': 'none' };
 
 // For some reason the first time we reconnect, we never get state events, so load up the app twice
 
-export const PlayScreen: FC<{ gameConfig: FeGameConfig, room?: Room | SlimRoom | null }> = ({ gameConfig, room }) => {
+export const PlayScreen: FC<{ gameId: string; room?: Room | SlimRoom | null }> = ({ gameId, room }) => {
   const setRoute = useSetRoute();
+  const gameConfig = useGetGameConfig()(gameId)!;
   const ref1 = useRef<HTMLIFrameElement | null>(null);
   const ref2 = useRef<HTMLIFrameElement | null>(null);
   const [showGame1, setShowGame1] = useState(true);
@@ -34,6 +33,7 @@ export const PlayScreen: FC<{ gameConfig: FeGameConfig, room?: Room | SlimRoom |
         }, 2500); // TODO should send event from iframe1 once room is connected
       } else {
         ref.current.focus();
+        setTimeout(() => ref.current && ref.current.focus(), 500); // why do i need to wait?
         setHideGame1(false);
       }
     }

@@ -1,10 +1,8 @@
-import React, { FC, Fragment } from 'react';
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-
-import { FeGameConfig } from 'common';
+import React, { FC } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import './App.css';
-import { LobbyManager, RoutingManager, useRoute, useGetJoinedRoom } from './contexts';
+import { LobbyManager, RoutingManager, useRoute, useGetJoinedRoom, GameConfigsManager } from './contexts';
 import { LobbyScreen } from './screens/lobby';
 import { PlayScreen } from './screens/play';
 
@@ -14,34 +12,26 @@ const Routes: FC = () => {
   const [route, playGameRoom] = useRoute();
   const getJoinedRoom = useGetJoinedRoom();
 
-  const { isLoading, error, data } = useQuery<{ gamesSupported: FeGameConfig[] }>('repoData', () =>
-    fetch('/config/games').then(res => res.json())
-  );
-
-  if (isLoading) return <Fragment>Loading...</Fragment>;
-
-  if (error) return <Fragment>An error has occurred: ' {(error as any).message}</Fragment>;
-
   if (route === 'play') {
     const [gameId, roomId] = playGameRoom!;
-    return <PlayScreen room={getJoinedRoom(roomId!)} gameConfig={data!.gamesSupported.find((gameConfig) => {
-      return gameConfig.id === gameId;
-    })!} />;
+    return <PlayScreen gameId={gameId} room={getJoinedRoom(roomId!)} />;
   } else {
-    return <LobbyScreen gamesConfig={data!.gamesSupported} />;
+    return <LobbyScreen />;
   }
 };
 
 const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <RoutingManager>
-          <LobbyManager>
-            <Routes />
-          </LobbyManager>
-        </RoutingManager>
-      </div>
+      <GameConfigsManager>
+        <div className="App">
+          <RoutingManager>
+            <LobbyManager>
+              <Routes />
+            </LobbyManager>
+          </RoutingManager>
+        </div>
+      </GameConfigsManager>
     </QueryClientProvider>
   );
 }

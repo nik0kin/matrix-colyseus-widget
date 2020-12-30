@@ -1,16 +1,19 @@
 import React, { FC, useMemo } from 'react';
 
-import { FeGameConfig } from 'common';
+import { GameStatus } from 'common';
 
 import { StartButton } from './start-button';
-import { useLobbyState, useGotoPlayGame, useGetJoinedRoom } from '../../contexts';
+import { GameCard } from '../../components';
+import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs } from '../../contexts';
 import { OpenCreateGameModal } from '../create-game';
 
 // import './style.css';
 
-export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }) => {
+export const LobbyScreen: FC = () => {
   const { rooms, joinGame } = useLobbyState();
   const getJoinedRoom = useGetJoinedRoom();
+  const gameConfigs = useGameConfigs();
+
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {
       return room.clients !== room.maxClients && !getJoinedRoom(room.roomId);
@@ -19,16 +22,28 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
   const activeGames = useMemo(() => {
     // EFF double looping when not needed
     return rooms
-      .filter((room) => getJoinedRoom(room.roomId))
+      .filter((room) => {
+        const jr = getJoinedRoom(room.roomId);
+        return jr && room.metadata?.gameStatus !== GameStatus.Finished
+      })
+      .map((room) => [room, getJoinedRoom(room.roomId)!] as const);
+  }, [rooms, getJoinedRoom]);
+  const finishedGames = useMemo(() => {
+    // EFF double looping when not needed
+    return rooms
+      .filter((room) => {
+        const jr = getJoinedRoom(room.roomId);
+        return jr && room.metadata?.gameStatus === GameStatus.Finished
+      })
       .map((room) => [room, getJoinedRoom(room.roomId)!] as const);
   }, [rooms, getJoinedRoom]);
   const gotoPlayGame = useGotoPlayGame();
 
   const [singlePlayerGames, multiPlayerGames] = useMemo(() => {
-    const singlePlayerGames = gamesConfig.filter((game) => !game.colyseus);
-    const multiPlayerGames = gamesConfig.filter((game) => !!game.colyseus);
+    const singlePlayerGames = gameConfigs.filter((game) => !game.colyseus);
+    const multiPlayerGames = gameConfigs.filter((game) => !!game.colyseus);
     return [singlePlayerGames, multiPlayerGames];
-  }, [gamesConfig]);
+  }, [gameConfigs]);
 
   return (
     <div>
@@ -54,31 +69,33 @@ export const LobbyScreen: FC<{ gamesConfig: FeGameConfig[] }> = ({ gamesConfig }
             <OpenCreateGameModal>Create Custom Game</OpenCreateGameModal>
           </div>
           <h3>Joinable Games</h3>
-          <ul>
-            {joinableGames.map((room) => (
-              <li key={room.roomId}>
-                {room.metadata?.gameId} - Id: {room.roomId} - {room.clients}/{room.maxClients}{' '}
-                <button onClick={() => {
-                  joinGame(room.roomId);
-                }}>join</button>
-              </li>
-            ))}
-          </ul>
+          {joinableGames.map((room) => (
+            <GameCard key={room.roomId} roomAvailable={room}>
+              <button onClick={() => {
+                joinGame(room.roomId);
+              }}>join</button>
+            </GameCard>
+          ))}
         </div>
         <div>
           <h3>Active Games</h3>
-          <ul>
-            {activeGames.map(([roomAvailable, room]) => (
-              <li key={room.id}>
-                {roomAvailable.metadata?.gameId} - GameName
-                - Id: {room.id} Sess: {room.sessionId}
-                - {roomAvailable.clients}/{roomAvailable.maxClients}{' '}
-                <button disabled={roomAvailable.clients !== roomAvailable.maxClients} onClick={() =>
-                  gotoPlayGame(roomAvailable.metadata!.gameId, room.id)}
-                >play</button>
-              </li>
-            ))}
-          </ul>
+          {activeGames.map(([roomAvailable, room]) => (
+            <GameCard key={room.id} roomAvailable={roomAvailable} room={room}>
+              <button disabled={roomAvailable.clients !== roomAvailable.maxClients} onClick={() =>
+                gotoPlayGame(roomAvailable.metadata!.gameId, room.id)}
+              >play</button>
+            </GameCard>
+          ))}
+        </div>
+        <div>
+          <h3>Completed Games</h3>
+          {finishedGames.map(([roomAvailable, room]) => (
+            <GameCard key={room.id} roomAvailable={roomAvailable} room={room}>
+              <button disabled={roomAvailable.clients !== roomAvailable.maxClients} onClick={() =>
+                gotoPlayGame(roomAvailable.metadata!.gameId, room.id)}
+              >view</button>
+            </GameCard>
+          ))}
         </div>
       </div>}
     </div>

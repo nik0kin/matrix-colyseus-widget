@@ -6,6 +6,9 @@ export interface FeGameConfig {
   frontend: string;
   displayName: string;
 
-  // customOptions: {}
+  customOptions?: Record<string, {
+    min: number;
+    max: number;
+  }>;
   quickOptions?: CustomOptions;
 }

@@ -11,7 +11,7 @@ export interface GameConfig {
   frontendFiles?: string;
   frontendIframe?: string;
 
-  quickOptions: CustomOptions;
+  quickOptions?: CustomOptions;
 }
 
 export interface McwConfig {
@@ -21,4 +21,8 @@ export interface McwConfig {
 
 export interface BackendGameConfig {
   GameRoom: Room;
+  customOptions?: Record<string, {
+    min: number;
+    max: number;
+  }>;
 }

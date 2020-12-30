@@ -1,8 +1,8 @@
-import { SpotSpace } from './common';
+import { SpotSpace, CustomOptions } from './common';
 
 import { times } from 'lodash';
 
-export const boardGeneratorHook = function (customBoardSettings: { width: number; height: number }) {
+export const boardGeneratorHook = function (customBoardSettings: CustomOptions) {
   var board: SpotSpace[] = [];
 
   times(customBoardSettings.width, function (x) {

@@ -26,12 +26,17 @@ const gameServer = new Server({
 gameServer.define('lobby', LobbyRoom);
 
 const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
+  const customOptions = gameConfig.backendModule ?
+    (require(resolve('../', gameConfig.backendModule)).default as BackendGameConfig).customOptions :
+    undefined;
+
   const feGameConfig: FeGameConfig = {
     id: gameConfig.id,
     colyseus: !!gameConfig.backendModule,
     frontend: gameConfig.frontendIframe || `/games/${gameConfig.id}`,
     displayName: gameConfig.displayName,
-    quickOptions: gameConfig.quickOptions
+    customOptions,
+    quickOptions: gameConfig.quickOptions,
   };
   return feGameConfig;
 });

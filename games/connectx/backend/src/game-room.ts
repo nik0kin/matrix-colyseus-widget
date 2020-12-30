@@ -12,17 +12,23 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
-  onCreate(options?: CustomOptions) {
+  onCreate(options: any) {
+    const { roomName, ...customOptions } = options;
+    console.log('onCreate options supplied: ', options);
+    if (customOptions && Object.keys(customOptions).length !== 3) throw new Error('options missing');
+
+    const meta: RoomMetadata = {
+      name: roomName,
+      gameId: (GameRoom as any).gameId,
+      gameStatus: GameStatus.PreGame,
+      players: [],
+      customOptions
+    };
+    this.setMetadata(meta).then(() => updateLobby(this));
+
     const state = new GameState();
-
-    console.log('options supplied: ', options);
-
-    if (options && Object.keys(options).length !== 3) throw new Error('options missing');
-
-    state.customOptions.assign(options);
-
+    state.customOptions.assign(meta.customOptions);
     state.spots.push(...boardGeneratorHook(state.customOptions));
-
     this.setState(state);
 
     this.onMessage(DROP_TOKEN, (client, message: DropTokenMessage) => {
@@ -48,14 +54,16 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
 
       const result = doQ(this.state.spots, state.customOptions, addToken, client.sessionId, message);
 
-      this.state.nextTurn = client.sessionId === this.metadata.players[0]
-        ? this.metadata.players[1]
-        : this.metadata.players[0];
+      this.state.nextTurn = client.sessionId === this.metadata.players[0].id
+        ? this.metadata.players[1].id
+        : this.metadata.players[0].id;
 
       const winner = winConditionHook(this.state.spots, this.state.tokens, state.customOptions, client.sessionId, result);
       if (winner) {
-        this.state.status = GameStatus.Finished;
+        this.state.status = this.metadata.gameStatus = GameStatus.Finished;
         this.state.winner = winner;
+
+        this.setMetadata(this.metadata).then(() => updateLobby(this));
 
         setTimeout(() => {
           this.disconnect();
@@ -65,16 +73,17 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   }
 
   onJoin(client: Client, options: any) {
-    const meta: RoomMetadata = this.metadata || { gameId: (GameRoom as any).gameId, players: [] };
-    meta.players.push(client.sessionId);
+    const meta: RoomMetadata = this.metadata!;
 
-    this.setMetadata(meta).then(() => updateLobby(this));
+    meta.players.push({ id: client.sessionId, name: client.sessionId });
 
     if (meta.players.length === 2) {
-      this.state.status = GameStatus.InProgress;
-      this.state.p1Player = meta.players[0];
-      this.state.nextTurn = getRandomArrayElement(meta.players);
+      this.state.status = meta.gameStatus = GameStatus.InProgress;
+      this.state.p1Player = meta.players[0].id;
+      this.state.nextTurn = getRandomArrayElement(meta.players).id;
     }
+
+    this.setMetadata(meta).then(() => updateLobby(this));
   }
 
   async onLeave(client: Client, consented: boolean) {

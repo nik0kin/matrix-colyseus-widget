@@ -31,10 +31,6 @@ export class CoordSchema extends Schema implements Coord {
   y: number;
 }
 
-export interface WithCustomOptions {
-  customOptions: Schema;
-}
-
 export class McwGameState extends Schema {
   @type('number') // TODO enum?
   status: GameStatus = GameStatus.PreGame;

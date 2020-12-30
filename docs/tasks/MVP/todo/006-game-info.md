@@ -1,1 +1,0 @@
-more info for each game on the lobby screen
