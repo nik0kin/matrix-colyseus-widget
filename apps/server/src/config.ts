@@ -12,6 +12,12 @@ export interface GameConfig {
   frontendIframe?: string;
 
   quickOptions?: CustomOptions;
+
+  attribution?: {
+    author: string;
+    license: string;
+    source: string;
+  };
 }
 
 export interface McwConfig {
@@ -19,6 +25,7 @@ export interface McwConfig {
 }
 
 
+// TODO-easy move this to common package
 export interface BackendGameConfig {
   GameRoom: Room;
   customOptions?: Record<string, {

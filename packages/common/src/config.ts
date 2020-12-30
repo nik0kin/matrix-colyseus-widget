@@ -11,4 +11,10 @@ export interface FeGameConfig {
     max: number;
   }>;
   quickOptions?: CustomOptions;
+
+  attribution?: {
+    author: string;
+    license: string;
+    source: string;
+  };
 }

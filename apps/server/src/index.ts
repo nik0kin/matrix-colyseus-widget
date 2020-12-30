@@ -40,6 +40,7 @@ const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
     displayName: gameConfig.displayName,
     customOptions,
     quickOptions: gameConfig.quickOptions,
+    attribution: gameConfig.attribution,
   };
   return feGameConfig;
 });

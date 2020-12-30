@@ -5,6 +5,7 @@ import { GameStatus } from 'common';
 import { StartButton } from './start-button';
 import { GameCard } from '../../components';
 import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs } from '../../contexts';
+import { OpenAttributionModal } from '../attribution';
 import { OpenCreateGameModal } from '../create-game';
 
 // import './style.css';
@@ -52,8 +53,8 @@ export const LobbyScreen: FC = () => {
         <h2>SinglePlayer Games</h2>
         <div>
           {singlePlayerGames.map((gameConfig) =>
-            <Fragment>
-              <button key={gameConfig.id} onClick={() => gotoPlayGame(gameConfig.id)}>
+            <Fragment key={gameConfig.id}>
+              <button onClick={() => gotoPlayGame(gameConfig.id)}>
                 Play {gameConfig.displayName}
               </button>
               {' '}
@@ -101,6 +102,9 @@ export const LobbyScreen: FC = () => {
           ))}
         </div>
       </div>}
+      <div style={{ marginTop: '40px' }}>
+        <OpenAttributionModal>Licenses</OpenAttributionModal>
+      </div>
     </div>
   )
 };
