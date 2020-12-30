@@ -1,0 +1,48 @@
+{
+  "name": "colyseus-battleship",
+  "homepage": "./",
+  "version": "0.1.0-inDev",
+  "private": true,
+  "devDependencies": {
+    "react-addons-test-utils": "^15.6.2",
+    "react-scripts": "4.0.1",
+    "typescript": "~3.7.2"
+  },
+  "dependencies": {
+    "@types/enzyme": "^2.8.12",
+    "@types/enzyme-adapter-react-16": "^1.0.1",
+    "@types/jest": "^21.1.1",
+    "@types/lodash": "^4.14.88",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^5.0.9",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "lodash": "^4.17.15",
+    "mule-sdk-js": "nik0kin/mule-sdk-js#v3",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0",
+    "redux-saga": "^0.16.0"
+  },
+  "scripts": {
+    "packageSdk": "(yarn unlink mule-sdk-js || echo 'no link') && rm -rf ./node_modules/mule-sdk-js && yarn add nik0kin/mule-sdk-js#v3 --no-lockfile",
+    "devSdk": "(yarn unlink mule-sdk-js || echo 'no link') && rm -rf ./node_modules/mule-sdk-js && yarn link mule-sdk-js",
+    "buildMockSdk": "./buildMockSdk.sh",
+    "useMockSdk": "./useMockSdk.sh",
+    "reMockSdk": "yarn run packageSdk && yarn run buildMockSdk && yarn run useMockSdk",
+    "restartMockSdk": "yarn run packageSdk && yarn run buildMockSdk && yarn run useMockSdk && yarn start",
+    "restartDevMockSdk": "yarn run devSdk && yarn run buildMockSdk && yarn run useMockSdk && yarn start",
+    "buildDevBundleCode": "./buildDevBundleCode.sh",
+    "buildProdBundleCode": "./buildProdBundleCode.sh",
+    "offlineBackup": "mkdir -p tmp && cp -r ./node_modules/mule-sdk-js ./tmp",
+    "useOfflineBackup": "rm -rf ./node_modules/mule-sdk-js && cp -r ./tmp/mule-sdk-js ./node_modules/",
+    "start": "PORT=8000 react-scripts start",
+    "build": "react-scripts build && rm -r dist/frontend && mv build dist/frontend",
+    "test": "react-scripts test --env=jsdom",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

@@ -1,0 +1,50 @@
+
+h1 {
+  margin-left: 180px;
+  margin-bottom: 0px;
+}
+
+.container {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.gameinfo {
+  width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.current-turn-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.current-turn-info .short-description {
+  font-weight: bold;
+}
+
+.waiting-indicator {
+  font-size: .8rem;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 8px;
+  border: 2px black solid;
+  margin-bottom: 12px;
+  background-color: white;
+  font-size: 1rem;
+}
+
+.submit-button:not([disabled]) {
+  cursor: pointer;
+}
+
+.gameboard {
+  width: 600px;
+}

@@ -1,0 +1,5 @@
+
+variable amount of ships
+
+salvo mode: one shot per ship per turn
+

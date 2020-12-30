@@ -1,0 +1,15 @@
+
+1. check if all ships are sunk
+ X- winConditionHook
+   X- deem winner if this is true for a user
+ X- game over hint text
+   X- show "You Won" or "You Lost" in hint spot
+   X- shot %s? - "niko    5 shots   4 hits   1miss    80% hit percent
+   X- "You needed 4 more hits to take out your opponents fleet"
+ X- frontend checks history.winner to see if someone has won
+
+  - dont poll
+    - after game over
+    - on your turn
+
+ X- test full game

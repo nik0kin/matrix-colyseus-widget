@@ -1,0 +1,53 @@
+basics
+X- webpack backend to node-readable module for mule backend to consume
+X- setup backend 'prod' build (uglifed and saved in dist/)
+X- setup frontend 'prod' build (uglifed and saved in dist/)
+X- dont hardcode first player as 'p1'
+ X- get session
+ X- show message if you arent the correct player
+X- check it's a Battleship Game
+
+X- place if its your turn
+  - your turn & you havent placed
+    - Desc: Your Placement
+    - Button: Place x ships
+  - your turn & you have placed = First Turn
+    - Desc: Your Shot
+  - opponent placement turn & you have placed
+    - Desc: Opponent Placement
+    - Button: Waiting on Ted's Ship Placement
+  - opponent placement turn & you havent placed
+    - Desc: Opponent Placement
+    - Button: Waiting on Ted's Ship Placement
+
+then
+X- redux-saga
+ X- loading while state loads
+X- submit button reducer
+ X- if (isYourTurn && isPlacementMode && getPlacementsLeft === 0) submitTurn()
+X- disable button while submitting
+x- see gen map & placement actions in a "real" mule environment
+ X- change currentTurnNumber & isYourTurn, which prevents user from submitting
+X- update mule-frontend to link to battleship
+
+X- servers-notes folder in notes-repo
+X- update jenkins
+  X- mule.tgp.io (domains)
+   X- ssl
+   X- runs newest jenkins
+    X- jobs
+      - watch/rebuild mdev/mule/mule-models
+      - watch/rebuild battleship
+   X- nginx
+   X- mule server
+    X- uses zion.tgp.io for db
+     X- lock down mongo port, it should only be accessible by localhost and mule.tgp.io
+
+
+ - Mule Backend doesnt catch bad id and doesnt send 404
+  - example: http://localhost:313/webservices/games/5b048b2daebfc56553f52d77/history/888
+ - Mule SDK doesnt reject promise if its 400
+
+
+ - does Mule Backend catch it if a player players out of Turn
+   - I saw validateTurn reject a Turn but I expected it to reject because of the wrong player is submitting a Tur

@@ -1,0 +1,18 @@
+goal: best ux without drag n drop
+
+ship outlines (on grid)
+  - black, then red when ship is sunk?
+
+  - rotate ship at square it was clicked
+
+New Turn modal - fades after 3s?
+ - "New Turn: You sunk Bob's Cruiser!"
+
+Select opponents shot on currentPlayers grid
+
+Mobile usability
+
+Mule Frontend shortlist
+  - "waiting on you" status message
+  - "waiting on opponent" status message
+  - "Game Over - Won|Loss" 

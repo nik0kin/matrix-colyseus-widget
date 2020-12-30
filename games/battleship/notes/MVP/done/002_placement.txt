@@ -1,0 +1,77 @@
+
+placement pseduocode
+ - only genericsize amount of ships, not ship structures (for mvp)
+
+shared:
+
+DEFAULT_SETUP = {
+ battleship: 1,
+ etc
+}
+
+frontend:
+ Action:
+  {
+    type: PlaceShips
+    params: {
+     shipPlacements: [
+       { shipId: 4, coord: 4,6 }
+       etc
+     ]
+    }
+  }
+
+ UI:
+  title followed by ship structure grid
+
+  "Click the ship on the left, then click a spot on your grid, click again to rotate"
+
+  table cell turns red if intersection
+
+ UX:
+  Prompted to place ships by button, and instructions to right
+
+  1. Click ship on left (or ship in the playfield)
+  X- shiplistship border turns dotted to indicate being placed
+
+  1a. Click occupied grid cell to rotate ship
+
+  2. Click grid cell
+   - unable to click an occupied spot
+    - not needed for MVP
+  X- shiplistship border turns solid to indicate it has been placed
+  X- shiplistship border turns solid red to indicate collision
+
+  3. repeat til all ships are placed
+
+  4. click button to send Turn
+
+  redux:
+   actions:
+    SELECT_SHIPLIST_SHIP
+     X- set selectedShipBeingPlaced
+
+    modify CLICK_SQUARE
+     (when placing)
+     X- to add actions ShipPlacement
+     X- unset selectedShipBeingPlaced
+     X- look for collisions
+     (when not placing)
+     X- rotate ship, and update ShipPlacement
+
+backend:
+ validate Action:
+  each shipPlacement {
+    is ship id valid?
+    does ship belong to currentPlayer?
+    are coords valid?
+    are coords already occupied?
+  }
+
+ do Action:
+  each shipPlacement {
+    ship.coords = shipPlacement.coords
+  }
+
+ validateTurn:
+   only allow one action

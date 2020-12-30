@@ -1,0 +1,68 @@
+
+ X- Poll for new turn
+   X- every 30s check if history.currentTurn is different that state.gamestate.currentTurn
+    - redux
+      - pollForNewTurn action/saga
+       X- uses mule/data function checkForNewTurn(currentTurn: number): Promise<boolean>
+       X- uses mule/data function getNewTurn(turnNumber: number): Promise<Turn>
+       X- emits newTurn(getNewTurn())
+     X- newTurn action
+        - turn: Turn
+     X- newTurnReducer
+       X- adds Turn to GameState
+    - UX
+      - ui.polledNewTurn = true
+
+ X- validateTurn
+    - only allow one action
+    - PlaceShips action requires !hasPlacedShips
+
+ X- frontend isPlacementMode to false
+   X- initial gamestate
+   X- after SubmitTurn
+
+ X- Dont show opponents ships (without shots)
+
+  - Shot Action
+   X- validateQ
+   X- doQ
+
+  - Shot UI/UX
+   X- Right side description
+   X- Submit Shot turn
+     X- lock selection
+    - on Successful Submit
+     X- unlock selection
+     X- change if the current player is allowed to submit
+     X- change right side description to tell the user about the last Shot
+      - Full Screen message
+   X- Shot/Turn history
+   X- show shots on left ship list
+   X- show sunk Ships
+
+-----------
+
+Shot Gameplay
+
+  1. User selects 1 Coord, that is not a previous Shot Coord
+
+  2. Submit.
+    Validate:
+      !_.includes(previousShots, (prevShot) => prevShot.id === newShot.id)
+    Do:
+      previousShots.push(newShot)
+
+      Check for ship hits
+        - mark shot as hit/miss for metadata
+        if Hit, check sunk,
+          - set ship.sunk=true and mark metadata?
+
+  3.
+    Current Player sees:
+      - Your Shot Hit/Missed at A4
+
+    Opponent Player sees:
+      - Your opponent fired a Shot at A4 and Hit/Missed
+
+    - playfield updates with X or /
+

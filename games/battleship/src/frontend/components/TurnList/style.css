@@ -1,0 +1,22 @@
+
+.TurnList {
+  display: flex;
+  margin-top: 10px;
+}
+
+.TurnList .turn-row {
+  padding: 2px;
+  font-size: .8rem;
+}
+
+.TurnList .turn-row:nth-child(2n+1) {
+  background-color: #f1f1f1;
+}
+
+.TurnList .subject {
+  font-weight: bold;
+}
+
+.TurnList .coord {
+  font-weight: bold;
+}

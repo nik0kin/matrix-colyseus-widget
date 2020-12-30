@@ -1,0 +1,36 @@
+Pieces per player (wikipedia version):
+
+Class of Ship	 Size
+x1 Carrier      5
+x1 Battleship   4
+x1 Cruiser      3
+x2 Submarine    1
+x2 Destroyer    2
+
+
+Round Robin, waitprogress
+
+Ships & Size could be variable
+
+Player Turn:
+
+ 1. Ship placement
+  - round robin placement because Mule limitations
+
+ 1a. Mule validates player 1 & 2 ship placements
+
+ 2. Player1 submits a valid guess
+  - must be in range
+  - must not of been guessed
+
+ 3. Mule Turn Progresses, determines if ship was hit
+
+ 3a. Check for win condition: all of one player's ships sunk
+
+ 4. Both players see result
+  - Player1 see's "You hit something at E5", "You miss at E5", or "You sunk a Carrier with a hit at E5"
+  - Player2 see's "Niko hit your Carrier at E5", etc
+ 
+ 4a. Announce winner
+
+ 5. Start from Step 2 with Player2

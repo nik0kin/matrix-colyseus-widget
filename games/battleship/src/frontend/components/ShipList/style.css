@@ -1,0 +1,42 @@
+
+.ShipList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ShipList .list-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.ship-name {
+  user-select: none;
+}
+
+.placement-mode .your-ship-list .ship-name,
+.placement-mode .your-ship-list td {
+  cursor: pointer;
+}
+
+.shiplist-ship {
+  border: 2px solid white;
+  display: inline-block;
+}
+
+.shiplist-ship.placing {
+  border: 2px dotted black;
+}
+
+.shiplist-ship.placed {
+  border: 2px solid black;
+}
+
+.shiplist-ship.placed.collision {
+  border: 2px solid red;
+}
+
+.ShipList .shiplist-ship td {
+  width: 15px;
+  height: 15px;
+  font-size: .7rem;
+}
