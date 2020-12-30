@@ -9,3 +9,5 @@ onAuth hook
   - calls https://matrix.org/docs/spec/server_server/unstable#get-matrix-federation-v1-openid-userinfo
     - return username if token is valid
   - set metadata.players[].name & state.players[].name
+
+https://github.com/matrix-org/matrix-doc/blob/master/proposals/1960-integrations-openid.md
