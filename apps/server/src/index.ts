@@ -12,7 +12,10 @@ import { McwConfig, BackendGameConfig } from './config'
 
 const mcwConfig: McwConfig = require('../mcw.config');
 
+
 const port = Number(process.env.PORT || 2567);
+const DEBUG = port !== 2560;
+
 const app = express()
 
 app.use(cors());
@@ -51,6 +54,8 @@ mcwConfig.gamesSupported.forEach((gameConfig) => {
   if (gameConfig.backendModule) {
     const backendConfig: BackendGameConfig = require(resolve('../', gameConfig.backendModule)).default;
     (backendConfig.GameRoom as any).gameId = gameConfig.id;
+    (backendConfig.GameRoom as any).DEBUG = DEBUG;
+
     gameServer.define(gameConfig.id, backendConfig.GameRoom as any)
       .enableRealtimeListing();
   }
@@ -76,3 +81,4 @@ app.use('/widget', express.static('../widget-client/build'));
 
 gameServer.listen(port);
 console.log(`Listening on ws://localhost:${port}`)
+console.log('DEBUG? ', DEBUG);

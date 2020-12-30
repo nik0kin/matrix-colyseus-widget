@@ -1,6 +1,8 @@
 import { WidgetApi } from 'matrix-widget-api';
 import React, { FC, Fragment, useState, useEffect, createContext, useContext } from 'react';
 
+const DEBUG = window.location.protocol !== 'https:';
+
 interface MatrixWidgetContextType {
   openIdAccessToken: string;
 }
@@ -8,10 +10,16 @@ interface MatrixWidgetContextType {
 const MatrixWidgetContext = createContext<MatrixWidgetContextType>(null as any);
 
 export const MatrixWidgetManager: FC = ({ children }) => {
+
   const [api] = useState(() => new WidgetApi());
   const [openIdAccessToken, setToken] = useState<string>('');
 
   useEffect(() => {
+    if (DEBUG) {
+      setToken('DEV_USER');
+      return;
+    }
+
     // Start the messaging
     api.start();
 

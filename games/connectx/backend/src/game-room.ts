@@ -18,6 +18,8 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   autoDispose = false;
 
   async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }) {
+    if ((GameRoom as any).DEBUG) return 'DEV_USER';
+
     if (cache[matrixOpenIdAccessToken]) {
       // Already been authed
       return cache[matrixOpenIdAccessToken];
