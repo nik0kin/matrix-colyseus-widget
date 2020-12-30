@@ -14,7 +14,7 @@
     "build-packages": "cd packages/utils && yarn build; cd ../common && yarn build",
     "build-docker": "docker build -t nik0kin/mcw .",
     "cloc": "cloc apps/**/src packages/**/src",
-    "run-dev-docker": "docker run -p 2567:2567 -d nik0kin/mcw"
+    "run-dev-docker": "docker run -p 2567:2560 -d nik0kin/mcw"
   },
   "devDependencies": {
     "lerna": "latest"

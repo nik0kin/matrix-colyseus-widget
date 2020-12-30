@@ -18,14 +18,19 @@ module.exports = {
     {
       id: 'tetris',
       displayName: 'Tetris',
-      frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en'
+      frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en',
+      attribution: {
+        author: 'Chvin',
+        license: 'Apache-2.0',
+        source: 'https://github.com/chvin/react-tetris'
+      }
     },
     {
       id: 'skifree',
       displayName: 'SkiFree',
       frontendIframe: 'https://basicallydan.github.io/skifree.js/',
       attribution: {
-        creator: 'Dan Hough <daniel.hough@gmail.com>',
+        author: 'Dan Hough <daniel.hough@gmail.com>',
         license: 'MIT',
         source: 'https://github.com/basicallydan/skifree.js'
       }

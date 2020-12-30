@@ -16,7 +16,7 @@ export const MatrixWidgetManager: FC = ({ children }) => {
 
   useEffect(() => {
     if (DEBUG) {
-      setToken('DEV_USER');
+      setToken('DEV_USER-token');
       return;
     }
 

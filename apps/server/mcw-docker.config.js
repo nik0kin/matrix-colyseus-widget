@@ -18,29 +18,49 @@ module.exports = {
     {
       id: 'solitaire',
       displayName: 'Solitaire',
-      frontendFiles: '../games/solitaire'
+      frontendFiles: '../games/solitaire',
+      attribution: {
+        author: 'cyanharlow',
+        license: '???',
+        source: 'https://github.com/cyanharlow/solitaire'
+      }
     },
     {
       id: 'sudoku',
       displayName: 'Sudoku',
-      frontendFiles: '../games/sudoku-js'
+      frontendFiles: '../games/sudoku-js',
+      attribution: {
+        author: 'baruchel',
+        license: 'MIT',
+        source: 'https://github.com/baruchel/sudoku-js'
+      }
     },
     {
       id: 'puzzles',
       displayName: 'Puzzle Collection',
-      frontendFiles: '../games/puzzles-menu'
+      frontendFiles: '../games/puzzles-menu',
+      attribution: {
+        author: 'Simon Tatham',
+        license: 'MIT',
+        source: 'https://git.tartarus.org/?p=simon/puzzles.git'
+      }
     },
     {
       id: 'tetris',
       displayName: 'Tetris',
-      frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en'
+      frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en',
+      attribution: {
+        author: 'Chvin',
+        license: 'Apache-2.0',
+        source: 'https://github.com/chvin/react-tetris'
+      }
     },
     {
       id: 'skifree',
       displayName: 'SkiFree',
       frontendIframe: 'https://basicallydan.github.io/skifree.js/',
       attribution: {
-        creator: 'Dan Hough <daniel.hough@gmail.com>',
+        author: 'Dan Hough <daniel.hough@gmail.com>',
         license: 'MIT',
         source: 'https://github.com/basicallydan/skifree.js'
       }

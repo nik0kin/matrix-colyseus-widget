@@ -27,7 +27,10 @@ RUN (cd apps/widget-client && yarn build)
 
 RUN (cd apps/server && mv mcw-docker.config.js mcw.config.js)
 
-EXPOSE 2567
+ENV PORT 2560
+
+EXPOSE 2560
 
 WORKDIR 'apps/server'
+
 CMD [ "yarn", "start" ]
