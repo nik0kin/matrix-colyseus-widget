@@ -46,6 +46,16 @@ module.exports = {
       }
     },
     {
+      id: '2048',
+      displayName: '2048',
+      frontendFiles: '../games/2048',
+      attribution: {
+        author: 'gabrielecirulli',
+        license: 'MIT',
+        source: 'https://github.com/gabrielecirulli/2048'
+      }
+    },
+    {
       id: 'tetris',
       displayName: 'Tetris',
       frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en',
