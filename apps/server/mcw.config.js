@@ -16,6 +16,13 @@ module.exports = {
       quickOptions: {}
     },
     {
+      id: 'battleship',
+      displayName: 'Battleship',
+      backendModule: '../games/battleship/backend-dist',
+      frontendFiles: '../games/battleship/build',
+      quickOptions: {}
+    },
+    {
       id: 'tetris',
       displayName: 'Tetris',
       frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en',

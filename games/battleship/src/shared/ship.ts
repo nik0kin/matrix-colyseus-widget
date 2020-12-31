@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { Alignment } from './types/alignment';
-import { DEFAULT_GAME_START_SHIP_SETUP_COUNTS, getShipStructure, Ship, ShipStructure, ShipType } from './types/ship';
+import { DEFAULT_GAME_START_SHIP_SETUP_COUNTS, getShipStructure, Ship, ShipStructure } from './types/ship';
 import { Coord, isValidCoord } from './mule-common';
 
 export function getIdFromShip(ship: Ship): number {
@@ -22,7 +22,7 @@ export function getTotalShipsPerPlayer(): number {
 export function findOneShip(playerShips: Ship[], shipId: number): Ship {
   const ship = _.find(playerShips, (_ship: Ship) => _ship.id === shipId) as Ship;
   if (!ship) {
-    throw 'playerShips should contain shipId ' + playerShips.toString();
+    throw new Error('playerShips should contain shipId ' + playerShips.toString());
   } else {
     return ship;
   }

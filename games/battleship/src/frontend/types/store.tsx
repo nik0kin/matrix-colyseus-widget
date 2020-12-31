@@ -1,6 +1,5 @@
 
-import { Action } from 'mule-sdk-js';
-import { Coord } from '../../shared';
+import { Coord, Action } from '../../shared';
 import { GameState } from './index';
 
 export interface StoreState {

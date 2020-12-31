@@ -1,7 +1,5 @@
-import { Action } from 'mule-sdk-js';
-
 import * as constants from '../constants';
-import { Coord } from '../../shared';
+import { Action, Coord } from '../../shared';
 
 export * from './mule';
 
@@ -25,10 +23,10 @@ export function clickSquare(lobbyPlayerId: string, coord: Coord): ClickSquare {
 
 export interface ClickSubmit {
   type: constants.CLICK_SUBMIT;
-  pendingTurn: {actions: Action[]};
+  pendingTurn: { actions: Action[] };
 }
 
-export function clickSubmit(pendingTurn: {actions: Action[]}): ClickSubmit {
+export function clickSubmit(pendingTurn: { actions: Action[] }): ClickSubmit {
   return {
     type: constants.CLICK_SUBMIT,
     pendingTurn,

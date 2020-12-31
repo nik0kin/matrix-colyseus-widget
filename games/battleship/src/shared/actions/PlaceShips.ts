@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import { Alignment, PlayerVariablesMap, Ship } from '../';
+import { Alignment, Ship } from '../';
 import { Coord } from '../mule-common';
 import { getIdFromShip, findOneShip } from '../ship';
 import { GameState } from '../state';

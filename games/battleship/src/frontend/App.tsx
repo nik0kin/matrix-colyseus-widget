@@ -1,11 +1,15 @@
 import * as React from 'react';
+
 import './App.css';
 import LoadScreen from './containers/LoadScreen';
+import { ServerManager } from './gamestate/colyseus';
 
 function App() {
   return (
     <div>
-      <LoadScreen/>
+      <ServerManager>
+        <LoadScreen />
+      </ServerManager>
     </div>
   );
 }

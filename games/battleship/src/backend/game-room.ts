@@ -26,6 +26,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   autoDispose = false;
 
   async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }) {
+    console.log('onAuth', (GameRoom as any).DEBUG)
     if ((GameRoom as any).DEBUG) return 'DEV_USER';
 
     if (cache[matrixOpenIdAccessToken]) {
@@ -55,7 +56,6 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   onCreate(options: any) {
     const { roomName, matrixOpenIdAccessToken, ...customOptions } = options;
     console.log('onCreate options supplied: ', options);
-    if (customOptions && Object.keys(customOptions).length !== 3) throw new Error('options missing');
 
     const meta: RoomMetadata = {
       name: roomName,
@@ -165,6 +165,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   }
 
   onJoin(client: Client, options: any, matrixName: string) {
+    console.log('onJoin', matrixName)
     const meta: RoomMetadata = this.metadata!;
 
     meta.players.push({ id: client.sessionId, name: matrixName });

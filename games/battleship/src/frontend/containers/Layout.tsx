@@ -1,11 +1,12 @@
 import { connect, Dispatch } from 'react-redux';
-import { Action } from 'mule-sdk-js';
+
+import { Action } from '../../shared';
 
 import Layout from '../components/Layout';
 import * as actions from '../actions/';
 import { StoreState } from '../types/index';
 
-export function mapStateToProps({gameState, ui: {selectedCoord}, pendingTurn, isSubmitting}: StoreState) {
+export function mapStateToProps({ gameState, ui: { selectedCoord }, pendingTurn, isSubmitting }: StoreState) {
 
   return {
     isYourTurn: gameState.mule.isYourTurn,
@@ -19,7 +20,7 @@ export function mapStateToProps({gameState, ui: {selectedCoord}, pendingTurn, is
 
 export function mapDispatchToProps(dispatch: Dispatch<actions.RemovePendingAction>) {
   return {
-    clickSubmit: (pendingTurn: {actions: Action[]}) => dispatch(actions.clickSubmit(pendingTurn)),
+    clickSubmit: (pendingTurn: { actions: Action[] }) => dispatch(actions.clickSubmit(pendingTurn)),
     removePendingAction: (index: number) => dispatch(actions.removePendingAction(index)),
   };
 }

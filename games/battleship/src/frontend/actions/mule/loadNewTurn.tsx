@@ -1,4 +1,4 @@
-import { Turn } from 'mule-sdk-js';
+import { Turn } from '../../../shared';
 
 import * as constants from '../../constants';
 

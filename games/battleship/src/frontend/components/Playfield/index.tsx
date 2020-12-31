@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { reduce, times } from 'lodash';
-import { Action } from 'mule-sdk-js';
 
 import './style.css';
 import { GameState } from '../../types';
 import {
   Coord, doesShipIdExistInShipPlacements, FireShotMuleActionMetaData,
-  getAllShipsIncludingPendingActions, getBattleshipCoordString, getFireShotActionMetaData, getInvalidShipPlacements,
+  getAllShipsIncludingPendingActions, getBattleshipCoordString, getInvalidShipPlacements,
   getPlaceShipsParamsFromAction, getShotOnSquare,
   getShipOnSquare, isValidCoord,
   Ship, ShipPlacement,
-  numberToLetter, Shot,
+  numberToLetter, Shot, Action,
 } from '../../../shared';
 
 type ClickSquareFn = (lobbyPlayerId: string, coord: Coord) => void;
@@ -39,7 +38,7 @@ function Playfield({ gameState, selectedCoord, selectedShipBeingPlaced, pendingA
   let yourShipsClassNames: string = 'your-ships ';
   let theirShipsClassNames: string = 'their-ships ';
 
-  if (gameState.isPlacementMode && selectedShipBeingPlaced ) {
+  if (gameState.isPlacementMode && selectedShipBeingPlaced) {
     yourShipsClassNames += 'placing-ships';
   }
 
@@ -146,7 +145,7 @@ function getRow(
     const coord: Coord = { x: x - 1, y: y - 1 };
     let _class: string = y === 0 ? 'top ' : '';
     _class += x === 0 ? 'left ' : '';
-    let cellContent: string = _class === 'top ' ? String(x) : _class ===  'left ' ? numberToLetter(y) : '';
+    let cellContent: string = _class === 'top ' ? String(x) : _class === 'left ' ? numberToLetter(y) : '';
 
     const possibleShip: Ship | undefined = getShipOnSquare(gridSize, coord, ships);
     if (possibleShip) {
@@ -196,12 +195,12 @@ function getHintDescription(
   waslastTurnByPlayer: boolean,
   gameState: GameState,
 ): JSX.Element {
-  const fireShotMeta: FireShotMuleActionMetaData | undefined = getFireShotActionMetaData(lastAction);
+  const fireShotMeta: FireShotMuleActionMetaData | undefined = lastAction?.metadata;
 
   return (
     <div>
       {isPlacementMode && <span>Click the ship on the left, then click a spot on your grid, click again to rotate</span>}
-    
+
       {!isPlacementMode && waslastTurnByPlayer &&
         <span>
           {fireShotMeta && fireShotMeta.newShot.hit && 'Your Shot HIT a Ship at ' + getBattleshipCoordString(fireShotMeta.newShot.coord) + '!'}
@@ -225,11 +224,11 @@ function getHintDescription(
       </p>}
     </div>
   );
-  
+
 }
 
 function getGameOverDiv(isPlayerWinner: boolean, gameState: GameState): JSX.Element {
-  
+
   function getShotPercentableTableRow(playerName: string, shots: Shot[]): JSX.Element {
     const hits: number = countHits(shots);
     const misses: number = shots.length - hits;
@@ -253,7 +252,7 @@ function getGameOverDiv(isPlayerWinner: boolean, gameState: GameState): JSX.Elem
       </tr>
     );
   }
-  
+
   // TODO calc based on Ship setup (18 = default total shipSquares)
 
   return (
@@ -291,7 +290,7 @@ function countHits(shots: Shot[]): number {
 function getLastAction(gameState: GameState): Action | undefined {
   if (gameState.mule.currentTurn <= 1) return;
 
-  return gameState.mule.previousTurns[gameState.mule.currentTurn - 2].playerTurns[gameState.mule.isYourTurn 
-      ? gameState.theirLobbyPlayerId
-      : gameState.yourLobbyPlayerId].actions[0];
+  return gameState.mule.previousTurns[gameState.mule.currentTurn - 2].playerTurns[gameState.mule.isYourTurn
+    ? gameState.theirLobbyPlayerId
+    : gameState.yourLobbyPlayerId].actions[0];
 }

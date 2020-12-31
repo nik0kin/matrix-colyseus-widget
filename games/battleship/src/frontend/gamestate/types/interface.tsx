@@ -1,6 +1,4 @@
-import { Turn } from 'mule-sdk-js';
-
-import { Ship, Grid, Square, Shot } from '../../../shared';
+import { Ship, Grid, Square, Shot, Turn } from '../../../shared';
 
 import { Player, PlayerMap } from '../../types';
 

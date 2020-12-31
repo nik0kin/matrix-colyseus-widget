@@ -1,8 +1,8 @@
 
-import { GameState } from '../types';
+// import { GameState } from '../types';
 
-import { getBattleshipGameState } from './mule/data';
+// import { getBattleshipGameState } from './mule/data';
 
-export function getInitialGameState(): Promise<GameState> {
-  return getBattleshipGameState();
-}
+// export function getInitialGameState(): Promise<GameState> {
+//   return getBattleshipGameState();
+// }

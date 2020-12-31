@@ -5,7 +5,7 @@ export interface Props {
 }
 
 export class WaitingIndicator extends React.Component {
-  private interval: NodeJS.Timer;
+  private interval: NodeJS.Timer | undefined;
 
   constructor(props: Props) {
     super(props);
@@ -23,7 +23,9 @@ export class WaitingIndicator extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
 
   render() {

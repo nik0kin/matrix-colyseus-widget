@@ -1,17 +1,16 @@
 import * as _ from 'lodash';
-import { Action } from 'mule-sdk-js';
 
 import {
   Alignment, Coord, FireShotMuleActionParams, getFireShotMuleActionFromParams,
   getShipsFromPendingActions, getShipOnSquare, getPlaceShipsActionParamsFromMuleAction,
   getPlaceShipsActionWithNewShipPlacement, getPlaceShipsMuleActionFromParams, getRotatedAlignment,
-  isValidFireShotCoord,
+  isValidFireShotCoord, Action,
   PlaceShipsMuleActionParams, Ship, ShipPlacement,
 } from '../../shared';
 
 import {
   ClickSquare,
-//  RemovePendingAction,
+  //  RemovePendingAction,
 } from '../actions';
 import { StoreState } from '../types';
 
@@ -78,7 +77,7 @@ export function clickSquareReducer(state: StoreState, clickSquareAction: ClickSq
   }
 
   if (clickSquareAction.lobbyPlayerId === state.gameState.theirLobbyPlayerId) {
-    const pendingTurn: { actions: Action[]} = { actions: [] };
+    const pendingTurn: { actions: Action[] } = { actions: [] };
 
     if (!state.gameState.isPlacementMode && state.gameState.mule.isYourTurn && isValidFireShotCoord(coord, state.gameState.yourShots)) {
       // add pending FireShot Action

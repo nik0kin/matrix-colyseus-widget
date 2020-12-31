@@ -1,6 +1,5 @@
 import * as React from 'react';
 // import * as _ from 'lodash';
-import { Action } from 'mule-sdk-js';
 
 import Playfield from '../../containers/Playfield';
 import ShipList from '../../containers/ShipList';
@@ -8,14 +7,14 @@ import TurnList from '../../containers/TurnList';
 import { GameState, PlayerMap } from '../../types';
 import {
   Coord, getBattleshipCoordString, getPlaceShipsActionParamsFromMuleAction, getTotalShipsPerPlayer,
-  isValidFireShotCoord, Shot,
+  isValidFireShotCoord, Shot, Action,
 } from '../../../shared';
 
 import { WaitingIndicator } from './waiting-indicator';
 
 import './style.css';
 
-type ClickSubmitFn = (pendingTurn: {actions: Action[]}) => void;
+type ClickSubmitFn = (pendingTurn: { actions: Action[] }) => void;
 
 export interface Props {
   isYourTurn: boolean;
@@ -40,7 +39,7 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
 
           <div className="current-turn-info">
             <div> Turn {gameState.mule.currentTurn} </div>
-            {false && !isYourTurn && <WaitingIndicator/>}
+            {false && !isYourTurn && <WaitingIndicator />}
             <div className="short-description">
               {getShortDescription(
                 isYourTurn,
@@ -52,7 +51,7 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
           </div>
           <button
             className="submit-button"
-            onClick={() => clickSubmit({actions: pendingActions})}
+            onClick={() => clickSubmit({ actions: pendingActions })}
             disabled={
               isSubmitting || !isYourTurn || gameState.isGameOver
               || isSubmitButtonDisabled(
@@ -74,17 +73,17 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
             )}
           </button>
 
-          <ShipList/>
+          <ShipList />
 
-          <TurnList/>
+          <TurnList />
 
-          <div className="shot-list"/>
+          <div className="shot-list" />
         </div>
         <div className="gameboard">
-          <Playfield/>
+          <Playfield />
         </div>
       </div>
-      <div className="chat"/>
+      <div className="chat" />
     </div>
   );
 }
@@ -120,9 +119,9 @@ function getSubmitButtonText(
 
   if (!isYourTurn) {
     if (isOpponentPlacementMode) {
-      return `Waiting on ${opponentName}\'s Ship Placement`;
+      return `Waiting on ${opponentName}'s Ship Placement`;
     } else {
-      return `Waiting on ${opponentName}\ to Fire a Shot`;
+      return `Waiting on ${opponentName} to Fire a Shot`;
     }
   }
 

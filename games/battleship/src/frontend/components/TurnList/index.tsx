@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { each, map } from 'lodash';
-import { Action, Turn } from 'mule-sdk-js';
 
 import {
   FireShotMuleActionMetaData, getBattleshipCoordString,
-  PLACE_SHIPS_MULE_ACTION
+  PLACE_SHIPS_MULE_ACTION, Action, Turn,
 } from '../../../shared';
 
 import './style.css';
@@ -38,7 +37,7 @@ function getTurnList(
 ): JSX.Element {
 
   const turnsHtml: JSX.Element[] = map(previousTurns, (turn: Turn) => {
-    const key: string = 'turnlist-turn-' + turn._id;
+    const key: string = 'turnlist-turn-' + turn.turnNumber;
     const lobbyPlayerId: string = getLobbyPlayerIdWhoPlayedTurn(turn);
     const action: Action = getActionFromTurn(turn);
 
@@ -95,7 +94,7 @@ function getListItemFromAction(
 
   if (action.type === PLACE_SHIPS_MULE_ACTION) {
     subject = isOpponentsTurn ? opponentName + '\'s' : 'Your';
-    return  (
+    return (
       <div>
         {turnNumber}. <span className="subject">{subject}</span> ship placement phase
       </div>

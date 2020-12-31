@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Action } from 'mule-sdk-js';
 
 import {
   addCoords, Coord, doesShipIdExistInShipPlacements, getAlignmentOffset,
   getPlaceShipsParamsFromAction, getInvalidShipPlacements, getShipStructure, getShotOnSquare,
-  isShipPlaced, Ship, ShipPlacement, Shot,
+  isShipPlaced, Ship, ShipPlacement, Shot, Action,
 } from '../../../shared';
 
 import './style.css';
@@ -123,7 +122,7 @@ function getShipListShip(
     let cellContent: string = '';
 
     const squareCoord: Coord = addCoords(ship.coord, getAlignmentOffset(shipSquares[i], ship.alignment));
-  
+
     const possibleShot: Shot | undefined = getShotOnSquare(squareCoord, opponentShots);
     if (possibleShot) {
       _class += possibleShot.hit ? 'hit-shot ' : 'miss-shot ';

@@ -1,8 +1,7 @@
-import { Action } from 'mule-sdk-js';
 
 import {
   FireShotMuleActionMetaData, getAllShipsIncludingPendingActions,
-  PLACE_SHIPS_MULE_ACTION, Ship,
+  PLACE_SHIPS_MULE_ACTION, Ship, Action,
 } from '../../shared';
 
 import { StoreState } from '../types';
@@ -58,17 +57,17 @@ export function loadNewTurnReducer(state: StoreState, loadNewTurn: LoadNewTurn):
 
   // Process their Completed Turn
   if (action.type === PLACE_SHIPS_MULE_ACTION) {
-      return {
-        ...state,
-        gameState: {
-          ...state.gameState,
-          mule: newMuleState,
-          isOpponentPlacementMode: false,
-          // theirShips.. dont update theirShips, that should be hidden knowledge
-        },
-        ui: getNoSelectedCoordUiState(state.ui),
-        isSubmitting: false,
-      };
+    return {
+      ...state,
+      gameState: {
+        ...state.gameState,
+        mule: newMuleState,
+        isOpponentPlacementMode: false,
+        // theirShips.. dont update theirShips, that should be hidden knowledge
+      },
+      ui: getNoSelectedCoordUiState(state.ui),
+      isSubmitting: false,
+    };
   } else { // FIRE SHOT
     const fireShotMetadata: FireShotMuleActionMetaData = (action.metadata as any);
     return {
@@ -76,7 +75,7 @@ export function loadNewTurnReducer(state: StoreState, loadNewTurn: LoadNewTurn):
       gameState: {
         ...state.gameState,
         mule: newMuleState,
-        theirShots: [...state.gameState.theirShots, fireShotMetadata.newShot], 
+        theirShots: [...state.gameState.theirShots, fireShotMetadata.newShot],
       },
       ui: getNoSelectedCoordUiState(state.ui),
       isSubmitting: false,
