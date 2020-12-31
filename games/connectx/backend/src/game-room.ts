@@ -17,11 +17,12 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
-  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }) {
+  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }): Promise<string | false> {
     if ((GameRoom as any).DEBUG) return 'DEV_USER';
 
     if (cache[matrixOpenIdAccessToken]) {
       // Already been authed
+      console.log('onAuth already authed: ', cache[matrixOpenIdAccessToken]);
       return cache[matrixOpenIdAccessToken];
     }
 
@@ -37,6 +38,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
 
       cache[matrixOpenIdAccessToken] = data.sub;
 
+      console.log('onAuth authed: ', data.sub);
       return data.sub;
     } catch (e) {
       console.error('matrix lookup failed', e);
@@ -105,10 +107,14 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   }
 
   onJoin(client: Client, options: any, matrixName: string) {
+    console.log('onJoin', client.sessionId, matrixName);
     const meta: RoomMetadata = this.metadata!;
 
     meta.players.push({ id: client.sessionId, name: matrixName });
-    this.state.players.push(new PlayerSchema().assign({ id: client.sessionId, name: matrixName }));
+    this.state.players.push(new PlayerSchema().assign({
+      id: client.sessionId,
+      name: typeof matrixName === 'boolean' ? undefined : matrixName
+    }));
 
     if (meta.players.length === 2) {
       this.state.status = meta.gameStatus = GameStatus.InProgress;

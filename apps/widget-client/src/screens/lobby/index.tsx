@@ -4,7 +4,7 @@ import { GameStatus } from 'common';
 
 import { StartButton } from './start-button';
 import { GameCard } from '../../components';
-import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs } from '../../contexts';
+import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs, useOpenIdAccessToken } from '../../contexts';
 import { OpenAttributionModal } from '../attribution';
 import { OpenCreateGameModal } from '../create-game';
 
@@ -14,6 +14,7 @@ export const LobbyScreen: FC = () => {
   const { rooms, joinGame } = useLobbyState();
   const getJoinedRoom = useGetJoinedRoom();
   const gameConfigs = useGameConfigs();
+  const openIdAccessToken = useOpenIdAccessToken();
 
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {
@@ -49,6 +50,7 @@ export const LobbyScreen: FC = () => {
   return (
     <div>
       <h1>Lobby</h1>
+      {!openIdAccessToken && <h2>Alert: Unable to authenticate with Matrix</h2>}
       {!!singlePlayerGames.length && <div>
         <h2>SinglePlayer Games</h2>
         <div>
@@ -62,7 +64,7 @@ export const LobbyScreen: FC = () => {
           )}
         </div>
       </div>}
-      {!!multiPlayerGames.length && <div>
+      {openIdAccessToken && !!multiPlayerGames.length && <div>
         <div>
           <h2>MultiPlayer Games</h2>
           <div>
