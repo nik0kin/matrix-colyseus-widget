@@ -4,7 +4,7 @@ import { GameStatus } from 'common';
 
 import { StartButton } from './start-button';
 import { GameCard } from '../../components';
-import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs, useOpenIdAccessToken } from '../../contexts';
+import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs, useMatrixAuth } from '../../contexts';
 import { OpenAttributionModal } from '../attribution';
 import { OpenCreateGameModal } from '../create-game';
 
@@ -14,7 +14,7 @@ export const LobbyScreen: FC = () => {
   const { rooms, joinGame } = useLobbyState();
   const getJoinedRoom = useGetJoinedRoom();
   const gameConfigs = useGameConfigs();
-  const openIdAccessToken = useOpenIdAccessToken();
+  const [openIdAccessToken] = useMatrixAuth();
 
   const joinableGames = useMemo(() => {
     return rooms.filter((room) => {

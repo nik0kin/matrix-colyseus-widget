@@ -7,7 +7,7 @@ const MATRIX_AUTH_TIMEOUT = 30 * 1000;
 
 interface MatrixWidgetContextType {
   enabled: boolean;
-  openIdAccessToken: string;
+  matrixAuth: [string, string]; // [openIdAccessToken, matrixServerName]
 }
 
 const MatrixWidgetContext = createContext<MatrixWidgetContextType>(null as any);
@@ -15,18 +15,18 @@ const MatrixWidgetContext = createContext<MatrixWidgetContextType>(null as any);
 export const MatrixWidgetManager: FC = ({ children }) => {
 
   const [api] = useState(() => new WidgetApi());
-  const [openIdAccessToken, setToken] = useState<string>('');
+  const [matrixAuth, setMatrixAuth] = useState<MatrixWidgetContextType['matrixAuth']>(['', '']);
   const [error, setError] = useState(false);
 
   useTimeout(() => {
-    if (!openIdAccessToken) {
+    if (!matrixAuth) {
       setError(true);
     }
   }, MATRIX_AUTH_TIMEOUT);
 
   useEffect(() => {
     if (DEBUG) {
-      setToken('DEV_USER-token');
+      setMatrixAuth(['DEV_USER-token', 'matrix.fake']);
       return;
     }
 
@@ -39,7 +39,7 @@ export const MatrixWidgetManager: FC = ({ children }) => {
       api.requestOpenIDConnectToken()
         .then((response) => {
           console.log('Matrix OpenId request success: ', response);
-          setToken(response.access_token!);
+          setMatrixAuth([response.access_token!, response.matrix_server_name!]);
         })
         .catch((error) => {
           console.error('Matrix OpenId request failed', error);
@@ -50,12 +50,12 @@ export const MatrixWidgetManager: FC = ({ children }) => {
     // return () => api.stop();
   }, [api]);
 
-  if (!openIdAccessToken && !error) return <Fragment>Authenticating with Matrix</Fragment>;
+  if (!matrixAuth && !error) return <Fragment>Authenticating with Matrix</Fragment>;
 
-  return <MatrixWidgetContext.Provider value={{ enabled: !error, openIdAccessToken }}>{children}</MatrixWidgetContext.Provider>;
+  return <MatrixWidgetContext.Provider value={{ enabled: !error, matrixAuth }}>{children}</MatrixWidgetContext.Provider>;
 };
 
-export const useOpenIdAccessToken = () => useContext(MatrixWidgetContext).openIdAccessToken;
+export const useMatrixAuth = () => useContext(MatrixWidgetContext).matrixAuth;
 
 // https://www.30secondsofcode.org/react/s/use-timeout
 const useTimeout = (callback: () => void, delay: number) => {

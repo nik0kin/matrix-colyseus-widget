@@ -1,6 +1,6 @@
 import { Room, Client, updateLobby } from 'colyseus';
 
-import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix } from 'common';
+import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
 import { getRandomArrayElement } from 'utils';
 
 // import { DROP_TOKEN, DropTokenMessage, GameState, TokenPiece } from './common';
@@ -22,12 +22,12 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
-  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }): Promise<string | false> {
-    return authWithMatrix(GameRoom, matrixOpenIdAccessToken);
+  async onAuth(client: Client, { matrixOpenIdAccessToken, matrixServerName }: WidgetMatrixAuth): Promise<string | false> {
+    return authWithMatrix(GameRoom, matrixOpenIdAccessToken, matrixServerName);
   }
 
   onCreate(options: any) {
-    const { roomName, matrixOpenIdAccessToken, ...customOptions } = options;
+    const { roomName, matrixOpenIdAccessToken, matrixServerName, ...customOptions } = options;
     console.log('onCreate options supplied: ', options);
 
     const meta: RoomMetadata = {
