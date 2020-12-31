@@ -11,7 +11,7 @@ export function getIdFromShip(ship: Ship): number {
 export function getTotalShipsPerPlayer(): number {
   return _.reduce(
     DEFAULT_GAME_START_SHIP_SETUP_COUNTS, // TODO dont hardcode
-    (total: number, count: number, shipType: ShipType) => {
+    (total: number, count: number, shipType) => {
       return total + count;
     },
     0

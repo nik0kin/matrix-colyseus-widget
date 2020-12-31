@@ -34,7 +34,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     }
 
     try {
-      const resp = await (fetch as typeof window.fetch)('https://matrix.tgp.io' + '/_matrix/federation/v1/openid/userinfo' + '?access_token=' + matrixOpenIdAccessToken);
+      const resp = await fetch('https://matrix.tgp.io' + '/_matrix/federation/v1/openid/userinfo' + '?access_token=' + matrixOpenIdAccessToken, {});
       const data = await resp.json();
 
       if (data.error || data.errcode) {

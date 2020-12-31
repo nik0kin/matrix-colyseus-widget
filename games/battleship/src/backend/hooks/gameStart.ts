@@ -11,12 +11,12 @@ const gameStartHook = (gameState: GameState) => {
     const lobbyPlayerId = 'p' + (i + 1);
 
     // 1. add ship pieces
-    _.each(DEFAULT_GAME_START_SHIP_SETUP_COUNTS, (count: number, shipType: ShipType) => {
+    _.each(DEFAULT_GAME_START_SHIP_SETUP_COUNTS, (count, shipType) => {
       _.times(count, () => {
         const newShip = new ShipSchema().assign({
           id: -1, // TODO-fork generate id based of state.idCounter
           ownerId: lobbyPlayerId,
-          shipType,
+          shipType: shipType as ShipType,
           alignment: Alignment.Horizontal,
           sunk: false,
         });

@@ -11,7 +11,7 @@ export class ShotSchema extends Schema implements Shot {
   hit: boolean = false;
 }
 
-export class BattleshipPlayerVariablesSchema extends Schema implements BattleshipPlayerVariables {
+export class BattleshipPlayerVariablesSchema extends Schema /* implements BattleshipPlayerVariables */ {
   @type('boolean')
   hasPlacedShips: boolean = false;
 
@@ -21,27 +21,27 @@ export class BattleshipPlayerVariablesSchema extends Schema implements Battleshi
 
 export class ShipSchema extends Schema implements Ship {
   @type('number')
-  id: number;
+  id: number = -1;
 
   @type('string')
-  ownerId: string;
+  ownerId: string = '';
 
   @type('string')
-  shipType: ShipType;
+  shipType: ShipType = ShipType.Battleship;
 
   @type(CoordSchema)
   coord = new CoordSchema().assign({ x: -1, y: -1 });
 
   @type('number')
-  alignment: Alignment;
+  alignment: Alignment = Alignment.Horizontal;
 
   @type('boolean')
-  sunk: boolean;
+  sunk: boolean = false;
 }
 
 export class SquareSchema extends Schema implements Square {
   @type('string')
-  ownerId: string;
+  ownerId: string = '';
 
   @type(CoordSchema)
   coord = new CoordSchema().assign({ x: -1, y: -1 });

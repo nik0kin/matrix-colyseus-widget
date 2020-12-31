@@ -27,11 +27,22 @@
     "redux-saga": "^0.16.0"
   },
   "scripts": {
-    "buildDevBundleCode": "./buildDevBundleCode.sh",
-    "buildProdBundleCode": "./buildProdBundleCode.sh",
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -r dist/frontend && mv build dist/frontend",
+    "build": "PUBLIC_URL=/games/battleship react-scripts build",
+    "build-backend": "webpack --config webpack.backend.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
