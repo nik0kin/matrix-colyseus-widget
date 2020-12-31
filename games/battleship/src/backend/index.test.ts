@@ -1,5 +1,6 @@
-import bundleCode from './index';
+import config from './index';
 
 it('should exist', () => {
-  expect(bundleCode).toBeTruthy();
+  expect(config).toBeTruthy();
+  expect(config.GameRoom).toBeTruthy();
 });

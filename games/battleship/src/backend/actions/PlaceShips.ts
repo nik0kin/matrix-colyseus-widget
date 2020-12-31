@@ -1,19 +1,16 @@
 
 import * as _ from 'lodash';
-import {
-  ActionCode,
-  MuleStateSdk, PieceState, VariableMap,
-} from 'mule-sdk-js';
 
 import {
   addCoords, Coord, getAlignmentOffset,
-  getPieceStateFromShip, getShipFromPieceSpace, getShipStructure, getTotalShipsPerPlayer, Grid, isValidCoord,
-  PlaceShipsMuleActionParams, Ship, ShipPlacement,
-  ShipStructure, ShipType,
+  getShipStructure, getTotalShipsPerPlayer, Grid, isValidCoord,
+  PlaceShipsMuleActionParams, ShipPlacement,
+  ShipStructure, GameState, setPlayerVariable,
 } from '../../shared';
+import { CoordSchema } from 'common';
 
 
-const PlaceShipsAction: ActionCode = {
+const PlaceShipsAction = {
   validateQ,
   doQ,
 };
@@ -21,8 +18,8 @@ const PlaceShipsAction: ActionCode = {
 export default PlaceShipsAction;
 
 
-function validateQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: VariableMap) {
-  const gridSize: Coord = {x: 10, y: 10}; // M.getCustomBoardSettings();
+function validateQ(gameState: GameState, lobbyPlayerId: string, _actionParams: PlaceShipsMuleActionParams) {
+  const gridSize: Coord = { x: 10, y: 10 }; // M.getCustomBoardSettings();
   const placedShips: number[] = [];
   const occupiedGrid: Grid<boolean> = new Grid<boolean>(gridSize, () => false);
 
@@ -39,8 +36,8 @@ function validateQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: Variab
   _.each(actionParams.shipPlacements, (shipPlacement: ShipPlacement) => {
 
     // 2a. is shipId valid?
-    const shipPieceState: PieceState = M.getPiece(shipPlacement.shipId); // TODO can I get pieceStates by regular 'id' instead of '_id' ? (I think M does, it just needs updated types)
-    if (!shipPieceState) {
+    const ship = gameState.ships.find((s) => s.id === shipPlacement.shipId);
+    if (!ship) {
       throw new Error('invalid shipId: ' + shipPlacement.shipId);
     }
 
@@ -50,7 +47,7 @@ function validateQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: Variab
     }
 
     // 2c. does ship belong to currentPlayer?
-    if (shipPieceState.ownerId !== lobbyPlayerId) {
+    if (ship.ownerId !== lobbyPlayerId) {
       throw new Error(`player does not own ship(id=${shipPlacement.shipId})`);
     }
 
@@ -62,8 +59,7 @@ function validateQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: Variab
     }
 
     // 2e. are the coordinates of each ship square valid and unoccupied?
-    const shipType: ShipType = shipPieceState.class as ShipType;
-    const shipStructure: ShipStructure = getShipStructure(shipType);
+    const shipStructure: ShipStructure = getShipStructure(ship.shipType);
     const invalidShipSquares: Coord[] = [];
 
     _.each(shipStructure.squares, (relativeCoord: Coord) => {
@@ -94,25 +90,16 @@ function validateQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: Variab
   if (placedShips.length !== getTotalShipsPerPlayer()) {
     throw new Error('all ships are not placed');
   }
-
-  return Promise.resolve();
 }
 
-function doQ(M: MuleStateSdk, lobbyPlayerId: string, _actionParams: VariableMap) {
+function doQ(gameState: GameState, lobbyPlayerId: string, actionParams: PlaceShipsMuleActionParams) {
 
-  const actionParams: PlaceShipsMuleActionParams = {
-    shipPlacements: _actionParams.shipPlacements as ShipPlacement[],
-  };
-
-  _.each(actionParams.shipPlacements, (shipPlacement: ShipPlacement) => {
-    const ship: Ship = getShipFromPieceSpace(M.getPiece(shipPlacement.shipId));
-    ship.coord = shipPlacement.coord;
+  actionParams.shipPlacements.forEach((shipPlacement: ShipPlacement) => {
+    const ship = gameState.ships.find((s) => s.id === shipPlacement.shipId)!;
+    ship.coord = new CoordSchema().assign(shipPlacement.coord);
     ship.alignment = shipPlacement.alignment;
-    M.setPiece(shipPlacement.shipId, getPieceStateFromShip(ship));
   });
 
-  M.setPlayerVariable(lobbyPlayerId, 'hasPlacedShips', true);
-
-  return M.persistQ();
+  setPlayerVariable(gameState, lobbyPlayerId, 'hasPlacedShips', true);
 }
 

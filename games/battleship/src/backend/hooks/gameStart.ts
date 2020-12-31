@@ -1,37 +1,32 @@
 
 import * as _ from 'lodash';
-import { MuleStateSdk, GameStartHook } from 'mule-sdk-js';
 
-import { Alignment, getPieceStateFromShip, DEFAULT_GAME_START_SHIP_SETUP_COUNTS, Ship, ShipType } from '../../shared';
+import { Alignment, DEFAULT_GAME_START_SHIP_SETUP_COUNTS, ShipType, GameState, ShipSchema, BattleshipPlayerVariablesSchema } from '../../shared';
 
 
-const gameStartHook: GameStartHook = (M: MuleStateSdk) => {
+const gameStartHook = (gameState: GameState) => {
 
   // for each player
-  _.each(M.getPlayerRels(), (lobbyPlayerId: string) => {
+  _.each(gameState.players, (player, i) => {
+    const lobbyPlayerId = 'p' + (i + 1);
 
     // 1. add ship pieces
     _.each(DEFAULT_GAME_START_SHIP_SETUP_COUNTS, (count: number, shipType: ShipType) => {
       _.times(count, () => {
-        const newShip: Ship = {
-          _id: '', // addPiece will generate a realId after persistQ
-          id: -1,
+        const newShip = new ShipSchema().assign({
+          id: -1, // TODO-fork generate id based of state.idCounter
           ownerId: lobbyPlayerId,
           shipType,
-          coord: { x: -1, y: -1 },
           alignment: Alignment.Horizontal,
           sunk: false,
-        };
-        M.addPiece(getPieceStateFromShip(newShip));
+        });
+        gameState.ships.push(newShip);
       });
     });
 
     // 2. initialize playerVariables
-    M.setPlayerVariable(lobbyPlayerId, 'hasPlacedShips', false);
-    M.setPlayerVariable(lobbyPlayerId, 'shots', []);
+    gameState.playerVariables.set(lobbyPlayerId, new BattleshipPlayerVariablesSchema());
   });
-
-  return M.persistQ();
 };
 
 export default gameStartHook;

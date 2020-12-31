@@ -1,7 +1,0 @@
-
-the idea of this module is
- - to be webpack compiled, into dist/ (with sdk inside it)
- - if you are in mock-dev mode, 
-     delete 'mule-sdk-js' from node_modules, 
-     then ln node_modules/mule-sdk-js -> dist/mock/mule-sdk-js
- - frontend build points at it, not knowing its a mock

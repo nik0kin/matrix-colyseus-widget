@@ -1,11 +1,10 @@
 
 import * as _ from 'lodash';
-import { BoardGeneratorHook, VariableMap } from 'mule-sdk-js';
 
-import { Coord, getBoardSpaceFromSquare, Grid, Square } from '../../../shared';
+import { Coord, Grid, Square, SquareSchema } from '../../../shared';
+import { CoordSchema } from 'common';
 
-const boardGenerator: BoardGeneratorHook = (customBoardSettings: VariableMap, battleshipRules: VariableMap) => {
-
+const boardGenerator = () => {
   const width: number = 10;
   const height: number = 10;
 
@@ -24,12 +23,8 @@ const boardGenerator: BoardGeneratorHook = (customBoardSettings: VariableMap, ba
     createSquare('p2'),
   );
 
-  return Promise.resolve(
-    _.map(
-      _.concat(p1Squares.toArray(), p2Squares.toArray()),
-      getBoardSpaceFromSquare,
-    )
-  );
+  return _.concat(p1Squares.toArray(), p2Squares.toArray())
+    .map((s) => new SquareSchema().assign({ ...s, coord: new CoordSchema().assign(s.coord) }));
 };
 
 export default boardGenerator;

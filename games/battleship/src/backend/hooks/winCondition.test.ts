@@ -1,16 +1,15 @@
 
-import { MuleStateSdk, PieceState } from 'mule-sdk-js';
-
 import {
   Alignment,
-  getPieceStateFromShip, Ship, ShipType,
+  Ship, ShipType, ShipSchema, GameState,
 } from '../../shared';
 
 import winCondition from './winCondition';
+import { ArraySchema } from '@colyseus/schema';
+import { CoordSchema } from 'common';
 
 const mockShips: Ship[] = [
   {
-    _id: '',
     id: 1,
     ownerId: 'p1',
     shipType: ShipType.Cruiser,
@@ -19,7 +18,6 @@ const mockShips: Ship[] = [
     sunk: false,
   },
   {
-    _id: '',
     id: 2,
     ownerId: 'p1',
     shipType: ShipType.Cruiser,
@@ -28,7 +26,6 @@ const mockShips: Ship[] = [
     sunk: true,
   },
   {
-    _id: '',
     id: 3,
     ownerId: 'p2',
     shipType: ShipType.Cruiser,
@@ -37,7 +34,6 @@ const mockShips: Ship[] = [
     sunk: false,
   },
   {
-    _id: '',
     id: 4,
     ownerId: 'p2',
     shipType: ShipType.Cruiser,
@@ -47,28 +43,29 @@ const mockShips: Ship[] = [
   },
 ];
 
-const mbackendSdkMock: Partial<MuleStateSdk> = {
-  getPieces: ({ownerId}) => mockShips
-    .map(getPieceStateFromShip)
-    .filter((ps: PieceState) => ps.ownerId === ownerId),
-};
+function getNewState(firstShipSunk?: boolean) {
+  const ships = new ArraySchema<ShipSchema>();
 
-
-describe('Hook: winCondition', () => {
-  it('should not return a winner', (done) => {
-    winCondition(mbackendSdkMock as MuleStateSdk)
-      .then((winner: string | null) => {
-        expect(winner).toBeNull();
-        done();
-      });
+  mockShips.forEach((s) => {
+    const ship = new ShipSchema().assign({ ...s, coord: new CoordSchema().assign(s.coord) });
+    ships.push(ship);
   });
 
-  it('should return a winner', (done) => {
-    mockShips[0].sunk = true;
-    winCondition(mbackendSdkMock as MuleStateSdk)
-      .then((winner: string | null) => {
-        expect(winner).toBe('p2');
-        done();
-      });
+  ships.at(0).sunk = !!firstShipSunk;
+
+  return new GameState().assign({
+    ships,
+  });
+}
+
+describe('Hook: winCondition', () => {
+  it('should not return a winner', () => {
+    const winner = winCondition(getNewState())
+    expect(winner).toBeNull();
+  });
+
+  it('should return a winner', () => {
+    const winner = winCondition(getNewState(true))
+    expect(winner).toBe('p2');
   });
 });

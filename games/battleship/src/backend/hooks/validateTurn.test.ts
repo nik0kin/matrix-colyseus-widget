@@ -1,21 +1,14 @@
-
-import { MuleStateSdk } from 'mule-sdk-js';
-
-import { BattleshipPlayerVariables } from '../../shared';
+import { GameState, BattleshipPlayerVariablesSchema } from '../../shared';
 
 import validateTurn from './validateTurn';
+import { MapSchema } from '@colyseus/schema';
 
-const mockPlayerVars: BattleshipPlayerVariables = {
+const newGameState = new GameState().assign({
+  playerVariables: new MapSchema<BattleshipPlayerVariablesSchema>()
+});
+newGameState.playerVariables.set('p1', new BattleshipPlayerVariablesSchema().assign({
   hasPlacedShips: true,
-  shots: [],
-};
-
-const mbackendSdkMock: Partial<MuleStateSdk> = {
-  getPlayerRels: () => ['p1', 'p2'],
-  addPiece: () => 1,
-  persistQ: () => Promise.resolve(),
-  getPlayerVariables: () => mockPlayerVars,
-};
+}));
 
 const validFireShotAction = {
   type: 'FireShot',
@@ -31,16 +24,13 @@ const invalidPlaceShipsAction = {
 };
 
 describe('Hook: validateTurn', () => {
-  it('should run without error', (done) => {
-    validateTurn(mbackendSdkMock as MuleStateSdk, 'p1', [validFireShotAction])
-      .then(() => {
-        done();
-      });
+  it('should run without error', () => {
+    validateTurn(newGameState, 'p1', [validFireShotAction]);
   });
 
   it('should fail because of too many actions', (done) => {
     try {
-      validateTurn(mbackendSdkMock as MuleStateSdk, 'p1', [validFireShotAction, validFireShotAction]);
+      validateTurn(newGameState, 'p1', [validFireShotAction, validFireShotAction]);
     } catch (e) {
       expect(e).toBeDefined();
       done();
@@ -49,7 +39,7 @@ describe('Hook: validateTurn', () => {
 
   it('should fail because the player has already placed ships', (done) => {
     try {
-      validateTurn(mbackendSdkMock as MuleStateSdk, 'p1', [invalidPlaceShipsAction]);
+      validateTurn(newGameState, 'p1', [invalidPlaceShipsAction]);
     } catch (e) {
       expect(e).toBeDefined();
       done();

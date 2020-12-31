@@ -1,11 +1,11 @@
-import { every, reduce } from 'lodash';
-
-import { Action, VariableMap } from 'mule-sdk-js';
+import { ArraySchema } from '@colyseus/schema';
+import { every } from 'lodash';
 
 import {
   areCoordsEqual, Coord, getCoordString, getShipStructureCoords,
   Ship, Shot,
 } from '../';
+import { ShotSchema } from '../state';
 
 export const FIRE_SHOT_MULE_ACTION: string = 'FireShot';
 
@@ -13,11 +13,11 @@ export interface FireShotMuleActionParams {
   shotCoord: Coord;
 }
 
-export function getFireShotMuleActionFromParams(params: FireShotMuleActionParams): Action {
+export function getFireShotMuleActionFromParams(params: FireShotMuleActionParams) {
   return {
     type: FIRE_SHOT_MULE_ACTION,
-    params: params as any as VariableMap,
-  } as Action;
+    params,
+  };
 }
 
 export interface FireShotMuleActionMetaData {
@@ -25,16 +25,9 @@ export interface FireShotMuleActionMetaData {
   sunkShip: Ship | undefined;
 }
 
-export function getFireShotActionMetaData(action: Action | undefined): FireShotMuleActionMetaData | undefined {
-  if (!action || action.type !== FIRE_SHOT_MULE_ACTION) return;
-
-  return action.metadata as any as FireShotMuleActionMetaData;
-}
-
-export function isShipSunk(ship: Ship, shots: Shot[]): boolean {
-  const shotHitsByCoord: {[stringCoord: string]: boolean} = reduce(
-    shots,
-    (prev: {[stringCoord: string]: boolean}, shot: Shot) => {
+export function isShipSunk(ship: Ship, shots: Shot[] | ArraySchema<ShotSchema>): boolean {
+  const shotHitsByCoord: { [stringCoord: string]: boolean } = (shots.reduce as any)(
+    (prev: { [stringCoord: string]: boolean }, shot: Shot) => {
       prev[getCoordString(shot.coord)] = true;
       return prev;
     },
@@ -50,6 +43,6 @@ export function isValidFireShotCoord(coord: Coord | undefined, previousShots: Sh
   if (!coord) return false;
 
   return every(previousShots, (shot: Shot) => {
-  return !areCoordsEqual(coord, shot.coord);
+    return !areCoordsEqual(coord, shot.coord);
   });
 }

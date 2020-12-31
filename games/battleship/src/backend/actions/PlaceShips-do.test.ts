@@ -1,28 +1,45 @@
+import { ArraySchema, MapSchema } from '@colyseus/schema';
 
-import { MuleStateSdk, VariableMap } from 'mule-sdk-js';
-
-import { Alignment, getPieceStateFromShip, ShipType /* PlaceShipsMuleActionParams */ } from '../../shared';
+import {
+  Alignment, ShipType, /* PlaceShipsMuleActionParams */
+  PlaceShipsMuleActionParams,
+  ShipSchema,
+  GameState,
+  BattleshipPlayerVariablesSchema,
+} from '../../shared';
 
 import placeShipsAction from './PlaceShips';
+import { times } from 'lodash';
 
-const mbackendSdkMock: Partial<MuleStateSdk> = {
-  getPiece: (pieceId: number) => getPieceStateFromShip({
-    _id: String(pieceId),
-    id: pieceId,
-    ownerId: 'p1',
-    shipType: ShipType.Battleship,
-    coord: { x: -1, y: -1 },
-    alignment: Alignment.Horizontal,
-    sunk: false,
-  }),
-  setPiece: () => null,
-  persistQ: () => Promise.resolve(),
-  setPlayerVariable: () => null, // TODO add spys and check if hasPlacedShips has been set to true
-};
+function getNewState() {
+  const ships = new ArraySchema<ShipSchema>();
+
+  times(7, (i) => {
+    const battleship = new ShipSchema().assign({
+      id: i + 1,
+      ownerId: 'p1',
+      shipType: ShipType.Battleship,
+      alignment: Alignment.Horizontal,
+      sunk: false,
+    });
+    ships.push(battleship);
+  });
+
+  const map = new MapSchema<BattleshipPlayerVariablesSchema>();
+  map.set(
+    'p1',
+    new BattleshipPlayerVariablesSchema()
+  );
+
+  return new GameState().assign({
+    ships,
+    playerVariables: map,
+  });
+}
 
 describe('Action.do: PlaceShipsAction', () => {
-  it('should run without error', (done) => {
-    const actionParams: VariableMap /* TODO use PlaceShipsMuleActionParams */ = {
+  it('should run without error', () => {
+    const actionParams: PlaceShipsMuleActionParams = {
       shipPlacements: [
         {
           shipId: 1,
@@ -62,9 +79,6 @@ describe('Action.do: PlaceShipsAction', () => {
       ]
     };
 
-    placeShipsAction.doQ(mbackendSdkMock as MuleStateSdk, 'p1', actionParams)
-      .then(() => {
-        done();
-      });
+    placeShipsAction.doQ(getNewState(), 'p1', actionParams)
   });
 });

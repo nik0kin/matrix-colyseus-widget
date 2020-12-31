@@ -1,81 +1,75 @@
 
-import { MuleStateSdk } from 'mule-sdk-js';
-
 import {
-  Alignment, BattleshipPlayerVariables, FireShotMuleActionMetaData,
-  getPieceStateFromShip, FireShotMuleActionParams, ShipType,
+  Alignment,
+  FireShotMuleActionParams, ShipType, GameState, Shot, ShotSchema, BattleshipPlayerVariablesSchema, ShipSchema,
 } from '../../shared';
 
 import fireShotAction from './FireShot';
+import { MapSchema, ArraySchema } from '@colyseus/schema';
+import { CoordSchema } from 'common';
 
-const mockPlayerVariables: Partial<BattleshipPlayerVariables> = {
-  shots: [],
-};
-const mbackendSdkMock: Partial<MuleStateSdk> = {
-  getPlayerVariables: () => mockPlayerVariables,
-  getPieces: () => [getPieceStateFromShip({
-    _id: '',
+function getNewState(shots: Shot[] = []) {
+  const cruiser = new ShipSchema().assign({
     id: 1,
-    ownerId: 'p1',
+    ownerId: 'p2',
     shipType: ShipType.Cruiser,
-    coord: { x: 0, y: 1 },
+    coord: new CoordSchema().assign({ x: 0, y: 1 }),
     alignment: Alignment.Horizontal,
     sunk: false,
-  })],
-  setPlayerVariable: () => null,
-  setPiece: () => null,
-  persistQ: () => Promise.resolve(),
-};
+  });
+  const ships = new ArraySchema();
+  ships.push(cruiser);
 
-const validActionParams: FireShotMuleActionParams  = {
-  shotCoord: { x: 1, y: 1},
+  return new GameState().assign({
+    ships,
+    playerVariables: new MapSchema<BattleshipPlayerVariablesSchema>().set(
+      'p1',
+      new BattleshipPlayerVariablesSchema().assign({
+        shots: new ArraySchema<ShotSchema>(...shots.map((s) => new ShotSchema().assign({
+          ...s,
+          coord: new CoordSchema().assign(s.coord)
+        })))
+      })
+    )
+  });
+}
+
+const validActionParams: FireShotMuleActionParams = {
+  shotCoord: { x: 1, y: 1 },
 };
 
 describe('Action.do: FireShotAction', () => {
-  it('should run without error', (done) => {
-    fireShotAction.doQ(mbackendSdkMock as MuleStateSdk, 'p1', validActionParams as any)
-      .then(() => {
-        done();
-      });
+  it('should run without error', () => {
+    fireShotAction.doQ(getNewState(), 'p1', validActionParams)
   });
 
-  it('should run without error (case 2)', (done) => {
-    mockPlayerVariables.shots = [{
-      coord: { x: 2, y: 2},
+  it('should run without error (case 2)', () => {
+    fireShotAction.doQ(getNewState([{
+      coord: { x: 2, y: 2 },
       hit: false,
     }, {
-      coord: { x: 5, y: 3},
+      coord: { x: 5, y: 3 },
       hit: false,
-    }];
-    fireShotAction.doQ(mbackendSdkMock as MuleStateSdk, 'p1', validActionParams as any)
-      .then(() => done());
+    }]), 'p1', validActionParams);
   });
 
-  it('should mark a ship as sunk', (done) => {
-    mockPlayerVariables.shots = [{
-      coord: { x: 0, y: 1},
+  it('should mark a ship as sunk', () => {
+    const metadata = fireShotAction.doQ(getNewState([{
+      coord: { x: 0, y: 1 },
       hit: false,
     }, {
-      coord: { x: 2, y: 1},
+      coord: { x: 2, y: 1 },
       hit: false,
-    }];
-    fireShotAction.doQ(mbackendSdkMock as MuleStateSdk, 'p1', validActionParams as any)
-      .then((metadata: FireShotMuleActionMetaData) => {
-        expect(metadata.sunkShip).toBeTruthy();
-        done();
-      });
+    }]), 'p1', validActionParams)
+    expect(metadata.sunkShip).toBeTruthy();
   });
 
-  it('should almost sink a ship', (done) => {
-    mockPlayerVariables.shots = [{
-      coord: { x: 0, y: 1},
+  it('should almost sink a ship', () => {
+    const metadata = fireShotAction.doQ(getNewState([{
+      coord: { x: 0, y: 1 },
       hit: false,
-    }];
-    fireShotAction.doQ(mbackendSdkMock as MuleStateSdk, 'p1', validActionParams as any)
-      .then((metadata: FireShotMuleActionMetaData) => {
-        expect(metadata.sunkShip).toBeFalsy();
-        expect(metadata.newShot.hit).toBeTruthy();
-        done();
-      });
+    }]), 'p1', validActionParams);
+    expect(metadata.sunkShip).toBeFalsy();
+    expect(metadata.newShot.hit).toBeTruthy();
   });
 });

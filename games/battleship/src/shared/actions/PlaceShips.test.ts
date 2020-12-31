@@ -1,18 +1,16 @@
-import { Action } from 'mule-sdk-js';
-
 import { Alignment } from '../types';
 
 import { getPlaceShipsActionWithNewShipPlacement, getPlaceShipsParamsFromAction, ShipPlacement } from './PlaceShips';
 
-describe ('getPlaceShipsActionWithNewShipPlacement()', () => {
+describe('getPlaceShipsActionWithNewShipPlacement()', () => {
   const aShipPlacement: ShipPlacement = {
     shipId: 1,
-    coord: { x: 1, y: 1},
+    coord: { x: 1, y: 1 },
     alignment: Alignment.Horizontal
   };
 
   it('should add a ShipPlacement to shipPlacements array', () => {
-    const action: Action = getPlaceShipsActionWithNewShipPlacement(
+    const action = getPlaceShipsActionWithNewShipPlacement(
       {
         type: 'PlaceShips',
         params: {
@@ -27,7 +25,7 @@ describe ('getPlaceShipsActionWithNewShipPlacement()', () => {
   });
 
   it('should not duplicate ids', () => {
-    const action: Action = getPlaceShipsActionWithNewShipPlacement(
+    const action = getPlaceShipsActionWithNewShipPlacement(
       {
         type: 'PlaceShips',
         params: {

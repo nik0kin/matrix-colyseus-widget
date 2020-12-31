@@ -1,18 +1,19 @@
 import * as _ from 'lodash';
-import { Action, GameState, VariableMap } from 'mule-sdk-js';
 
-import {
-  Alignment,
-  getPlayerVariablesFromGameState, PlayerVariablesMap,
-  Ship,
-} from '../';
+import { Alignment, PlayerVariablesMap, Ship } from '../';
 import { Coord } from '../mule-common';
 import { getIdFromShip, findOneShip } from '../ship';
+import { GameState } from '../state';
 
 export const PLACE_SHIPS_MULE_ACTION: string = 'PlaceShips';
 
 export interface PlaceShipsMuleActionParams {
   shipPlacements: ShipPlacement[];
+}
+
+interface Action {
+  type: typeof PLACE_SHIPS_MULE_ACTION;
+  params: PlaceShipsMuleActionParams;
 }
 
 export interface ShipPlacement {
@@ -21,11 +22,11 @@ export interface ShipPlacement {
   alignment: Alignment;
 }
 
-export function getPlaceShipsMuleActionFromParams(placeShipsMuleActionParams: PlaceShipsMuleActionParams): Action {
+export function getPlaceShipsMuleActionFromParams(params: PlaceShipsMuleActionParams) {
   return {
     type: PLACE_SHIPS_MULE_ACTION,
-    params: placeShipsMuleActionParams as any as VariableMap,
-  } as Action;
+    params,
+  };
 }
 
 export function getPlaceShipsActionParamsFromMuleAction(action?: Action): PlaceShipsMuleActionParams {
@@ -60,7 +61,7 @@ export function getPlaceShipsParamsFromAction(action: Action | undefined): Place
       shipPlacements: [],
     };
   }
-  return action.params as any as PlaceShipsMuleActionParams;
+  return action.params;
 }
 
 export function doesShipIdExistInShipPlacements(shipPlacements: ShipPlacement[], shipId: number): boolean {
@@ -70,9 +71,7 @@ export function doesShipIdExistInShipPlacements(shipPlacements: ShipPlacement[],
 }
 
 export function isPlacementMode(gameState: GameState, lobbyPlayerId: string): boolean {
-  const playerVariables: PlayerVariablesMap = getPlayerVariablesFromGameState(gameState);
-
-  return !playerVariables[lobbyPlayerId].hasPlacedShips;
+  return !gameState.playerVariables.get(lobbyPlayerId).hasPlacedShips;
 }
 
 export function getAllShipsIncludingPendingActions(lobbyPlayerId: string, playersShips: Ship[], pendingActions: Action[]): Ship[] {

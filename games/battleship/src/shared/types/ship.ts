@@ -5,7 +5,7 @@ import { addCoords, Coord } from '../mule-common';
 import { Alignment, getAlignmentOffset } from './alignment';
 
 export interface Ship {
-  _id: string;
+  // _id: string;
   id: number;
   ownerId: string;
   shipType: ShipType;
@@ -41,11 +41,11 @@ export const ShipStructures: Map<ShipType, ShipStructure> = new Map([
     ShipType.Carrier,
     {
       squares: [
-        { x: 0, y: 0},
-        { x: 1, y: 0},
-        { x: 2, y: 0},
-        { x: 3, y: 0},
-        { x: 4, y: 0},
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 3, y: 0 },
+        { x: 4, y: 0 },
       ]
     },
   ],
@@ -53,10 +53,10 @@ export const ShipStructures: Map<ShipType, ShipStructure> = new Map([
     ShipType.Battleship,
     {
       squares: [
-        { x: 0, y: 0},
-        { x: 1, y: 0},
-        { x: 2, y: 0},
-        { x: 3, y: 0},
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 3, y: 0 },
       ]
     },
   ],
@@ -64,9 +64,9 @@ export const ShipStructures: Map<ShipType, ShipStructure> = new Map([
     ShipType.Cruiser,
     {
       squares: [
-        { x: 0, y: 0},
-        { x: 1, y: 0},
-        { x: 2, y: 0},
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
       ]
     },
   ],
@@ -74,8 +74,8 @@ export const ShipStructures: Map<ShipType, ShipStructure> = new Map([
     ShipType.Destroyer,
     {
       squares: [
-        { x: 0, y: 0},
-        { x: 1, y: 0},
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
       ]
     },
   ],
@@ -83,7 +83,7 @@ export const ShipStructures: Map<ShipType, ShipStructure> = new Map([
     ShipType.Submarine,
     {
       squares: [
-        { x: 0, y: 0},
+        { x: 0, y: 0 },
       ]
     },
   ],

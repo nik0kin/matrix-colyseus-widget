@@ -1,14 +1,14 @@
 import { each, every } from 'lodash';
-import { MuleStateSdk, WinConditionHook } from 'mule-sdk-js';
 
-import { getShipsFromM, Ship } from '../../shared';
+import { Ship, GameState } from '../../shared';
 
-const winConditionHook: WinConditionHook = async (M: MuleStateSdk) => {
+const winConditionHook = (gameState: GameState) => {
   let winner: string | null = null;
 
   // EFF - it'd be an incredibly smaller amount faster to only check the player who just played
   each(['p1', 'p2'], (lobbyPlayerId: string) => {
-    const areAllShipsSunk: boolean = every(getShipsFromM(M, lobbyPlayerId), (ship: Ship) => ship.sunk);
+    const playerShips = gameState.ships.filter((s) => s.ownerId === lobbyPlayerId)
+    const areAllShipsSunk: boolean = every(playerShips, (ship: Ship) => ship.sunk);
     if (areAllShipsSunk) {
       winner = lobbyPlayerId === 'p1' ? 'p2' : 'p1';
     }
