@@ -40,7 +40,7 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
         <div className="gameinfo">
 
           <div className="current-turn-info">
-            <div> Turn {gameState.mule.currentTurn} </div>
+            <div> Round {gameState.mule.currentTurn} </div>
             {false && !isYourTurn && <WaitingIndicator />}
             <div className="short-description">
               {getShortDescription(

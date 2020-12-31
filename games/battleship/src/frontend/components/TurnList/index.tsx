@@ -44,7 +44,7 @@ function getTurnList(
     return (
       <div className="turn-row" key={key}>
         {getListItemFromAction(
-          i + 1,
+          previousTurns.length - i,
           lobbyPlayerId !== currentLobbyPlayerId,
           opponentName,
           action,
