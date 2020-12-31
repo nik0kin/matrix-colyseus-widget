@@ -1,12 +1,13 @@
 import * as Colyseus from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 
 import { GameStatus } from 'common';
 
-import { GameState } from '../../../shared';
-import { loadMuleStateSuccess } from '../../actions';
-import { toFeGameState } from './data';
+import { GameState, Action, PLACE_SHIPS_MULE_ACTION, FIRE_SHOT_MULE_ACTION } from '../../../shared';
+import { loadMuleStateSuccess, loadNewTurn, setWinner } from '../../actions';
+import { toFeGameState, toFeTurn } from './data';
+import { StoreState } from '../../types';
 
 // eslint-disable-next-line no-restricted-globals
 const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.hostname}:2567`);
@@ -45,6 +46,7 @@ const initConnection = async (
   onIsPlayersTurnUpdate: (isPlayersTurn: boolean) => void,
   // onIsPlayerXUpdate: (isPlayerX: boolean) => void,
   onWinnerUpdate: (winner: string) => void,
+  onActionUpdate: (action: Action) => void
 ) => {
   try {
     const room = await getRoom();
@@ -88,6 +90,14 @@ const initConnection = async (
       });
     };
 
+    room.onMessage(PLACE_SHIPS_MULE_ACTION + '-complete', (action: Action) => {
+      onActionUpdate(action);
+    });
+
+    room.onMessage(FIRE_SHOT_MULE_ACTION + '-complete', (action: Action) => {
+      onActionUpdate(action);
+    });
+
     // room.state.players.onAdd = (player, key) => {
     //   console.log(player, "has been added at", key);
     //   // onPlayerConnect(key);
@@ -127,8 +137,11 @@ interface ServerManagerType {
 
 const ServerContext = createContext<ServerManagerType>(null as any);
 
+let recievingSoon = false;
+
 export const ServerManager: FC = ({ children }) => {
   const dispatch = useDispatch();
+  const store = useStore<StoreState>();
 
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.PreGame);
   // const [spots, setSpots] = useState<string[]>([]);
@@ -136,7 +149,7 @@ export const ServerManager: FC = ({ children }) => {
   const [sessionId, setSessionId] = useState('');
   const [isPlayersTurn, setIsPlayersTurn] = useState(false);
   // const [isPlayerX, setIsPlayerX] = useState(false);
-  const [winner, setWinner] = useState('');
+  const [winner, _setWinner] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [sendMessage, setSendMessage] = useState<(type: string | number, payload?: any) => void>(() => () => null);
 
@@ -144,15 +157,28 @@ export const ServerManager: FC = ({ children }) => {
   // const onSpotsUpdate = useCallback((spots: string[]) => setSpots(spots), []);
   const onIsPlayersTurnUpdate = useCallback((isPlayersTurn: boolean) => setIsPlayersTurn(isPlayersTurn), []);
   // const onIsPlayerXUpdate = useCallback((isPlayerX: boolean) => setIsPlayerX(isPlayerX), []);
-  const onWinnerUpdate = useCallback((winner: string) => setWinner(winner), []);
+  const onWinnerUpdate = useCallback((winner: string) => {
+    _setWinner(winner);
+    if (winner) {
+      dispatch(setWinner(winner));
+    }
+  }, []);
   const onGameStateUpdate = useCallback((gameState: GameState, sessionId: string, firstUpdate?: boolean) => {
     if (firstUpdate) {
       dispatch(loadMuleStateSuccess(toFeGameState(gameState, sessionId)));
     }
+    if (recievingSoon) {
+      const lastTurnWithAction = gameState.turns[gameState.turns.length - 1].playerTurns.size ? gameState.turns[gameState.turns.length - 1] : gameState.turns[gameState.turns.length - 2];
+      dispatch(loadNewTurn(gameState.turns.length - 1, toFeTurn(lastTurnWithAction))); // TODO-fork, does `gameState.turns.length - 1` need to match above?
+      recievingSoon = false;
+    }
   }, []);
+  const onActionUpdate = useCallback((action: Action) => {
+    recievingSoon = true;
+  }, [store]);
 
   useEffect(() => {
-    initConnection(onGameStatusUpdate, onGameStateUpdate, onIsPlayersTurnUpdate, onWinnerUpdate)
+    initConnection(onGameStatusUpdate, onGameStateUpdate, onIsPlayersTurnUpdate, onWinnerUpdate, onActionUpdate)
       .then(([roomId, sessionId, sendMessage]) => {
         setIsConnected(true);
         setServerRoomId(roomId);

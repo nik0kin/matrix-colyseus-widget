@@ -12,8 +12,6 @@ import './index.css';
 
 export function bootstrapFrontend(): void {
 
-  // const sagaMiddleware: SagaMiddleware<{}> = createSagaMiddleware();
-
   // Setup Redux Store (w/ initial state)
   // @ts-ignore
   const store = createStore<StoreState>(

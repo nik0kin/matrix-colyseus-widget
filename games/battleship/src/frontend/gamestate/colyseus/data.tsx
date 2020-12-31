@@ -1,24 +1,26 @@
 import { initial } from 'lodash';
 
-import { GameState, Shot, Coord, Grid, isPlacementMode, Turn, Action } from '../../../shared';
+import { GameState, Shot, Coord, Grid, isPlacementMode, Turn, Action, TurnSchema } from '../../../shared';
 import { GameState as FeGameState } from '../types';
 import { Player } from '../../types';
 
+export function toFeTurn(turn: TurnSchema): Turn {
+  const playerTurns: Record<string, Action> = {};
+  turn.playerTurns.forEach((action, lobbyPlayerId) => {
+    playerTurns[lobbyPlayerId] = {
+      type: action.type,
+      params: JSON.parse(action.params),
+      metadata: action.metadata ? JSON.parse(action.metadata) : undefined
+    };
+  });
+  return {
+    playerTurns
+  }
+}
+
 export function toFeGameState(gameState: GameState, sessionId: string): FeGameState {
 
-  const turns = gameState.turns.map((t): Turn => {
-    const playerTurns: Record<string, Action> = {};
-    t.playerTurns.forEach((action, lobbyPlayerId) => {
-      playerTurns[lobbyPlayerId] = {
-        type: action.type,
-        params: JSON.parse(action.params),
-        metadata: action.metadata ? JSON.parse(action.metadata) : undefined
-      };
-    });
-    return {
-      playerTurns
-    }
-  });
+  const turns = gameState.turns.map(toFeTurn);
 
   const players = gameState.players.reduce(
     (acc, p, i) => {
@@ -81,7 +83,7 @@ export function toFeGameState(gameState: GameState, sessionId: string): FeGameSt
     isGameOver: !!gameState.winner,
 
     yourShips: gameState.ships.filter((s) => s.ownerId === currentPlayerRel),
-    theirShips: gameState.ships.filter((s) => s.ownerId === opponentPlayerRel),
+    theirShips: getSunkenShipsFromGameState(gameState, opponentPlayerRel),
 
     yourShots: gameState.playerVariables.get(currentPlayerRel).shots as Shot[],
     theirShots: gameState.playerVariables.get(opponentPlayerRel).shots as Shot[],
@@ -96,4 +98,8 @@ function getGridFromSquares(gridSize: Coord, lobbyPlayerId: string) {
       // might have other attributes later
     };
   });
+}
+
+function getSunkenShipsFromGameState(gameState: GameState, lobbyPlayerId: string) {
+  return gameState.ships.filter((s) => s.ownerId === lobbyPlayerId && s.sunk);
 }

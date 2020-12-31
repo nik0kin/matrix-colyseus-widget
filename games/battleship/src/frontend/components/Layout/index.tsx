@@ -9,6 +9,7 @@ import {
   Coord, getBattleshipCoordString, getPlaceShipsActionParamsFromMuleAction, getTotalShipsPerPlayer,
   isValidFireShotCoord, Shot, Action,
 } from '../../../shared';
+import { useSendMessage } from '../../gamestate/colyseus';
 
 import { WaitingIndicator } from './waiting-indicator';
 
@@ -27,6 +28,7 @@ export interface Props {
 }
 
 function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions, clickSubmit, isSubmitting }: Props) {
+  const sendMessage = useSendMessage();
   const theirName: string = gameState.mule.players[gameState.theirLobbyPlayerId].name;
 
   const shipsLeftToBePlaced: number = getAmountOfShipsRemainingToPlace(gameState.isPlacementMode, pendingActions);
@@ -51,7 +53,10 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
           </div>
           <button
             className="submit-button"
-            onClick={() => clickSubmit({ actions: pendingActions })}
+            onClick={() => {
+              clickSubmit({ actions: pendingActions });
+              sendMessage(pendingActions[0].type, pendingActions[0].params)
+            }}
             disabled={
               isSubmitting || !isYourTurn || gameState.isGameOver
               || isSubmitButtonDisabled(
