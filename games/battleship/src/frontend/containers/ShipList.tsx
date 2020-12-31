@@ -1,10 +1,11 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import ShipList from '../components/ShipList';
 import * as actions from '../actions/';
 import { StoreState } from '../types/index';
 
-export function mapStateToProps({gameState, ui: {selectedShipBeingPlaced}, pendingTurn}: StoreState) {
+export function mapStateToProps({ gameState, ui: { selectedShipBeingPlaced }, pendingTurn }: StoreState) {
   return {
     isPlacementMode: gameState.isPlacementMode,
     yourLobbyPlayerId: gameState.yourLobbyPlayerId,
@@ -18,7 +19,7 @@ export function mapStateToProps({gameState, ui: {selectedShipBeingPlaced}, pendi
   };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.RemovePendingAction>) {
+export function mapDispatchToProps(dispatch: Dispatch) {
   return {
     selectShipListShip: (shipId: number) => dispatch(actions.selectShipListShip(shipId)),
   };

@@ -1,9 +1,10 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import TurnList from '../components/TurnList';
 import { StoreState } from '../types/index';
 
-export function mapStateToProps({gameState}: StoreState) {
+export function mapStateToProps({ gameState }: StoreState) {
   return {
     currentLobbyPlayerId: gameState.yourLobbyPlayerId,
     opponentName: gameState.mule.players[gameState.theirLobbyPlayerId].name,
@@ -11,7 +12,7 @@ export function mapStateToProps({gameState}: StoreState) {
   };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<StoreState>) {
+export function mapDispatchToProps(dispatch: Dispatch) {
   return {
   };
 }

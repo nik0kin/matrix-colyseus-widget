@@ -36,15 +36,15 @@ function getTurnList(
   previousTurns: Turn[],
 ): JSX.Element {
 
-  const turnsHtml: JSX.Element[] = map(previousTurns, (turn: Turn) => {
-    const key: string = 'turnlist-turn-' + turn.turnNumber;
+  const turnsHtml: JSX.Element[] = map(previousTurns, (turn: Turn, i) => {
+    const key: string = 'turnlist-turn-' + i;
     const lobbyPlayerId: string = getLobbyPlayerIdWhoPlayedTurn(turn);
     const action: Action = getActionFromTurn(turn);
 
     return (
       <div className="turn-row" key={key}>
         {getListItemFromAction(
-          turn.turnNumber,
+          i + 1,
           lobbyPlayerId !== currentLobbyPlayerId,
           opponentName,
           action,
@@ -63,7 +63,7 @@ function getTurnList(
 function getLobbyPlayerIdWhoPlayedTurn(turn: Turn): string {
   let lobbyPlayerId: string | undefined;
 
-  each(turn.playerTurns, ({ actions }, _lobbyPlayerId: string) => {
+  each(turn.playerTurns, (action, _lobbyPlayerId: string) => {
     lobbyPlayerId = _lobbyPlayerId;
   });
 
@@ -75,8 +75,8 @@ function getLobbyPlayerIdWhoPlayedTurn(turn: Turn): string {
 function getActionFromTurn(turn: Turn): Action {
   let action: Action | undefined;
 
-  each(turn.playerTurns, ({ actions }) => {
-    action = actions[0];
+  each(turn.playerTurns, (_action) => {
+    action = _action;
   });
 
   if (!action) throw new Error('missing action from turn' + JSON.stringify(turn));

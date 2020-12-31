@@ -10,13 +10,13 @@ export interface Action {
 }
 
 export interface Turn {
-  turnNumber: number; // use index?
+  // turnNumber: number; // use index?
   // metaTurn?: UnknownType[]; // TODO unsure if optional
   playerTurns: {
-    [playerRel: string]: {
-      actions: Action[];
-      dateSubmitted: Date;
-    }
+    [playerRel: string]: Action; // {
+    //   actions: Action[];
+    //   // dateSubmitted: Date;
+    // }
   };
 }
 

@@ -33,7 +33,7 @@ function Layout({ isYourTurn, selectedCoord, gameState, players, pendingActions,
 
   return (
     <div>
-      <h1> mBattleship </h1>
+      <h1> mcwBattleship </h1>
       <div className="container">
         <div className="gameinfo">
 

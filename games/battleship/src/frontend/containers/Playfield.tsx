@@ -1,11 +1,12 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { Coord } from '../../shared';
 import Playfield from '../components/Playfield';
 import * as actions from '../actions/';
 import { StoreState } from '../types';
 
-export function mapStateToProps({gameState, ui: {selectedCoord, selectedShipBeingPlaced}, pendingTurn}: StoreState) {
+export function mapStateToProps({ gameState, ui: { selectedCoord, selectedShipBeingPlaced }, pendingTurn }: StoreState) {
   return {
     gameState,
     selectedCoord,

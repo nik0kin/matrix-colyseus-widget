@@ -1,7 +1,23 @@
 import { type, ArraySchema, Schema, MapSchema } from '@colyseus/schema';
 import { McwGameState, CoordSchema } from 'common';
 
-import { BattleshipPlayerVariables, Shot, Ship, ShipType, Square, Alignment } from './types';
+import { BattleshipPlayerVariables, Shot, Ship, ShipType, Square, Alignment, Action } from './types';
+
+export class ActionSchema extends Schema implements Action {
+  @type('string')
+  type: string = '';
+
+  @type('string')
+  params: string = ''; // stringified json
+
+  @type('string')
+  metadata: string = ''; // stringified json
+}
+
+export class TurnSchema extends Schema {
+  @type({ map: ActionSchema })
+  playerTurns = new MapSchema<ActionSchema>();
+}
 
 export class ShotSchema extends Schema implements Shot {
   @type(CoordSchema)
@@ -50,6 +66,9 @@ export class SquareSchema extends Schema implements Square {
 export class GameState extends McwGameState {
   @type('string')
   nextTurn: string = '';
+
+  @type([TurnSchema])
+  turns = new ArraySchema<TurnSchema>();
 
   // @type('string')
   // xPlayer: string = '';

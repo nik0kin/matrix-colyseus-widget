@@ -1,4 +1,5 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { Action } from '../../shared';
 
@@ -18,7 +19,7 @@ export function mapStateToProps({ gameState, ui: { selectedCoord }, pendingTurn,
   };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.RemovePendingAction>) {
+export function mapDispatchToProps(dispatch: Dispatch) {
   return {
     clickSubmit: (pendingTurn: { actions: Action[] }) => dispatch(actions.clickSubmit(pendingTurn)),
     removePendingAction: (index: number) => dispatch(actions.removePendingAction(index)),

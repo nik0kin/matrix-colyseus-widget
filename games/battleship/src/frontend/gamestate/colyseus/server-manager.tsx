@@ -1,8 +1,12 @@
 import * as Colyseus from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { GameStatus } from 'common';
 
 import { GameState } from '../../../shared';
+import { loadMuleStateSuccess } from '../../actions';
+import { toFeGameState } from './data';
 
 // eslint-disable-next-line no-restricted-globals
 const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.hostname}:2567`);
@@ -36,7 +40,8 @@ const getRoom = async () => {
 
 const initConnection = async (
   onGameStatusUpdate: (gameStatus: GameStatus) => void,
-  onSpotsUpdate: (spots: string[]) => void,
+  // onSpotsUpdate: (spots: string[]) => void,
+  onGameStateUpdate: (gameState: GameState, sessionId: string, firstUpdate?: boolean) => void,
   onIsPlayersTurnUpdate: (isPlayersTurn: boolean) => void,
   // onIsPlayerXUpdate: (isPlayerX: boolean) => void,
   onWinnerUpdate: (winner: string) => void,
@@ -51,6 +56,7 @@ const initConnection = async (
     room.onStateChange.once((state) => {
       console.log("this is the first room state!", state);
       onGameStatusUpdate(state.status);
+      onGameStateUpdate(state, room.sessionId, true);
       // onSpotsUpdate(state.spots);
       onIsPlayersTurnUpdate(state.nextTurn === room.sessionId);
       // onIsPlayerXUpdate(state.xPlayer === room.sessionId);
@@ -59,13 +65,14 @@ const initConnection = async (
 
     room.onStateChange((state) => {
       console.log("the room state has been updated:", state);
+      onGameStateUpdate(state, room.sessionId);
     });
 
     room.state.onChange = (changes) => {
       changes.forEach((change) => {
-        if (change.field === 'spots') {
-          onSpotsUpdate(change.value);
-        }
+        // if (change.field === 'spots') {
+        //   onSpotsUpdate(change.value);
+        // }
         if (change.field === 'nextTurn') {
           onIsPlayersTurnUpdate(change.value === room.sessionId);
         }
@@ -110,7 +117,7 @@ interface ServerManagerType {
   serverRoomId: string;
   sessionId: string;
   gameStatus: GameStatus;
-  spots: string[];
+  // spots: string[];
   isPlayersTurn: boolean;
   // isPlayerX: boolean;
   winner: string;
@@ -121,8 +128,10 @@ interface ServerManagerType {
 const ServerContext = createContext<ServerManagerType>(null as any);
 
 export const ServerManager: FC = ({ children }) => {
+  const dispatch = useDispatch();
+
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.PreGame);
-  const [spots, setSpots] = useState<string[]>([]);
+  // const [spots, setSpots] = useState<string[]>([]);
   const [serverRoomId, setServerRoomId] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [isPlayersTurn, setIsPlayersTurn] = useState(false);
@@ -132,13 +141,18 @@ export const ServerManager: FC = ({ children }) => {
   const [sendMessage, setSendMessage] = useState<(type: string | number, payload?: any) => void>(() => () => null);
 
   const onGameStatusUpdate = useCallback((gameStatus: GameStatus) => setGameStatus(gameStatus), []);
-  const onSpotsUpdate = useCallback((spots: string[]) => setSpots(spots), []);
+  // const onSpotsUpdate = useCallback((spots: string[]) => setSpots(spots), []);
   const onIsPlayersTurnUpdate = useCallback((isPlayersTurn: boolean) => setIsPlayersTurn(isPlayersTurn), []);
   // const onIsPlayerXUpdate = useCallback((isPlayerX: boolean) => setIsPlayerX(isPlayerX), []);
   const onWinnerUpdate = useCallback((winner: string) => setWinner(winner), []);
+  const onGameStateUpdate = useCallback((gameState: GameState, sessionId: string, firstUpdate?: boolean) => {
+    if (firstUpdate) {
+      dispatch(loadMuleStateSuccess(toFeGameState(gameState, sessionId)));
+    }
+  }, []);
 
   useEffect(() => {
-    initConnection(onGameStatusUpdate, onSpotsUpdate, onIsPlayersTurnUpdate, onWinnerUpdate)
+    initConnection(onGameStatusUpdate, onGameStateUpdate, onIsPlayersTurnUpdate, onWinnerUpdate)
       .then(([roomId, sessionId, sendMessage]) => {
         setIsConnected(true);
         setServerRoomId(roomId);
@@ -152,7 +166,7 @@ export const ServerManager: FC = ({ children }) => {
 
   return <ServerContext.Provider value={{
     serverRoomId, sessionId, gameStatus,
-    spots, isPlayersTurn, winner,
+    isPlayersTurn, winner,
     sendMessage
   }}>{children}</ServerContext.Provider>
 };

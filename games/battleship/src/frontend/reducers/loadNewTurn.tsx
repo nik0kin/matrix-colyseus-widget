@@ -11,12 +11,12 @@ export function loadNewTurnReducer(state: StoreState, loadNewTurn: LoadNewTurn):
   const newMuleState = {
     ...state.gameState.mule,
     isYourTurn: !state.gameState.mule.isYourTurn,
-    currentTurn: loadNewTurn.newTurn.turnNumber + 1,
+    currentTurn: loadNewTurn.turnNumber + 1,
     previousTurns: [...state.gameState.mule.previousTurns, loadNewTurn.newTurn],
   };
 
   const whosTurn: string = state.gameState.mule.isYourTurn ? state.gameState.yourLobbyPlayerId : state.gameState.theirLobbyPlayerId;
-  const action: Action = loadNewTurn.newTurn.playerTurns[whosTurn].actions[0];
+  const action: Action = loadNewTurn.newTurn.playerTurns[whosTurn];
 
   // Process your Completed Turn
   if (whosTurn === state.gameState.yourLobbyPlayerId) {

@@ -9,7 +9,7 @@ import { getRandomArrayElement } from 'utils';
 // import { DROP_TOKEN, DropTokenMessage, GameState, TokenPiece } from './common';
 import {
   GameState, PLACE_SHIPS_MULE_ACTION, FIRE_SHOT_MULE_ACTION, FireShotMuleActionParams,
-  getFireShotMuleActionFromParams, PlaceShipsMuleActionParams, getPlaceShipsMuleActionFromParams,
+  getFireShotMuleActionFromParams, PlaceShipsMuleActionParams, getPlaceShipsMuleActionFromParams, TurnSchema, ActionSchema, Action,
 } from '../shared';
 // import { winConditionHook } from './winCondition';
 import fireShotCode from './actions/FireShot';
@@ -69,6 +69,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     const state = new GameState();
     // state.customOptions.assign(meta.customOptions);
     state.squares.push(...boardGeneratorHook());
+    state.turns.push(new TurnSchema());
     this.setState(state);
 
     this.onMessage(FIRE_SHOT_MULE_ACTION, (client, message: FireShotMuleActionParams) => {
@@ -100,12 +101,17 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
         return;
       }
 
-      const result = fireShotCode.doQ(this.state, lobbyPlayerId, message);
-      this.broadcast(FIRE_SHOT_MULE_ACTION + '_meta', result);
+      const metadata = fireShotCode.doQ(this.state, lobbyPlayerId, message);
 
-      this.state.nextTurn = client.sessionId === this.metadata.players[0].id
-        ? this.metadata.players[1].id
-        : this.metadata.players[0].id;
+      const action = {
+        type: FIRE_SHOT_MULE_ACTION,
+        params: message,
+        metadata,
+      };
+
+      this.broadcast(FIRE_SHOT_MULE_ACTION + '-complete', action);
+
+      this.progressTurnStuff(client.sessionId, lobbyPlayerId, action);
 
       this.checkWin();
     });
@@ -139,15 +145,37 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
         return;
       }
 
-      const result = placeShipsCode.doQ(this.state, lobbyPlayerId, message);
-      this.broadcast(PLACE_SHIPS_MULE_ACTION + '_meta', result);
+      const metadata = placeShipsCode.doQ(this.state, lobbyPlayerId, message);
 
-      this.state.nextTurn = client.sessionId === this.metadata.players[0].id
-        ? this.metadata.players[1].id
-        : this.metadata.players[0].id;
+      const action = {
+        type: PLACE_SHIPS_MULE_ACTION,
+        params: message,
+        metadata,
+      };
+
+      this.broadcast(PLACE_SHIPS_MULE_ACTION + '-complete', action);
+
+      this.progressTurnStuff(client.sessionId, lobbyPlayerId, action);
 
       this.checkWin();
     });
+  }
+
+  progressTurnStuff(sessionId: string, lobbyPlayerId: string, action: Action) {
+    const currentTurn = this.state.turns[this.state.turns.length - 1];
+    currentTurn.playerTurns.set(lobbyPlayerId, new ActionSchema().assign({
+      type: action.type,
+      params: JSON.stringify(action.params),
+      metadata: JSON.stringify(action.metadata),
+    }));
+
+    if (currentTurn.playerTurns.size === 2) {
+      this.state.turns.push(new TurnSchema());
+    }
+
+    this.state.nextTurn = sessionId === this.metadata.players[0].id
+      ? this.metadata.players[1].id
+      : this.metadata.players[0].id;
   }
 
   checkWin() {

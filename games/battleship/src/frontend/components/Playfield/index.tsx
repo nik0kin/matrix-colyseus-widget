@@ -292,5 +292,5 @@ function getLastAction(gameState: GameState): Action | undefined {
 
   return gameState.mule.previousTurns[gameState.mule.currentTurn - 2].playerTurns[gameState.mule.isYourTurn
     ? gameState.theirLobbyPlayerId
-    : gameState.yourLobbyPlayerId].actions[0];
+    : gameState.yourLobbyPlayerId];
 }
