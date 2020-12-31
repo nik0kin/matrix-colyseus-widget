@@ -1,9 +1,6 @@
 import { Room, Client, updateLobby } from 'colyseus';
 
-// @ts-ignore
-import fetch from 'node-fetch';
-
-import { GameStatus, RoomMetadata, PlayerSchema } from 'common';
+import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix } from 'common';
 import { getRandomArrayElement } from 'utils';
 
 // import { DROP_TOKEN, DropTokenMessage, GameState, TokenPiece } from './common';
@@ -25,32 +22,8 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
 
-  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }) {
-    console.log('onAuth', (GameRoom as any).DEBUG)
-    if ((GameRoom as any).DEBUG) return 'DEV_USER';
-
-    if (cache[matrixOpenIdAccessToken]) {
-      // Already been authed
-      return cache[matrixOpenIdAccessToken];
-    }
-
-    try {
-      const resp = await fetch('https://matrix.tgp.io' + '/_matrix/federation/v1/openid/userinfo' + '?access_token=' + matrixOpenIdAccessToken, {});
-      const data = await resp.json();
-
-      if (data.error || data.errcode) {
-        throw data;
-      }
-
-      console.log('matrix lookup success', data);
-
-      cache[matrixOpenIdAccessToken] = data.sub;
-
-      return data.sub;
-    } catch (e) {
-      console.error('matrix lookup failed', e);
-      return false;
-    }
+  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }): Promise<string | false> {
+    return authWithMatrix(GameRoom, matrixOpenIdAccessToken);
   }
 
   onCreate(options: any) {

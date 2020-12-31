@@ -12,16 +12,21 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@colyseus/schema": "^1.0.6",
+    "@types/node-fetch": "^2.5.7",
+    "colyseus": "^0.14.0",
+    "lodash": "^4.17.15",
+    "node-fetch": "^2.5.0",
     "rollup": "^2.16.1",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.4.5",
-    "lodash": "^4.17.15",
     "utils": "0.0.0"
   },
   "dependencies": {},
   "peerDependencies": {
     "@colyseus/schema": "^1.0.6",
+    "colyseus": "^0.14.0",
     "lodash": "^4.17.15",
+    "node-fetch": "^2.5.0",
     "utils": "0.0.0"
   }
 }

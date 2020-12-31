@@ -1,6 +1,6 @@
 import { ArraySchema } from '@colyseus/schema';
 import { Room, Client, updateLobby } from 'colyseus';
-import { GameStatus, RoomMetadata, PlayerSchema } from 'common';
+import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix } from 'common';
 import { getRandomArrayElement, Coord, toArrayIndex } from 'utils';
 
 import { PLACE_MARK, PlaceMarkMessage, GameState } from '../common';
@@ -10,6 +10,10 @@ import { checkWin } from './check-win';
 export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 2;
   autoDispose = false;
+
+  async onAuth(client: Client, { matrixOpenIdAccessToken }: { matrixOpenIdAccessToken: string }): Promise<string | false> {
+    return authWithMatrix(GameRoom, matrixOpenIdAccessToken);
+  }
 
   onCreate(options: any) {
     const { roomName, ...customOptions } = options;
