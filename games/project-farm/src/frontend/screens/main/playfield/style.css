@@ -7,16 +7,35 @@
 
 .inner {
   display: grid;
-  grid-template-columns: repeat(40, 1fr);
-  grid-template-rows: repeat(100, 1fr);
+  grid-template-columns: repeat(30, 1fr);
+  grid-template-rows: repeat(80, 1fr);
   grid-gap: 0;
   background-color: black;
 }
 
 .Playfield .Plot {
-  width: 5vh;
-  height: 5vh;
+  width: 7vh;
+  height: 7vh;
   background-color: green;
-  border: yellowgreen 1px solid;
-  font-size: 1vh;
+  /* border: yellowgreen 1px solid; */
+  font-size: 1.8vh;
+}
+
+/* https://stackoverflow.com/a/56664704/346485 */
+
+.Playfield .Plot {
+  background-image: url('../../../images/ClassicRPG_Sheet.png');
+  background-size: 2000% 800%;  /* 20x8 sprites */
+}
+
+.Plot.type-Normal {
+  background-position: -600% -57%;
+}
+
+.Plot.type-Plowed {
+  background-position: -605% 0;
+}
+
+.Plot.type-Weeded {
+  background-position: -595% 0;
 }
