@@ -29,8 +29,8 @@ const gameServer = new Server({
 gameServer.define('lobby', LobbyRoom);
 
 const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
-  const customOptions = gameConfig.backendModule ?
-    (require(resolve('../', gameConfig.backendModule)).default as BackendGameConfig).customOptions :
+  const backendConfig = gameConfig.backendModule ?
+    (require(resolve('../', gameConfig.backendModule)).default as BackendGameConfig) :
     undefined;
 
   const feGameConfig: FeGameConfig = {
@@ -38,7 +38,8 @@ const gamesSupported = mcwConfig.gamesSupported.map((gameConfig) => {
     colyseus: !!gameConfig.backendModule,
     frontend: gameConfig.frontendIframe || `/games/${gameConfig.id}`,
     displayName: gameConfig.displayName,
-    customOptions,
+    joinableInProgress: backendConfig?.joinableInProgress,
+    customOptions: backendConfig?.customOptions,
     quickOptions: gameConfig.quickOptions,
     attribution: gameConfig.attribution,
   };

@@ -23,6 +23,13 @@ module.exports = {
       quickOptions: {}
     },
     {
+      id: 'project-farm',
+      displayName: 'Farmsprawl',
+      backendModule: '../games/project-farm/backend-dist',
+      frontendFiles: '../games/project-farm/build',
+      quickOptions: {}
+    },
+    {
       id: 'tetris',
       displayName: 'Tetris',
       frontendIframe: 'https://chvin.github.io/react-tetris/?lan=en',

@@ -1,0 +1,22 @@
+.Playfield {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  grid-template-rows: repeat(100, 1fr);
+  grid-gap: 0;
+  background-color: black;
+}
+
+.Playfield .Plot {
+  width: 5vh;
+  height: 5vh;
+  background-color: green;
+  border: yellowgreen 1px solid;
+  font-size: 1vh;
+}

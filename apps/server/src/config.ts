@@ -32,4 +32,5 @@ export interface BackendGameConfig {
     min: number;
     max: number;
   }>;
+  joinableInProgress?: boolean;
 }

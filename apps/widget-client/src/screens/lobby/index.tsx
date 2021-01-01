@@ -4,7 +4,7 @@ import { GameStatus } from 'common';
 
 import { StartButton } from './start-button';
 import { GameCard } from '../../components';
-import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs, useMatrixAuth } from '../../contexts';
+import { useLobbyState, useGotoPlayGame, useGetJoinedRoom, useGameConfigs, useMatrixAuth, useGetGameConfig } from '../../contexts';
 import { OpenAttributionModal } from '../attribution';
 import { OpenCreateGameModal } from '../create-game';
 
@@ -14,6 +14,7 @@ export const LobbyScreen: FC = () => {
   const { rooms, joinGame } = useLobbyState();
   const getJoinedRoom = useGetJoinedRoom();
   const gameConfigs = useGameConfigs();
+  const getGameConfig = useGetGameConfig();
   const [openIdAccessToken] = useMatrixAuth();
 
   const joinableGames = useMemo(() => {
@@ -87,7 +88,7 @@ export const LobbyScreen: FC = () => {
           <h3>Active Games</h3>
           {activeGames.map(([roomAvailable, room]) => (
             <GameCard key={room.id} roomAvailable={roomAvailable} room={room}>
-              <button disabled={roomAvailable.clients !== roomAvailable.maxClients} onClick={() =>
+              <button disabled={!getGameConfig(roomAvailable.metadata?.gameId!)?.joinableInProgress && roomAvailable.clients !== roomAvailable.maxClients} onClick={() =>
                 gotoPlayGame(roomAvailable.metadata!.gameId, room.id)}
               >play</button>
             </GameCard>
