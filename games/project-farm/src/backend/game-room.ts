@@ -1,13 +1,18 @@
 import { Room, Client, updateLobby } from 'colyseus';
+import { Dispatcher } from '@colyseus/command';
+
 import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
 
-import { GameState, CharacterSchema } from '../common';
-import { createMap } from './create-map';
+import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST } from '../common';
+import { OnGameStartCommand } from './commands/on-game-start';
+import { OnMoveRequestCommand } from './commands/requests/move';
 
 
 export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 10;
   autoDispose = false;
+
+  dispatcher = new Dispatcher(this);
 
   async onAuth(client: Client, { matrixOpenIdAccessToken, matrixServerName }: WidgetMatrixAuth): Promise<string | false> {
     return authWithMatrix(GameRoom, matrixOpenIdAccessToken, matrixServerName);
@@ -25,9 +30,11 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     };
     this.setMetadata(meta).then(() => updateLobby(this));
 
-    const state = new GameState();
-    state.map.push(...createMap());
-    this.setState(state);
+    this.dispatcher.dispatch(new OnGameStartCommand(), { dispatcher: this.dispatcher });
+
+    this.onMessage(MOVE_CHARACTER_REQUEST, (client, message) => {
+      this.dispatcher.dispatch(new OnMoveRequestCommand(), { client, ...message });
+    });
   }
 
   onJoin(client: Client, options: any, matrixName: string) {

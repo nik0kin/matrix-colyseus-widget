@@ -1,25 +1,22 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-// import { Coord } from 'utils';
 
-// import { useServerState } from '../../../contexts';
-import { PlotSchema } from '../../../../common';
+
+import { PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage } from '../../../../common';
+import { useSendMessage } from '../../../contexts';
 
 export const Plot: FC<{ plot: PlotSchema }> = ({ plot }) => {
-  // const sendMessage = useSendMessage();
-
-  // const onClick = () => {
-  //   const message: PlaceMarkMessage = {
-  //     coord: { x, y }
-  //   };
-  //   sendMessage(PLACE_MARK, message);
-  // };
+  const sendMessage = useSendMessage();
 
   const onSingleClick = useCallback(() => {
     console.log('single click', plot.coord)
   }, [plot]);
   const onDoubleClick = useCallback(() => {
-    console.log('double click', plot.coord)
-  }, [plot]);
+    console.log('double click', plot.coord);
+    const message: MoveCharacterMessage = {
+      coord: plot.coord
+    };
+    sendMessage(MOVE_CHARACTER_REQUEST, message);
+  }, [plot, sendMessage]);
 
   const onClick = useSimpleAndDoubleClick(onSingleClick, onDoubleClick);
 

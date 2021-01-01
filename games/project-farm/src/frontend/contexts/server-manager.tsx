@@ -67,7 +67,7 @@ const initConnection = async (
 interface ServerManagerType {
   serverRoomId: string;
   sessionId: string;
-  gameState: GameState | null;
+  gameState: Pick<GameState, 'map' | 'characters'> | null;
 
   sendMessage: (type: string | number, payload?: any) => void;
 }
@@ -75,13 +75,16 @@ interface ServerManagerType {
 const ServerContext = createContext<ServerManagerType>(null as any);
 
 export const ServerManager: FC = ({ children }) => {
-  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [gameState, setGameState] = useState<Pick<GameState, 'map' | 'characters'> | null>(null);
   const [serverRoomId, setServerRoomId] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [sendMessage, setSendMessage] = useState<(type: string | number, payload?: any) => void>(() => () => null);
 
-  const onGameStatusUpdate = useCallback((gameState: GameState) => setGameState(gameState), []);
+  const onGameStatusUpdate = useCallback((gameState: GameState) => {
+    // cheap (code), but costly (rendering everything) way to redraw the playfield
+    setGameState({ ...gameState })
+  }, []);
 
   useEffect(() => {
     initConnection(onGameStatusUpdate)

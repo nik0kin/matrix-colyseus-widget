@@ -1,6 +1,7 @@
 import { type, Schema, ArraySchema } from '@colyseus/schema';
 import { CoordSchema } from 'common';
 
+export const CHARACTER_SPEED = 1; // 1 plot per second
 
 export class CharacterActionSchema extends Schema {
   @type('string')
