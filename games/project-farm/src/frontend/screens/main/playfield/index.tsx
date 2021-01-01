@@ -19,6 +19,10 @@ export const Playfield: FC = () => {
           {gameState.map.map((p, i) => {
             return <Plot key={i} plot={p} />
           })}
+          {gameState.characters.map((c, i) => <div key={i} className="Character" style={{
+            left: `calc(7vh * ${c.coord.x})`,
+            top: `calc(7vh * ${c.coord.y})`
+          }} />)}
         </div>
       </div>
     </div>

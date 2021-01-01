@@ -1,7 +1,7 @@
 import { Room, Client, updateLobby } from 'colyseus';
 import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
 
-import { GameState } from '../common';
+import { GameState, CharacterSchema } from '../common';
 import { createMap } from './create-map';
 
 
@@ -35,6 +35,10 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
 
     meta.players.push({ id: client.sessionId, name: client.sessionId });
     this.state.players.push(new PlayerSchema().assign({ id: client.sessionId, name: matrixName }));
+
+    const character = new CharacterSchema();
+    character.coord.assign({ x: 2, y: 2 });
+    this.state.characters.push(character);
 
     this.setMetadata(meta).then(() => updateLobby(this));
   }

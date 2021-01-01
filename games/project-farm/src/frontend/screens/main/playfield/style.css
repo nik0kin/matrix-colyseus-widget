@@ -1,12 +1,13 @@
 .Playfield {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 .inner {
   display: grid;
+  position: relative;
   grid-template-columns: repeat(30, 1fr);
   grid-template-rows: repeat(80, 1fr);
   grid-gap: 0;
@@ -23,7 +24,8 @@
 
 /* https://stackoverflow.com/a/56664704/346485 */
 
-.Playfield .Plot {
+.Playfield .Plot,
+.Playfield .Character {
   background-image: url('../../../images/ClassicRPG_Sheet.png');
   background-size: 2000% 800%;  /* 20x8 sprites */
 }
@@ -38,4 +40,11 @@
 
 .Plot.type-Weeded {
   background-position: -595% 0;
+}
+
+.Playfield .Character {
+  position: absolute;
+  width: 5vh;
+  height: 5vh;
+  background-position: 0 0;
 }
