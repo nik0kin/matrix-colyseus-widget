@@ -17,7 +17,7 @@ module.exports = {
     },
     {
       id: 'battleship',
-      displayName: 'Battleship',
+      displayName: 'Battleship (Desktop)',
       backendModule: '../games/battleship/backend-dist',
       frontendFiles: '../games/battleship/build',
       quickOptions: {}

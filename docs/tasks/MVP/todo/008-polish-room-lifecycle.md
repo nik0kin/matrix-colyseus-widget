@@ -9,3 +9,5 @@ remove a player if they dont reconnect after 500s if the game hasnt started
 remove sessionStorage joinedGames that are no longer joined (eg 500s timeout)
 
 if a player dc's and times out, neither player can rejoin the game.
+
+ base auth id off matrix name instead of sessionId

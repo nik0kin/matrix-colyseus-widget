@@ -16,6 +16,13 @@ module.exports = {
       quickOptions: {}
     },
     {
+      id: 'battleship',
+      displayName: 'Battleship (Desktop)',
+      backendModule: '../games/battleship/backend-dist',
+      frontendFiles: '../games/battleship/build',
+      quickOptions: {}
+    },
+    {
       id: 'solitaire',
       displayName: 'Solitaire',
       frontendFiles: '../games/solitaire',

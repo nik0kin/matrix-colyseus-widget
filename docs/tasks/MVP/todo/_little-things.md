@@ -1,4 +1,4 @@
  - [x] show "Matrix-auth not available" error and let user play non-colyseus games
  - tictactoe ux: make it more obvious that it's the users turn
  - connectx ux: make it more obvious what color the user is playing as
- - teach how to resolve matrix homeserver from server-name
+ - [x] teach how to resolve matrix homeserver from server-name
