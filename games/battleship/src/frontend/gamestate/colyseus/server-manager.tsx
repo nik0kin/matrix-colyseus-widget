@@ -51,10 +51,6 @@ const initConnection = async (
   try {
     const room = await getRoom();
 
-    room.onMessage('game-start', () => {
-      onGameStatusUpdate(GameStatus.InProgress);
-    });
-
     room.onStateChange.once((state) => {
       console.log("this is the first room state!", state);
       onGameStatusUpdate(state.status);

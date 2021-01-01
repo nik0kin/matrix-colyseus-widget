@@ -6,3 +6,4 @@ Contenders:
  - checkers
  - risk
   - fork an existing project https://github.com/topics/risk-game ?
+ - backgammon (mule conversion)

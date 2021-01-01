@@ -45,10 +45,6 @@ define(function () {
 
       let firstUpdate = true;
 
-      room.onMessage('game-start', () => {
-        onGameStatusUpdate(GameStatus.InProgress);
-      });
-
       room.onStateChange.once((state) => {
         console.log("this is the first room state!", state);
         onInitialState(state.spots, state.tokens, state.p1Player, state.nextTurn === room.sessionId, state.customOptions, state.players);
