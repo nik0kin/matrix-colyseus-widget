@@ -18,10 +18,12 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
 
     const character = this.state.characters[0]; // TODO support multi characters
 
-    if (character.actionQueue.find(
-      (a) => a.type !== 'Move' && a.coord.x === request.coord.x && a.coord.y === request.coord.y)
-    ) {
-      // ignore if action on plot already exists
+    const actionOnPlotIndex = character.actionQueue.findIndex(
+      (a) => a.type !== 'Move' && a.coord.x === request.coord.x && a.coord.y === request.coord.y
+    );
+    if (actionOnPlotIndex !== -1) {
+      // remove action if action on plot already exists
+      character.actionQueue.splice(actionOnPlotIndex, 1);
       return;
     }
 
