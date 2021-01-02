@@ -1,5 +1,6 @@
 import { type, Schema } from '@colyseus/schema';
 import { CoordSchema } from 'common';
+import { PlantSchema } from './plants';
 
 export class PlotSchema extends Schema {
   @type(CoordSchema)
@@ -11,6 +12,7 @@ export class PlotSchema extends Schema {
   @type('number')
   actionTime: number = 0;
 
-  // plant?: Plant;
+  @type([PlantSchema])
+  plant?: PlantSchema;
 }
 

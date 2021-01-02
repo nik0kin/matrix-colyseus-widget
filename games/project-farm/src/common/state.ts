@@ -1,4 +1,4 @@
-import { type, ArraySchema, Schema } from '@colyseus/schema';
+import { type, ArraySchema, Schema, MapSchema } from '@colyseus/schema';
 import { McwGameState } from 'common';
 import { Coord } from 'utils';
 
@@ -22,6 +22,9 @@ export class GameState extends McwGameState {
 
   @type([CharacterSchema])
   characters = new ArraySchema<CharacterSchema>();
+
+  @type({ map: 'number' })
+  seedInventory = new MapSchema<number>();
 }
 
 export function getPlotAtLocation(gameState: GameState, coord: Coord) {

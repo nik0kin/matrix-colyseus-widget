@@ -9,6 +9,7 @@ export class OnGameStartCommand extends Command<GameState> {
     const state = new GameState();
     state.customOptions.assign(this.room.metadata.customOptions);
     state.map.push(...createMap(state.customOptions));
+    state.seedInventory.set('potato', 50);
     this.room.setState(state);
   };
 }
