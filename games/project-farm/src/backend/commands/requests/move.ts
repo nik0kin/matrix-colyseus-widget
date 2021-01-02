@@ -12,14 +12,14 @@ export class OnMoveRequestCommand extends Command<GameState, Payload> {
       throw new Error('Bad move request');
     }
 
-    // TODO ignore if another non-move action is in progress
-
-    // TODO if a move action comes, replace current action
-
     const character = this.state.characters[0]; // TODO support multi characters
-    // character.coord.assign(request.coord);
 
+    if (character.actionQueue[0] && character.actionQueue[0].type !== 'Move') {
+      // ignore if another non-move action is in progress
+      return;
+    }
 
+    // replace current move action if applicable
     character.actionQueue.setAt(0, new CharacterActionSchema().assign({
       type: 'Move',
       coord: new CoordSchema().assign(request.coord),

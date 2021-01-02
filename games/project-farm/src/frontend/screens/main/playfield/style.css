@@ -3,6 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center; */
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
 }
 
 .inner {
@@ -20,6 +23,10 @@
   background-color: green;
   /* border: yellowgreen 1px solid; */
   font-size: 1.8vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* https://stackoverflow.com/a/56664704/346485 */
@@ -40,6 +47,10 @@
 
 .Plot.type-Weeded {
   background-position: -595% 0;
+}
+
+.Plot.selected {
+  border: yellow solid 1px;
 }
 
 .Playfield .Character {

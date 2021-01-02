@@ -1,15 +1,22 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 
 
-import { PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage } from '../../../../common';
+import {
+  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST
+} from '../../../../common';
 import { useSendMessage } from '../../../contexts';
 
-export const Plot: FC<{ plot: PlotSchema }> = ({ plot }) => {
+export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean }> = ({ plot, selectedForAction }) => {
   const sendMessage = useSendMessage();
 
   const onSingleClick = useCallback(() => {
     console.log('single click', plot.coord)
-  }, [plot]);
+    const message: DoActionMessage = {
+      tool: 'Hoe',
+      coord: plot.coord,
+    };
+    sendMessage(DO_ACTION_REQUEST, message);
+  }, [plot, sendMessage]);
   const onDoubleClick = useCallback(() => {
     console.log('double click', plot.coord);
     const message: MoveCharacterMessage = {
@@ -21,8 +28,9 @@ export const Plot: FC<{ plot: PlotSchema }> = ({ plot }) => {
   const onClick = useSimpleAndDoubleClick(onSingleClick, onDoubleClick);
 
   return (
-    <div className={`Plot type-${plot.dirt}`} onClick={onClick}>
+    <div className={`Plot type-${plot.dirt} ${selectedForAction ? 'selected' : ''}`} onClick={onClick}>
       {plot.coord.x},{plot.coord.y}
+      {!!plot.actionTime && <span>{plot.actionTime - Date.now()}</span>}
     </div>
   );
 };

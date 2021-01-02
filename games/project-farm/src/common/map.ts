@@ -8,6 +8,9 @@ export class PlotSchema extends Schema {
   @type('string')
   dirt: 'Weeded' | 'Normal' | 'Plowed' = 'Normal';
 
+  @type('number')
+  actionTime: number = 0;
+
   // plant?: Plant;
 }
 

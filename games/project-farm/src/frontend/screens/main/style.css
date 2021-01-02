@@ -1,0 +1,20 @@
+.ToolButton,
+.ShopButton {
+  position: absolute;
+  width: 10vh;
+  height: 10vh;
+  border-radius: 50%;
+  padding-top: 3vh;
+}
+
+.ToolButton {
+  bottom: 5%;
+  left: 5%;
+  background-color: blue;
+}
+
+.ShopButton {
+  bottom: 5%;
+  right: 5%;
+  background-color: purple;
+}
