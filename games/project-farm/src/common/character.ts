@@ -5,7 +5,7 @@ export const CHARACTER_SPEED = 1; // 1 plot per second
 
 export class CharacterActionSchema extends Schema {
   @type('string')
-  type: 'Plow' | 'Plant' | 'Harvest' | 'Water' = 'Plow';
+  type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' = 'Plow';
 
   @type(CoordSchema)
   coord = new CoordSchema();

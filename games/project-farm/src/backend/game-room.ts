@@ -5,6 +5,7 @@ import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAut
 
 import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST } from '../common';
 import { OnGameStartCommand } from './commands/on-game-start';
+import { OnTickCommand } from './commands/on-tick';
 import { OnMoveRequestCommand } from './commands/requests/move';
 
 
@@ -30,11 +31,15 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     };
     this.setMetadata(meta).then(() => updateLobby(this));
 
-    this.dispatcher.dispatch(new OnGameStartCommand(), { dispatcher: this.dispatcher });
+    this.dispatcher.dispatch(new OnGameStartCommand());
 
     this.onMessage(MOVE_CHARACTER_REQUEST, (client, message) => {
       this.dispatcher.dispatch(new OnMoveRequestCommand(), { client, ...message });
     });
+
+    this.setSimulationInterval((deltaTime) =>
+      this.dispatcher.dispatch(new OnTickCommand(), { deltaTime })
+    );
   }
 
   onJoin(client: Client, options: any, matrixName: string) {

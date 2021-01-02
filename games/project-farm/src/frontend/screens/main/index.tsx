@@ -10,12 +10,11 @@ export const MainScreen: FC = () => {
   const { serverRoomId, sessionId } = useServerState();
   return (
     <div>
-      <h2>Farmsprawl</h2>
+      <h3>Farmsprawl</h3>
       <div>
         <Playfield />
       </div>
-      <p>RoomId: {serverRoomId}</p>
-      <p>SessionId: {sessionId}</p>
+      <p>RoomId: {serverRoomId}, SessionId: {sessionId}</p>
     </div>
   )
 };
