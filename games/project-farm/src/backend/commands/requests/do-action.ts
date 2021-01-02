@@ -1,7 +1,7 @@
 import { Command } from '@colyseus/command';
 import { Client } from 'colyseus';
 
-import { GameState, DoActionMessage, CharacterActionSchema } from '../../../common';
+import { GameState, DoActionMessage, CharacterActionSchema, getPlotAtLocation } from '../../../common';
 import { CoordSchema } from 'common';
 
 type Payload = { client: Client } & DoActionMessage;
@@ -19,11 +19,14 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
     const character = this.state.characters[0]; // TODO support multi characters
 
     if (character.actionQueue.find(
-      (a) => a.type === 'Plow' && a.coord.x === request.coord.x && a.coord.y === request.coord.y)
+      (a) => a.type !== 'Move' && a.coord.x === request.coord.x && a.coord.y === request.coord.y)
     ) {
-      // ignore if action already exists
+      // ignore if action on plot already exists
       return;
     }
+
+    const plot = getPlotAtLocation(this.state, request.coord);
+    if (plot?.dirt === 'Plowed') return;
 
     if (character.actionQueue[0] && character.actionQueue[0].type === 'Move') {
       character.actionQueue.shift();

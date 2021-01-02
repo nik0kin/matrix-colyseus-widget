@@ -1,6 +1,6 @@
 import { Command } from '@colyseus/command';
 
-import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema } from '../../common';
+import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation } from '../../common';
 import { Coord } from 'utils';
 
 const ACTION_LENGTH = 1000;
@@ -67,10 +67,6 @@ function moveCharacter(character: CharacterSchema, dest: Coord, deltaTime: numbe
     x: newX, // character.coord.x * deltaTime * CHARACTER_SPEED * directionX,
     y: newY, // character.coord.y * deltaTime * CHARACTER_SPEED * directionY,
   })
-}
-
-function getPlotAtLocation(gameState: GameState, coord: Coord) {
-  return gameState.map.find((p) => p.coord.x === coord.x && p.coord.y === coord.y);
 }
 
 function plow(plot: PlotSchema, currentTime: number) {

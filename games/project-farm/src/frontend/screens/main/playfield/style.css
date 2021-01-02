@@ -18,6 +18,7 @@
 }
 
 .Playfield .Plot {
+  position: relative;
   width: 7vh;
   height: 7vh;
   background-color: green;
@@ -43,14 +44,27 @@
 
 .Plot.type-Plowed {
   background-position: -605% 0;
+  background-size: 2020% 800%;
 }
 
 .Plot.type-Weeded {
   background-position: -595% 0;
 }
 
-.Plot.selected {
+.Plot.selectedForAction {
   border: yellow solid 1px;
+}
+
+.Plot.selected:before {
+  /* https://css-tricks.com/snippets/css/multiple-borders/ */
+  border: orange solid 2px;
+
+  content: " ";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
 }
 
 .Playfield .Character {

@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 
+// TODO-quick remove and use the one from utils
+
 export interface Coord {
   x: number;
   y: number;
@@ -49,7 +51,6 @@ export class Grid<T> {
     return _.flatten(this._grid);
   }
 }
-
 
 export function areCoordsEqual(coord1: Coord, coord2: Coord) {
   return coord1.x === coord2.x && coord1.y === coord2.y;

@@ -36,3 +36,7 @@ export function toCoord(coordString: string) {
 export function toArrayIndex(coord: Coord) {
   return coord.y * 3 + coord.x;
 }
+
+export function areCoordsEqual(coord1: Coord, coord2: Coord) {
+  return coord1.x === coord2.x && coord1.y === coord2.y;
+}

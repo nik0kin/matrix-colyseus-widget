@@ -1,12 +1,15 @@
 import React, { FC } from 'react';
 
+import { areCoordsEqual } from 'utils';
+
 import { Plot } from './plot';
 
 import './style.css';
-import { useServerState } from '../../../contexts';
+import { useServerState, useClientState } from '../../../contexts';
 
 export const Playfield: FC = () => {
   const { gameState } = useServerState();
+  const { selectedPlot } = useClientState();
   const characterActions = gameState?.characters[0].actionQueue || [];
 
   if (!gameState) {
@@ -19,8 +22,9 @@ export const Playfield: FC = () => {
         <div className="inner">
           {gameState.map.map((p, i) => {
             return <Plot key={i} plot={p}
-              selectedForAction={!!characterActions.find((ca) =>
-                ca.type !== 'Move' && ca.coord.x === p.coord.x && ca.coord.y === p.coord.y)} />
+              selectedForAction={!!characterActions.find((ca) => ca.type !== 'Move' && areCoordsEqual(ca.coord, p.coord))}
+              selected={!!selectedPlot && areCoordsEqual(selectedPlot, p.coord)}
+            />
           })}
           {gameState.characters.map((c, i) => <div key={i} className="Character" style={{
             left: `calc(7vh * ${c.coord.x})`,

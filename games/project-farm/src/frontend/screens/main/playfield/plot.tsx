@@ -4,10 +4,11 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import {
   PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST
 } from '../../../../common';
-import { useSendMessage } from '../../../contexts';
+import { useSendMessage, useClientState } from '../../../contexts';
 
-export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean }> = ({ plot, selectedForAction }) => {
+export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?: boolean }> = ({ plot, selectedForAction, selected }) => {
   const sendMessage = useSendMessage();
+  const { setSelectedPlot } = useClientState();
 
   const onSingleClick = useCallback(() => {
     console.log('single click', plot.coord)
@@ -16,7 +17,8 @@ export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean }> = ({ pl
       coord: plot.coord,
     };
     sendMessage(DO_ACTION_REQUEST, message);
-  }, [plot, sendMessage]);
+    setSelectedPlot(plot.coord);
+  }, [plot, sendMessage, setSelectedPlot]);
   const onDoubleClick = useCallback(() => {
     console.log('double click', plot.coord);
     const message: MoveCharacterMessage = {
@@ -28,8 +30,8 @@ export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean }> = ({ pl
   const onClick = useSimpleAndDoubleClick(onSingleClick, onDoubleClick);
 
   return (
-    <div className={`Plot type-${plot.dirt} ${selectedForAction ? 'selected' : ''}`} onClick={onClick}>
-      {plot.coord.x},{plot.coord.y}
+    <div className={`Plot type-${plot.dirt} ${selectedForAction ? 'selectedForAction' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
+      <span />
       {!!plot.actionTime && <span>{plot.actionTime - Date.now()}</span>}
     </div>
   );

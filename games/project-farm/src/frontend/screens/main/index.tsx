@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { useServerState } from '../../contexts';
+import { useServerState, useClientState } from '../../contexts';
 
 import { Playfield } from './playfield';
 
@@ -10,8 +10,8 @@ export const MainScreen: FC = () => {
   const { serverRoomId, sessionId } = useServerState();
   return (
     <div>
-      <h3>Farmsprawl</h3>
       <div>
+        <Info />
         <Playfield />
         <ToolButton />
         <ShopButton />
@@ -19,6 +19,19 @@ export const MainScreen: FC = () => {
       <p>RoomId: {serverRoomId}, SessionId: {sessionId}</p>
     </div>
   )
+};
+
+const Info: FC = () => {
+  const { gameState } = useServerState();
+  const { selectedPlot } = useClientState();
+  const plot = selectedPlot && gameState?.map.find((p) => selectedPlot.x === p.coord.x && selectedPlot.y === p.coord.y);
+  return (
+    <div className="Info">
+      {selectedPlot && plot && <div>
+        {selectedPlot.x},{selectedPlot.y} {plot.dirt}
+      </div>}
+    </div>
+  );
 };
 
 const ToolButton: FC = () => {

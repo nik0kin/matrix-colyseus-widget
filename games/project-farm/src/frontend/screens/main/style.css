@@ -18,3 +18,9 @@
   right: 5%;
   background-color: purple;
 }
+
+.Info {
+  height: 13vh;
+  border: black solid 3px;
+  padding: 5px;
+}
