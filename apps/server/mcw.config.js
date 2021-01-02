@@ -27,7 +27,7 @@ module.exports = {
       displayName: 'Farmsprawl',
       backendModule: '../games/project-farm/backend-dist',
       frontendFiles: '../games/project-farm/build',
-      quickOptions: {}
+      quickOptions: { width: 25, height: 60 }
     },
     {
       id: 'tetris',

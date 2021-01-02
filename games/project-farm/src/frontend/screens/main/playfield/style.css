@@ -6,21 +6,23 @@
   width: 100vw;
   height: 100vh;
   overflow: scroll;
+
+  --plot-size: 8vh;
 }
 
 .inner {
   display: grid;
   position: relative;
-  grid-template-columns: repeat(30, 1fr);
-  grid-template-rows: repeat(80, 1fr);
+  grid-template-columns: repeat(var(--playfield-width), 1fr);
+  grid-template-rows: repeat(var(--playfield-height), 1fr);
   grid-gap: 0;
   background-color: black;
 }
 
 .Playfield .Plot {
   position: relative;
-  width: 7vh;
-  height: 7vh;
+  width: var(--plot-size);
+  height: var(--plot-size);
   background-color: green;
   /* border: yellowgreen 1px solid; */
   font-size: 1.8vh;

@@ -22,6 +22,8 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
 
   onCreate(options: any) {
     const { roomName, matrixOpenIdAccessToken, matrixServerName, ...customOptions } = options;
+    console.log('onCreate options supplied: ', options);
+    if (customOptions && Object.keys(customOptions).length !== 2) throw new Error('options missing');
 
     const meta: RoomMetadata = {
       name: roomName,

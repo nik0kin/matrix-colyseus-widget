@@ -1,15 +1,14 @@
 
 import { times } from 'lodash';
-
-import { PlotSchema } from '../common';
 import { getRandomInt } from 'utils';
 
-const MAP_SIZE = { width: 30, height: 80 };
+import { PlotSchema } from '../common';
+import { CustomOptions } from './custom-options';
 
-export function createMap() {
+export function createMap(customOptions: CustomOptions) {
   const plots: PlotSchema[] = [];
-  times(MAP_SIZE.height, (y) => {
-    times(MAP_SIZE.width, (x) => {
+  times(customOptions.height, (y) => {
+    times(customOptions.width, (x) => {
       const plot = new PlotSchema();
       plot.coord.assign({ x, y });
       if (getRandomInt(0, 100) > 70) {

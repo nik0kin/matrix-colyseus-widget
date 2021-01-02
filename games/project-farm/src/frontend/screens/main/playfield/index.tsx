@@ -17,7 +17,10 @@ export const Playfield: FC = () => {
   }
 
   return (
-    <div className="Playfield">
+    <div className="Playfield" style={{
+      '--playfield-width': gameState.customOptions.width,
+      '--playfield-height': gameState.customOptions.height,
+    } as any}>
       <div className="container">
         <div className="inner">
           {gameState.map.map((p, i) => {
@@ -27,8 +30,8 @@ export const Playfield: FC = () => {
             />
           })}
           {gameState.characters.map((c, i) => <div key={i} className="Character" style={{
-            left: `calc(7vh * ${c.coord.x})`,
-            top: `calc(7vh * ${c.coord.y})`
+            left: `calc(var(--plot-size) * ${c.coord.x})`,
+            top: `calc(var(--plot-size) * ${c.coord.y})`
           }} />)}
         </div>
       </div>
