@@ -4,11 +4,12 @@ import { Dispatcher } from '@colyseus/command';
 import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
 import { getRandomInt } from 'utils';
 
-import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST, DO_ACTION_REQUEST } from '../common';
+import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST, DO_ACTION_REQUEST, CHANGE_TOOL_REQUEST } from '../common';
 import { OnGameStartCommand } from './commands/on-game-start';
 import { OnTickCommand } from './commands/on-tick';
 import { OnMoveRequestCommand } from './commands/requests/move';
 import { OnDoActionRequestCommand } from './commands/requests/do-action';
+import { ChangeToolRequestCommand } from './commands/requests/change-tool';
 
 
 export class GameRoom extends Room<GameState, RoomMetadata> {
@@ -42,6 +43,9 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     });
     this.onMessage(DO_ACTION_REQUEST, (client, message) => {
       this.dispatcher.dispatch(new OnDoActionRequestCommand(), { client, ...message });
+    });
+    this.onMessage(CHANGE_TOOL_REQUEST, (client, message) => {
+      this.dispatcher.dispatch(new ChangeToolRequestCommand(), { client, ...message });
     });
 
     this.setSimulationInterval((deltaTime) =>

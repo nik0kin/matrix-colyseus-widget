@@ -1,4 +1,4 @@
-// Generated file - see generate-buildings-config.js
+// Generated file - see generate-plants-config.js
 import PotatoConfig from './config/Potato';
 
 const configs = {

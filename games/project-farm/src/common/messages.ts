@@ -12,3 +12,9 @@ export interface DoActionMessage { // rename to QueueAction?
   coord: Coord;
   tool: string;
 }
+
+export const CHANGE_TOOL_REQUEST = 'CHANGE_TOOL_REQUEST';
+
+export interface ChangeToolMessage {
+  tool: string;
+}

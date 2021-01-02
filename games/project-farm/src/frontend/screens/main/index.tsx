@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { useServerState, useClientState } from '../../contexts';
 
 import { Playfield } from './playfield';
+import { OpenToolBox } from './tool-box';
 
 import './style.css';
 
@@ -36,7 +37,11 @@ const Info: FC = () => {
 
 const ToolButton: FC = () => {
   const { gameState } = useServerState();
-  return <div className="ToolButton">{gameState?.characters[0].tool}</div>;
+  return (
+    <OpenToolBox>
+      {(openModal) => <div className="ToolButton" onClick={openModal}>{gameState?.characters[0].tool}</div>}
+    </OpenToolBox>
+  );
 };
 
 const ShopButton: FC = () => {
