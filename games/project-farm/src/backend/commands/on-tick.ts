@@ -8,6 +8,7 @@ const ACTION_LENGTH = 1000;
 export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
   execute({ deltaTime }: { deltaTime: number }) {
 
+    // Do character actions
     this.state.characters.forEach((character) => {
       if (character.actionQueue[0]) {
         const action = character.actionQueue[0];

@@ -2,6 +2,7 @@ import { Room, Client, updateLobby } from 'colyseus';
 import { Dispatcher } from '@colyseus/command';
 
 import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
+import { getRandomInt } from 'utils';
 
 import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST, DO_ACTION_REQUEST } from '../common';
 import { OnGameStartCommand } from './commands/on-game-start';
@@ -46,6 +47,17 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     this.setSimulationInterval((deltaTime) =>
       this.dispatcher.dispatch(new OnTickCommand(), { deltaTime })
     );
+
+    this.clock.setInterval(() => {
+      // Randomly Turn Dirt into Weeds
+      this.state.map.forEach((plot) => {
+        if (plot.dirt === 'Normal') {
+          if (getRandomInt(0, 100) > 99) {
+            plot.dirt = 'Weeded';
+          }
+        }
+      });
+    }, 15 * 1000); // every 5 seconds
   }
 
   onJoin(client: Client, options: any, matrixName: string) {
