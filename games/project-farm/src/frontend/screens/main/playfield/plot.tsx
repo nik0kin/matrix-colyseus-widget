@@ -1,19 +1,21 @@
+import c from 'classnames';
 import React, { FC, useState, useEffect, useCallback } from 'react';
 
 
 import {
-  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST
+  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST, PlantSchema, getPlantConfig, PlantStageType
 } from '../../../../common';
 import { useSendMessage, useClientState } from '../../../contexts';
 
 export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?: boolean }> = ({ plot, selectedForAction, selected }) => {
+  const plant = (plot.plant as any as PlantSchema[] || [])[0];
   const sendMessage = useSendMessage();
   const { setSelectedPlot } = useClientState();
 
   const onSingleClick = useCallback(() => {
     console.log('single click', plot.coord)
     const message: DoActionMessage = {
-      tool: 'Hoe',
+      // tool: 'Hoe',
       coord: plot.coord,
     };
     sendMessage(DO_ACTION_REQUEST, message);
@@ -30,8 +32,13 @@ export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?
   const onClick = useSimpleAndDoubleClick(onSingleClick, onDoubleClick);
 
   return (
-    <div className={`Plot type-${plot.dirt} ${selectedForAction ? 'selectedForAction' : ''} ${selected ? 'selected' : ''}`} onClick={onClick}>
+    <div className={c('Plot', `type-${plot.dirt}`, { selected, selectedForAction })} onClick={onClick}>
       <span />
+      {plant && <span className={c('Plant', `type-${plant.type}`, {
+        seed: isSeed(plant),
+        harvestable: plant.stage === PlantStageType.Harvestable,
+        withered: plant.stage === PlantStageType.Withered,
+      })} />}
       {!!plot.actionTime && <span>{plot.actionTime - Date.now()}</span>}
     </div>
   );
@@ -56,4 +63,9 @@ function useSimpleAndDoubleClick(actionSimpleClick: () => void, actionDoubleClic
   }, [click, actionSimpleClick, actionDoubleClick, delay]);
 
   return () => setClick(prev => prev + 1);
+}
+
+function isSeed(plant: PlantSchema) {
+  const plantConfig = getPlantConfig(plant.type);
+  return plant.stage === PlantStageType.Growing && plant.timeLeft > plantConfig.growTime * .75;
 }

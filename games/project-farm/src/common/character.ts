@@ -9,12 +9,23 @@ export enum ToolType {
   Shovel = 'Shovel',
 }
 
+export enum ActionType {
+  Move = 'Move',
+  Plow = 'Plow',
+  Plant = 'Plant',
+  Harvest = 'Harvest',
+  Water = 'Water'
+}
+
 export class CharacterActionSchema extends Schema {
   @type('string')
   type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' = 'Plow';
 
   @type(CoordSchema)
   coord = new CoordSchema();
+
+  @type('string')
+  plantToPlant?: string;
 }
 
 export class CharacterSchema extends Schema {

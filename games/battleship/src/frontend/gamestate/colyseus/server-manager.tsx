@@ -1,13 +1,12 @@
 import * as Colyseus from 'colyseus.js';
 import React, { FC, useEffect, useState, useCallback, createContext, useContext } from 'react';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { GameStatus } from 'common';
 
 import { GameState, Action, PLACE_SHIPS_MULE_ACTION, FIRE_SHOT_MULE_ACTION } from '../../../shared';
 import { loadMuleStateSuccess, loadNewTurn, setWinner } from '../../actions';
 import { toFeGameState, toFeTurn } from './data';
-import { StoreState } from '../../types';
 
 // eslint-disable-next-line no-restricted-globals
 const client = new Colyseus.Client(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.hostname}:2567`);
@@ -62,7 +61,7 @@ const initConnection = async (
     });
 
     room.onStateChange((state) => {
-      console.log("the room state has been updated:", state);
+      // console.log("the room state has been updated:", state);
       onGameStateUpdate(state, room.sessionId);
     });
 
@@ -137,7 +136,6 @@ let recievingSoon = false;
 
 export const ServerManager: FC = ({ children }) => {
   const dispatch = useDispatch();
-  const store = useStore<StoreState>();
 
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.PreGame);
   // const [spots, setSpots] = useState<string[]>([]);
@@ -158,7 +156,7 @@ export const ServerManager: FC = ({ children }) => {
     if (winner) {
       dispatch(setWinner(winner));
     }
-  }, []);
+  }, [dispatch]);
   const onGameStateUpdate = useCallback((gameState: GameState, sessionId: string, firstUpdate?: boolean) => {
     if (firstUpdate) {
       dispatch(loadMuleStateSuccess(toFeGameState(gameState, sessionId)));
@@ -168,10 +166,10 @@ export const ServerManager: FC = ({ children }) => {
       dispatch(loadNewTurn(gameState.turns.length - 1, toFeTurn(lastTurnWithAction))); // TODO-fork, does `gameState.turns.length - 1` need to match above?
       recievingSoon = false;
     }
-  }, []);
+  }, [dispatch]);
   const onActionUpdate = useCallback((action: Action) => {
     recievingSoon = true;
-  }, [store]);
+  }, []);
 
   useEffect(() => {
     initConnection(onGameStatusUpdate, onGameStateUpdate, onIsPlayersTurnUpdate, onWinnerUpdate, onActionUpdate)

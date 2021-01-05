@@ -1,25 +1,27 @@
 import { Command } from '@colyseus/command';
 import { Client } from 'colyseus';
 
-import { GameState, DoActionMessage, CharacterActionSchema, getPlotAtLocation } from '../../../common';
 import { CoordSchema } from 'common';
+import { areCoordsEqual } from 'utils';
+
+import {
+  GameState, DoActionMessage, CharacterActionSchema,
+  getPlotAtLocation, ToolType, ActionType, getPlantConfigs
+} from '../../../common';
 
 type Payload = { client: Client } & DoActionMessage;
 
 export class OnDoActionRequestCommand extends Command<GameState, Payload> {
   execute({ client, ...request }: Payload) {
-    if (!request.coord || !request.tool) { // TODO check coord bounds
+    if (!request.coord) { // TODO check coord bounds
       throw new Error('Bad action request');
     }
 
-    if (request.tool !== 'Hoe') {
-      throw new Error('Wrong tool');
-    }
-
     const character = this.state.characters[0]; // TODO support multi characters
+    const type = getActionTypeFromTool(character.tool);
 
     const actionOnPlotIndex = character.actionQueue.findIndex(
-      (a) => a.type !== 'Move' && a.coord.x === request.coord.x && a.coord.y === request.coord.y
+      (a) => a.type !== ActionType.Move && areCoordsEqual(a.coord, request.coord)
     );
     if (actionOnPlotIndex !== -1) {
       // remove action if action on plot already exists
@@ -28,15 +30,36 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
     }
 
     const plot = getPlotAtLocation(this.state, request.coord);
-    if (plot?.dirt === 'Plowed') return;
 
-    if (character.actionQueue[0] && character.actionQueue[0].type === 'Move') {
+    if (character.actionQueue[0] && character.actionQueue[0].type === ActionType.Move) {
       character.actionQueue.shift();
     }
 
-    character.actionQueue.push(new CharacterActionSchema().assign({
-      type: 'Plow',
+    const newAction = new CharacterActionSchema().assign({
+      type,
       coord: new CoordSchema().assign(request.coord),
-    }));
+    });
+
+    if (type === ActionType.Plant) {
+      newAction.plantToPlant = character.tool;
+
+      if (plot?.dirt !== 'Plowed' || plot.plant || !this.state.seedInventory.get(newAction.plantToPlant)) return;
+    } else if (type === ActionType.Plow) {
+      if (plot?.dirt === 'Plowed') return;
+    }
+
+    character.actionQueue.push(newAction);
   }
 };
+
+function getActionTypeFromTool(tool: ToolType | string) {
+  if ((getPlantConfigs() as any)[tool]) {
+    return ActionType.Plant;
+  }
+
+  switch (tool) {
+    case ToolType.Hoe: return ActionType.Plow;
+    default:
+      throw new Error('Invalid Tool');
+  }
+}

@@ -1,9 +1,12 @@
 import { Command } from '@colyseus/command';
 
-import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation } from '../../common';
-import { Coord } from 'utils';
+import { Coord, areCoordsEqual } from 'utils';
+
+import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation, ActionType, PlantSchema, PlantStageType, getPlantConfig } from '../../common';
 
 const ACTION_LENGTH = 1000;
+
+const HARVEST_LENGTH = 30 * 60 * 1000;
 
 export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
   execute({ deltaTime }: { deltaTime: number }) {
@@ -13,19 +16,19 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
       if (character.actionQueue[0]) {
         const action = character.actionQueue[0];
         switch (action.type) {
-          case 'Move':
-            if (character.coord.x !== action.coord.x || character.coord.y !== action.coord.y) {
+          case ActionType.Move:
+            if (!areCoordsEqual(character.coord, action.coord)) {
               moveCharacter(character, action.coord, deltaTime);
             }
-            if (character.coord.x === action.coord.x && character.coord.y === action.coord.y) {
+            if (areCoordsEqual(character.coord, action.coord)) {
               character.actionQueue.shift();
             }
             break;
-          case 'Plow':
-            if (character.coord.x !== action.coord.x || character.coord.y !== action.coord.y) {
+          case ActionType.Plow:
+            if (!areCoordsEqual(character.coord, action.coord)) {
               moveCharacter(character, action.coord, deltaTime);
             }
-            if (character.coord.x === action.coord.x && character.coord.y === action.coord.y) {
+            if (areCoordsEqual(character.coord, action.coord)) {
               const plot = getPlotAtLocation(this.state, action.coord)!;
               plow(plot, this.clock.currentTime);
               if (plot.actionTime === 0) {
@@ -33,6 +36,43 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               }
             }
             break;
+          case ActionType.Plant:
+            if (!areCoordsEqual(character.coord, action.coord)) {
+              moveCharacter(character, action.coord, deltaTime);
+            }
+            if (areCoordsEqual(character.coord, action.coord)) {
+              const plot = getPlotAtLocation(this.state, action.coord)!;
+              const plantConfig = getPlantConfig(action.plantToPlant!);
+              // console.log('planting ', plantConfig);
+              plot.plant = new PlantSchema().assign({
+                type: plantConfig.type,
+                stage: PlantStageType.Growing,
+                timeLeft: plantConfig.growTime,
+              });
+              // console.log('just planted', plot.plant.toJSON());
+              const seedsLeft = this.state.seedInventory.get(plantConfig.type);
+              this.state.seedInventory.set(plantConfig.type, seedsLeft);
+              character.actionQueue.shift();
+            }
+            break;
+        }
+      }
+    });
+
+    // Grow plants
+    this.state.map.forEach((plot) => {
+      const plant = (plot.plant as any as PlantSchema[] || [])[0];
+      if (plant && plant.stage !== PlantStageType.Withered) {
+        // console.log('growing', plant.toJSON());
+        // const plantConfig = getPlantConfig(plant.type);
+        plant.timeLeft -= deltaTime;
+        if (plant.timeLeft <= 0 && plant.stage === PlantStageType.Growing) {
+          // Harvest
+          plant.stage = PlantStageType.Harvestable;
+          plant.timeLeft = HARVEST_LENGTH;
+        } else if (plant.timeLeft <= 0 && plant.stage === PlantStageType.Harvestable) {
+          plant.stage = PlantStageType.Withered;
+          plant.timeLeft = 0;
         }
       }
     });

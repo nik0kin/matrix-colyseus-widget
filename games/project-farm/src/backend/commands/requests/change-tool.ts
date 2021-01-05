@@ -1,8 +1,7 @@
 import { Command } from '@colyseus/command';
 import { Client } from 'colyseus';
 
-import { GameState, ChangeToolMessage } from '../../../common';
-import { getPlantConfigs } from '../../../common/plants/plant-config';
+import { GameState, ChangeToolMessage, ToolType, getPlantConfigs } from '../../../common';
 
 type Payload = { client: Client } & ChangeToolMessage;
 
@@ -12,7 +11,7 @@ export class ChangeToolRequestCommand extends Command<GameState, Payload> {
       throw new Error('Bad action request');
     }
 
-    if (!(request.tool === 'Hoe' || isValidPlant(request.tool))) {
+    if (!(request.tool === ToolType.Hoe || isValidPlant(request.tool))) {
       throw new Error('Invalid tool');
     }
 

@@ -56,12 +56,12 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
       // Randomly Turn Dirt into Weeds
       this.state.map.forEach((plot) => {
         if (plot.dirt === 'Normal') {
-          if (getRandomInt(0, 100) > 99) {
+          if (getRandomInt(0, 1000) > 995) {
             plot.dirt = 'Weeded';
           }
         }
       });
-    }, 15 * 1000); // every 5 seconds
+    }, 30 * 1000); // every 30 seconds
   }
 
   onJoin(client: Client, options: any, matrixName: string) {

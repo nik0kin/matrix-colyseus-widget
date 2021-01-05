@@ -10,7 +10,7 @@ export const DO_ACTION_REQUEST = 'DO_ACTION_REQUEST';
 
 export interface DoActionMessage { // rename to QueueAction?
   coord: Coord;
-  tool: string;
+  // tool: string; // uses current tool
 }
 
 export const CHANGE_TOOL_REQUEST = 'CHANGE_TOOL_REQUEST';

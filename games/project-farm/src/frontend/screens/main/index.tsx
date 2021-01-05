@@ -29,7 +29,7 @@ const Info: FC = () => {
   return (
     <div className="Info">
       {selectedPlot && plot && <div>
-        {selectedPlot.x},{selectedPlot.y} {plot.dirt}
+        {selectedPlot.x},{selectedPlot.y} {plot.dirt} {(plot.plant as any || [])[0]?.timeLeft}
       </div>}
     </div>
   );
