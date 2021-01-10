@@ -20,7 +20,25 @@
 }
 
 .Info {
+  display: flex;
+  flex-direction: column;
   height: 13vh;
-  border: black solid 3px;
+  border: black solid 2px;
+}
+
+.Info .section {
   padding: 5px;
+  flex-grow: 2;
+  border: black solid 1px;
+}
+
+
+@media screen and (min-width: 600px) {
+  .Info {
+    flex-direction: row;
+  }
+
+  .Info .section {
+    width: 50%;
+  }
 }

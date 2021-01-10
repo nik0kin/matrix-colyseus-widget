@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { formatNumber } from 'utils';
 
 import { useServerState, useClientState } from '../../contexts';
 
@@ -6,6 +7,7 @@ import { Playfield } from './playfield';
 import { OpenToolBox } from './tool-box';
 
 import './style.css';
+import { PlantSchema } from '../../../common';
 
 export const MainScreen: FC = () => {
   const { serverRoomId, sessionId } = useServerState();
@@ -26,11 +28,20 @@ const Info: FC = () => {
   const { gameState } = useServerState();
   const { selectedPlot } = useClientState();
   const plot = selectedPlot && gameState?.map.find((p) => selectedPlot.x === p.coord.x && selectedPlot.y === p.coord.y);
+  const plant = plot && (plot.plant as any || [])[0] as PlantSchema;
   return (
     <div className="Info">
-      {selectedPlot && plot && <div>
-        {selectedPlot.x},{selectedPlot.y} {plot.dirt} {(plot.plant as any || [])[0]?.timeLeft}
-      </div>}
+      <div className="section">
+        People Fed: 0, Karma: 0
+      </div>
+      <div className="section">
+        {selectedPlot && plot && <div>
+          {selectedPlot.x},{selectedPlot.y} {plot.dirt}<br />
+          {plant && <span>
+            {plant.type} {plant.stage} {formatNumber(msToMinutes(plant.timeLeft))} minutes left
+          </span>}
+        </div>}
+      </div>
     </div>
   );
 };
@@ -47,3 +58,8 @@ const ToolButton: FC = () => {
 const ShopButton: FC = () => {
   return <div className="ShopButton">Shop</div>;
 };
+
+function msToMinutes(ms: number) {
+  const minutes = ms / 1000 / 60;
+  return minutes;
+}

@@ -13,6 +13,7 @@
 .inner {
   display: grid;
   position: relative;
+  width: calc(var(--playfield-width) * var(--plot-size));
   grid-template-columns: repeat(var(--playfield-width), 1fr);
   grid-template-rows: repeat(var(--playfield-height), 1fr);
   grid-gap: 0;
