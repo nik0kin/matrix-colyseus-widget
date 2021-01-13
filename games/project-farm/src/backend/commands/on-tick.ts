@@ -37,6 +37,11 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
             }
             break;
           case ActionType.Plant:
+            if (!this.state.seedInventory.get(action.plantToPlant!)) {
+              // Out of seeds, stop action
+              character.actionQueue.shift();
+              return;
+            }
             if (!areCoordsEqual(character.coord, action.coord)) {
               moveCharacter(character, action.coord, deltaTime);
             }
@@ -50,7 +55,7 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
                 timeLeft: plantConfig.growTime,
               });
               // console.log('just planted', plot.plant.toJSON());
-              const seedsLeft = this.state.seedInventory.get(plantConfig.type);
+              const seedsLeft = this.state.seedInventory.get(plantConfig.type) - 1;
               this.state.seedInventory.set(plantConfig.type, seedsLeft);
               character.actionQueue.shift();
             }
