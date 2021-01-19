@@ -3,12 +3,12 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 
 
 import {
-  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST, PlantSchema, getPlantConfig, PlantStageType
+  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST, PlantSchema, getPlantConfig, PlantStageType, getPlantFromPlot
 } from '../../../../common';
 import { useSendMessage, useClientState } from '../../../contexts';
 
 export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?: boolean }> = ({ plot, selectedForAction, selected }) => {
-  const plant = (plot.plant as any as PlantSchema[] || [])[0];
+  const plant = getPlantFromPlot(plot);
   const sendMessage = useSendMessage();
   const { setSelectedPlot } = useClientState();
 

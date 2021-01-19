@@ -1,8 +1,8 @@
 import { Command } from '@colyseus/command';
 
-import { Coord, areCoordsEqual } from 'utils';
+import { Coord, areCoordsEqual, getRandomInt } from 'utils';
 
-import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation, ActionType, PlantSchema, PlantStageType, getPlantConfig } from '../../common';
+import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation, ActionType, PlantSchema, PlantStageType, getPlantConfig, getPlantFromPlot, removePlantFromPlot } from '../../common';
 
 const ACTION_LENGTH = 1000;
 
@@ -49,15 +49,36 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               const plot = getPlotAtLocation(this.state, action.coord)!;
               const plantConfig = getPlantConfig(action.plantToPlant!);
               // console.log('planting ', plantConfig);
-              plot.plant = new PlantSchema().assign({
+              plot.plant.push(new PlantSchema().assign({
                 type: plantConfig.type,
                 stage: PlantStageType.Growing,
                 timeLeft: plantConfig.growTime,
-              });
+              }));
               // console.log('just planted', plot.plant.toJSON());
               const seedsLeft = this.state.seedInventory.get(plantConfig.type) - 1;
               this.state.seedInventory.set(plantConfig.type, seedsLeft);
               character.actionQueue.shift();
+            }
+            break;
+          case ActionType.Harvest:
+            const plot = getPlotAtLocation(this.state, action.coord)!;
+            const plant = getPlantFromPlot(plot);
+            if (!plant || plant.stage !== PlantStageType.Harvestable) {
+              // Plot has been harvested, stop action
+              character.actionQueue.shift();
+              return;
+            }
+            if (!areCoordsEqual(character.coord, action.coord)) {
+              moveCharacter(character, action.coord, deltaTime);
+            }
+            if (areCoordsEqual(character.coord, action.coord)) {
+              const plantConfig = getPlantConfig(plant.type);
+              const [minSeeds, maxSeeds] = plantConfig.seedsOnHarvest;
+              const seedsLeft = this.state.seedInventory.get(plantConfig.type) + getRandomInt(minSeeds, maxSeeds);
+              this.state.seedInventory.set(plantConfig.type, seedsLeft);
+              this.state.karma = plantConfig.feeds;
+              this.state.peopleFed = plantConfig.feeds;
+              removePlantFromPlot(plot);
             }
             break;
         }
@@ -66,7 +87,7 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
 
     // Grow plants
     this.state.map.forEach((plot) => {
-      const plant = (plot.plant as any as PlantSchema[] || [])[0];
+      const plant = getPlantFromPlot(plot);
       if (plant && plant.stage !== PlantStageType.Withered) {
         // console.log('growing', plant.toJSON());
         // const plantConfig = getPlantConfig(plant.type);

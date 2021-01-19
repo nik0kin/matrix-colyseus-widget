@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { formatNumber } from 'utils';
 
+import { getPlantFromPlot } from '../../../common';
 import { useServerState, useClientState } from '../../contexts';
 
 import { Playfield } from './playfield';
 import { OpenToolBox } from './tool-box';
 
 import './style.css';
-import { PlantSchema } from '../../../common';
 
 export const MainScreen: FC = () => {
   const { serverRoomId, sessionId } = useServerState();
@@ -28,7 +28,7 @@ const Info: FC = () => {
   const { gameState } = useServerState();
   const { selectedPlot } = useClientState();
   const plot = selectedPlot && gameState?.map.find((p) => selectedPlot.x === p.coord.x && selectedPlot.y === p.coord.y);
-  const plant = plot && (plot.plant as any || [])[0] as PlantSchema;
+  const plant = plot && getPlantFromPlot(plot);
   return (
     <div className="Info">
       <div className="section">

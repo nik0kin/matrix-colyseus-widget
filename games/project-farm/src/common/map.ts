@@ -1,4 +1,4 @@
-import { type, Schema } from '@colyseus/schema';
+import { type, Schema, ArraySchema } from '@colyseus/schema';
 import { CoordSchema } from 'common';
 import { PlantSchema } from './plants';
 
@@ -13,6 +13,15 @@ export class PlotSchema extends Schema {
   actionTime: number = 0;
 
   @type([PlantSchema])
-  plant?: PlantSchema;
+  plant = new ArraySchema<PlantSchema>();
 }
 
+export function getPlantFromPlot(plot: PlotSchema): PlantSchema | undefined {
+  return plot.plant[0];
+}
+
+export function removePlantFromPlot(plot: PlotSchema) {
+  if (plot.plant) {
+    plot.plant.pop();
+  }
+}

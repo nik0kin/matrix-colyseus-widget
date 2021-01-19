@@ -6,7 +6,7 @@ import { areCoordsEqual } from 'utils';
 
 import {
   GameState, DoActionMessage, CharacterActionSchema,
-  getPlotAtLocation, ToolType, ActionType, getPlantConfigs
+  getPlotAtLocation, ToolType, ActionType, getPlantConfigs, PlantStageType, getPlantFromPlot
 } from '../../../common';
 
 type Payload = { client: Client } & DoActionMessage;
@@ -30,6 +30,7 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
     }
 
     const plot = getPlotAtLocation(this.state, request.coord);
+    const plant = plot && getPlantFromPlot(plot);
 
     if (character.actionQueue[0] && character.actionQueue[0].type === ActionType.Move) {
       character.actionQueue.shift();
@@ -40,10 +41,12 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
       coord: new CoordSchema().assign(request.coord),
     });
 
-    if (type === ActionType.Plant) {
+    if (plot?.dirt === 'Plowed' && plant?.stage === PlantStageType.Harvestable) {
+      newAction.type = ActionType.Harvest;
+    } else if (type === ActionType.Plant) {
       newAction.plantToPlant = character.tool;
 
-      if (plot?.dirt !== 'Plowed' || plot.plant || !this.state.seedInventory.get(newAction.plantToPlant)) return;
+      if (plot?.dirt !== 'Plowed' || plant || !this.state.seedInventory.get(newAction.plantToPlant)) return;
     } else if (type === ActionType.Plow) {
       if (plot?.dirt === 'Plowed') return;
     }

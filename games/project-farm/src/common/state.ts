@@ -23,6 +23,12 @@ export class GameState extends McwGameState {
   @type([CharacterSchema])
   characters = new ArraySchema<CharacterSchema>();
 
+  @type('number')
+  karma: number = 0;
+
+  @type('number')
+  peopleFed: number = 0;
+
   @type({ map: 'number' })
   seedInventory = new MapSchema<number>();
 }
