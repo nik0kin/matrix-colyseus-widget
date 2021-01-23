@@ -81,7 +81,8 @@
   background-image: url('../../../images/ClassicRPG_Sheet.png');
 }
 
-.Plot .Plant.type-Potato {
+.Plot .Plant.type-Potato,
+.Plot .Plant.type-TestPotato {
   background-position: -574% -358%;
   background-size: 2000% 791%;
   top: 2vh;

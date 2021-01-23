@@ -32,7 +32,7 @@ const Info: FC = () => {
   return (
     <div className="Info">
       <div className="section">
-        People Fed: 0, Karma: 0
+        People Fed: {gameState?.peopleFed || 0}, Karma: {gameState?.karma || 0}
       </div>
       <div className="section">
         {selectedPlot && plot && <div>

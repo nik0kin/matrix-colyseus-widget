@@ -41,7 +41,9 @@ export class OnDoActionRequestCommand extends Command<GameState, Payload> {
       coord: new CoordSchema().assign(request.coord),
     });
 
-    if (plot?.dirt === 'Plowed' && plant?.stage === PlantStageType.Harvestable) {
+    if (character.tool === 'Hoe' && plant?.stage === PlantStageType.Withered) {
+      newAction.type = ActionType.ClearWithered;
+    } else if (plot?.dirt === 'Plowed' && plant?.stage === PlantStageType.Harvestable) {
       newAction.type = ActionType.Harvest;
     } else if (type === ActionType.Plant) {
       newAction.plantToPlant = character.tool;

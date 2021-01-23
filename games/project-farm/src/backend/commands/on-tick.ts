@@ -15,6 +15,8 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
     this.state.characters.forEach((character) => {
       if (character.actionQueue[0]) {
         const action = character.actionQueue[0];
+        const plot = getPlotAtLocation(this.state, action.coord)!;
+        const plant = getPlantFromPlot(plot);
         switch (action.type) {
           case ActionType.Move:
             if (!areCoordsEqual(character.coord, action.coord)) {
@@ -29,7 +31,6 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               moveCharacter(character, action.coord, deltaTime);
             }
             if (areCoordsEqual(character.coord, action.coord)) {
-              const plot = getPlotAtLocation(this.state, action.coord)!;
               plow(plot, this.clock.currentTime);
               if (plot.actionTime === 0) {
                 character.actionQueue.shift();
@@ -46,7 +47,6 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               moveCharacter(character, action.coord, deltaTime);
             }
             if (areCoordsEqual(character.coord, action.coord)) {
-              const plot = getPlotAtLocation(this.state, action.coord)!;
               const plantConfig = getPlantConfig(action.plantToPlant!);
               // console.log('planting ', plantConfig);
               plot.plant.push(new PlantSchema().assign({
@@ -61,8 +61,6 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
             }
             break;
           case ActionType.Harvest:
-            const plot = getPlotAtLocation(this.state, action.coord)!;
-            const plant = getPlantFromPlot(plot);
             if (!plant || plant.stage !== PlantStageType.Harvestable) {
               // Plot has been harvested, stop action
               character.actionQueue.shift();
@@ -76,9 +74,24 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               const [minSeeds, maxSeeds] = plantConfig.seedsOnHarvest;
               const seedsLeft = this.state.seedInventory.get(plantConfig.type) + getRandomInt(minSeeds, maxSeeds);
               this.state.seedInventory.set(plantConfig.type, seedsLeft);
-              this.state.karma = plantConfig.feeds;
-              this.state.peopleFed = plantConfig.feeds;
+              this.state.karma += plantConfig.feeds;
+              this.state.peopleFed += plantConfig.feeds;
               removePlantFromPlot(plot);
+            }
+            break;
+          case ActionType.ClearWithered:
+            if (!plant || plant.stage !== PlantStageType.Withered) {
+              // Plot doesnt have a plant, stop action
+              character.actionQueue.shift();
+              return;
+            }
+
+            if (!areCoordsEqual(character.coord, action.coord)) {
+              moveCharacter(character, action.coord, deltaTime);
+            }
+            if (areCoordsEqual(character.coord, action.coord)) {
+              removePlantFromPlot(plot);
+              plot.dirt = 'Normal';
             }
             break;
         }

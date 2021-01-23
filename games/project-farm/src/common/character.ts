@@ -14,12 +14,13 @@ export enum ActionType {
   Plow = 'Plow',
   Plant = 'Plant',
   Harvest = 'Harvest',
-  Water = 'Water'
+  Water = 'Water',
+  ClearWithered = 'ClearWithered',
 }
 
 export class CharacterActionSchema extends Schema {
   @type('string')
-  type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' = 'Plow';
+  type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' | 'ClearWithered' = 'Plow';
 
   @type(CoordSchema)
   coord = new CoordSchema();

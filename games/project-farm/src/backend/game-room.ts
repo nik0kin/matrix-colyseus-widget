@@ -56,7 +56,7 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
       // Randomly Turn Dirt into Weeds
       this.state.map.forEach((plot) => {
         if (plot.dirt === 'Normal') {
-          if (getRandomInt(0, 1000) > 995) {
+          if (getRandomInt(0, 10000) > 9958) {
             plot.dirt = 'Weeded';
           }
         }

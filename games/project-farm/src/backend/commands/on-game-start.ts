@@ -10,6 +10,11 @@ export class OnGameStartCommand extends Command<GameState> {
     state.customOptions.assign(this.room.metadata.customOptions);
     state.map.push(...createMap(state.customOptions));
     state.seedInventory.set('Potato', 50);
+
+    if ((this.room as any).__proto__?.constructor?.DEBUG) {
+      state.seedInventory.set('TestPotato', 50);
+    }
+
     this.room.setState(state);
   };
 }
