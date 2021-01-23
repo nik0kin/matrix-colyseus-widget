@@ -23,6 +23,13 @@ module.exports = {
       quickOptions: {}
     },
     {
+      id: 'project-farm',
+      displayName: 'Farmsprawl (Singleplayer)',
+      backendModule: '../games/project-farm/backend-dist',
+      frontendFiles: '../games/project-farm/build',
+      quickOptions: { width: 25, height: 60 }
+    },
+    {
       id: 'solitaire',
       displayName: 'Solitaire',
       frontendFiles: '../games/solitaire',
@@ -80,6 +87,16 @@ module.exports = {
         author: 'Dan Hough <daniel.hough@gmail.com>',
         license: 'MIT',
         source: 'https://github.com/basicallydan/skifree.js'
+      }
+    },
+    {
+      id: 'oregon-trail',
+      displayName: 'Oregon Trail',
+      frontendIframe: 'https://warnock.github.io/oregon-trail-game/',
+      attribution: {
+        author: 'Gloria Friesen, Megan Warnock, Ryan McAlpin, Chris Carr, Riley Watts',
+        license: 'MIT',
+        source: 'https://github.com/warnock/oregon-trail-game'
       }
     }
   ]

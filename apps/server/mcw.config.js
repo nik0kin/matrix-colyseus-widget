@@ -48,6 +48,16 @@ module.exports = {
         license: 'MIT',
         source: 'https://github.com/basicallydan/skifree.js'
       }
+    },
+    {
+      id: 'oregon-trail',
+      displayName: 'Oregon Trail',
+      frontendIframe: 'https://warnock.github.io/oregon-trail-game/',
+      attribution: {
+        author: 'Gloria Friesen, Megan Warnock, Ryan McAlpin, Chris Carr, Riley Watts',
+        license: 'MIT',
+        source: 'https://github.com/warnock/oregon-trail-game'
+      }
     }
   ]
 };
