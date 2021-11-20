@@ -39,7 +39,7 @@
 .Playfield .Plot .Plant,
 .Playfield .Character {
   background-image: url('../../../images/ClassicRPG_Sheet.png');
-  background-size: 2000% 800%;  /* 20x8 sprites */
+  background-size: 2000% 800%; /* 20x8 sprites */
 }
 
 .Plot.type-Normal {
@@ -63,7 +63,7 @@
   /* https://css-tricks.com/snippets/css/multiple-borders/ */
   border: orange solid 2px;
 
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 2px;
   left: 2px;
@@ -91,6 +91,15 @@
   height: 4vh;
 }
 
+.Plot .Plant.type-Sunflower {
+  background-position: -569% -358%;
+  background-size: 2000% 791%;
+  top: 2vh;
+  left: 2vh;
+  width: 4vh;
+  height: 4vh;
+}
+
 .Plot .Plant.harvestable,
 .Plot .Plant.harvestable.withered {
   top: 0;
@@ -109,7 +118,7 @@
   width: 2vh;
   height: 2vh;
   border-radius: 50%;
-  background-color: brown;
+  background-color: saddlebrown;
   background-image: none;
 }
 

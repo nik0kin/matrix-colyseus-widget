@@ -22,7 +22,7 @@
 .Info {
   display: flex;
   flex-direction: column;
-  height: 13vh;
+  height: 15vh;
   border: black solid 2px;
 }
 
@@ -31,7 +31,6 @@
   flex-grow: 2;
   border: black solid 1px;
 }
-
 
 @media screen and (min-width: 600px) {
   .Info {
