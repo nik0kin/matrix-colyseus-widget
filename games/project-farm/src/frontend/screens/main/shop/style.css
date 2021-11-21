@@ -1,0 +1,16 @@
+.Shop .portrait {
+  width: 10vh;
+  height: 10vh;
+  pointer-events: none;
+  background-image: url('../../../images/portraits.png');
+}
+
+.talking-text-container {
+  display: flex;
+}
+
+.Shop .portrait.type-ShopOwner {
+  background-position: 3% 35%;
+  background-size: 520%;
+  margin-right: 10px;
+}
