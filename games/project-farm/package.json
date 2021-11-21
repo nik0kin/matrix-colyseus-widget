@@ -19,6 +19,7 @@
     "colyseus": "^0.14.0",
     "colyseus.js": "^0.14.0",
     "common": "0.0.0",
+    "date-fns": "^2.26.0",
     "lodash": "^4.17.15",
     "node-fetch": "^2.5.0",
     "react": "^17.0.0",

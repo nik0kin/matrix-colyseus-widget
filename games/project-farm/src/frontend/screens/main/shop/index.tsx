@@ -17,7 +17,7 @@ import {
   DEFAULT_HARVEST_LENGTH,
 } from '../../../../common';
 import './style.css';
-import { toMinutesSeconds } from '../../../format';
+import { formatDuration } from '../../../format';
 
 const ShopModal: FC<{ closeModal?: () => void }> = () => {
   const sendMessage = useSendMessage();
@@ -70,12 +70,10 @@ const ShopModal: FC<{ closeModal?: () => void }> = () => {
               <div>
                 <h4>{type}</h4>
                 <div>Cost: {config.cost}</div>
-                <div>Grow time: {toMinutesSeconds(config.growTime)}</div>
+                <div>Grow time: {formatDuration(config.growTime)}</div>
                 <div>
                   Harvest time:{' '}
-                  {toMinutesSeconds(
-                    config.harvestTime || DEFAULT_HARVEST_LENGTH
-                  )}
+                  {formatDuration(config.harvestTime || DEFAULT_HARVEST_LENGTH)}
                 </div>
                 <div>Feeds: {config.feeds}</div>
                 {config.requirement && (

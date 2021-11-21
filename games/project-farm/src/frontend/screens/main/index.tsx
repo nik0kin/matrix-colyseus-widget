@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { getPlantFromPlot } from '../../../common';
 import { useServerState, useClientState } from '../../contexts';
-import { toMinutesSeconds } from '../../format';
+import { formatDuration } from '../../format';
 
 import { OpenHelp } from './help';
 import { Playfield } from './playfield';
@@ -50,8 +50,7 @@ const Info: FC = () => {
             <br />
             {plant && (
               <span>
-                {plant.type} {plant.stage} {toMinutesSeconds(plant.timeLeft)}{' '}
-                left
+                {plant.type} {plant.stage} {formatDuration(plant.timeLeft)} left
               </span>
             )}
           </div>
