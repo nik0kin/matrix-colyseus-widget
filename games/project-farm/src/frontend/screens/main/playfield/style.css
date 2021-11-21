@@ -92,8 +92,9 @@
 }
 
 .Plot .Plant.type-Sunflower {
-  background-position: -569% -358%;
-  background-size: 2000% 791%;
+  background-image: url('../../../images/Crop_Spritesheet.png');
+  background-position: -568.5% -353%;
+  background-size: 2000% 846%;
   top: 2vh;
   left: 2vh;
   width: 4vh;

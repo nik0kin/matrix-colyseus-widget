@@ -1,16 +1,31 @@
 import { Room, Client, updateLobby } from 'colyseus';
 import { Dispatcher } from '@colyseus/command';
 
-import { GameStatus, RoomMetadata, PlayerSchema, authWithMatrix, WidgetMatrixAuth } from 'common';
+import {
+  GameStatus,
+  RoomMetadata,
+  PlayerSchema,
+  authWithMatrix,
+  WidgetMatrixAuth,
+} from 'common';
 import { getRandomInt } from 'utils';
 
-import { GameState, CharacterSchema, MOVE_CHARACTER_REQUEST, DO_ACTION_REQUEST, CHANGE_TOOL_REQUEST } from '../common';
+import {
+  GameState,
+  CharacterSchema,
+  MOVE_CHARACTER_REQUEST,
+  DO_ACTION_REQUEST,
+  CHANGE_TOOL_REQUEST,
+  BUY_SEED,
+  UNLOCK_SEED,
+} from '../common';
 import { OnGameStartCommand } from './commands/on-game-start';
 import { OnTickCommand } from './commands/on-tick';
-import { OnMoveRequestCommand } from './commands/requests/move';
-import { OnDoActionRequestCommand } from './commands/requests/do-action';
+import { BuySeedRequestCommand } from './commands/requests/buy-seed';
 import { ChangeToolRequestCommand } from './commands/requests/change-tool';
-
+import { OnDoActionRequestCommand } from './commands/requests/do-action';
+import { OnMoveRequestCommand } from './commands/requests/move';
+import { UnlockSeedRequestCommand } from './commands/requests/unlock-seed';
 
 export class GameRoom extends Room<GameState, RoomMetadata> {
   maxClients = 10;
@@ -18,14 +33,23 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
 
   dispatcher = new Dispatcher(this);
 
-  async onAuth(client: Client, { matrixOpenIdAccessToken, matrixServerName }: WidgetMatrixAuth): Promise<string | false> {
+  async onAuth(
+    client: Client,
+    { matrixOpenIdAccessToken, matrixServerName }: WidgetMatrixAuth
+  ): Promise<string | false> {
     return authWithMatrix(GameRoom, matrixOpenIdAccessToken, matrixServerName);
   }
 
   onCreate(options: any) {
-    const { roomName, matrixOpenIdAccessToken, matrixServerName, ...customOptions } = options;
+    const {
+      roomName,
+      matrixOpenIdAccessToken,
+      matrixServerName,
+      ...customOptions
+    } = options;
     console.log('onCreate options supplied: ', options);
-    if (customOptions && Object.keys(customOptions).length !== 2) throw new Error('options missing');
+    if (customOptions && Object.keys(customOptions).length !== 2)
+      throw new Error('options missing');
 
     const meta: RoomMetadata = {
       name: roomName,
@@ -39,13 +63,54 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     this.dispatcher.dispatch(new OnGameStartCommand());
 
     this.onMessage(MOVE_CHARACTER_REQUEST, (client, message) => {
-      this.dispatcher.dispatch(new OnMoveRequestCommand(), { client, ...message });
+      try {
+        this.dispatcher.dispatch(new OnMoveRequestCommand(), {
+          client,
+          ...message,
+        });
+      } catch (e) {
+        console.error(MOVE_CHARACTER_REQUEST, e);
+      }
     });
     this.onMessage(DO_ACTION_REQUEST, (client, message) => {
-      this.dispatcher.dispatch(new OnDoActionRequestCommand(), { client, ...message });
+      try {
+        this.dispatcher.dispatch(new OnDoActionRequestCommand(), {
+          client,
+          ...message,
+        });
+      } catch (e) {
+        console.error(DO_ACTION_REQUEST, e);
+      }
     });
     this.onMessage(CHANGE_TOOL_REQUEST, (client, message) => {
-      this.dispatcher.dispatch(new ChangeToolRequestCommand(), { client, ...message });
+      try {
+        this.dispatcher.dispatch(new ChangeToolRequestCommand(), {
+          client,
+          ...message,
+        });
+      } catch (e) {
+        console.error(CHANGE_TOOL_REQUEST, e);
+      }
+    });
+    this.onMessage(BUY_SEED, (client, message) => {
+      try {
+        this.dispatcher.dispatch(new BuySeedRequestCommand(), {
+          client,
+          ...message,
+        });
+      } catch (e) {
+        console.error(BUY_SEED, e);
+      }
+    });
+    this.onMessage(UNLOCK_SEED, (client, message) => {
+      try {
+        this.dispatcher.dispatch(new UnlockSeedRequestCommand(), {
+          client,
+          ...message,
+        });
+      } catch (e) {
+        console.error(UNLOCK_SEED, e);
+      }
     });
 
     this.setSimulationInterval((deltaTime) =>
@@ -68,7 +133,9 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     const meta: RoomMetadata = this.metadata!;
 
     meta.players.push({ id: client.sessionId, name: client.sessionId });
-    this.state.players.push(new PlayerSchema().assign({ id: client.sessionId, name: matrixName }));
+    this.state.players.push(
+      new PlayerSchema().assign({ id: client.sessionId, name: matrixName })
+    );
 
     const character = new CharacterSchema();
     character.coord.assign({ x: 2, y: 2 });
@@ -85,4 +152,3 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
     }
   }
 }
-

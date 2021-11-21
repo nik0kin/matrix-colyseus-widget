@@ -33,5 +33,11 @@ export function assertMixinExists<T>(
 
 export const getPlantConfigs = () => configs;
 
+export type PlantTypes = keyof typeof configs;
+
 const plantTypes = Object.keys(configs);
 export const getPlantTypes = () => plantTypes;
+
+export const isValidPlant = (plantType: string) => {
+  return !!getPlantConfigs()[plantType as PlantTypes];
+};

@@ -1,5 +1,5 @@
 .Shop .portrait {
-  width: 10vh;
+  min-width: 10vh;
   height: 10vh;
   pointer-events: none;
   background-image: url('../../../images/portraits.png');

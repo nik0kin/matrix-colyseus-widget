@@ -5,7 +5,7 @@ const TestPotato: PlantConfig = {
   growTime: 30,
   cost: -1,
   feeds: 1,
-  seedsOnHarvest: [5, 5],
+  seedsOnHarvest: [1, 1],
 };
 
 export default TestPotato;

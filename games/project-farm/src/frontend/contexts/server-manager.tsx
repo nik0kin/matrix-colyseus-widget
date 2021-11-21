@@ -64,7 +64,7 @@ const initConnection = async (
   }
 }
 
-type FeGameState = Pick<GameState, 'map' | 'characters' | 'seedInventory' | 'customOptions' | 'karma' | 'peopleFed'>;
+type FeGameState = Pick<GameState, 'map' | 'characters' | 'seedInventory' | 'seedsUnlocked' | 'customOptions' | 'karma' | 'peopleFed'>;
 
 interface ServerManagerType {
   serverRoomId: string;

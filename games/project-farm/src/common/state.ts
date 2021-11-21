@@ -31,8 +31,13 @@ export class GameState extends McwGameState {
 
   @type({ map: 'number' })
   seedInventory = new MapSchema<number>();
+
+  @type(['string'])
+  seedsUnlocked = new ArraySchema<string>();
 }
 
 export function getPlotAtLocation(gameState: GameState, coord: Coord) {
-  return gameState.map.find((p) => p.coord.x === coord.x && p.coord.y === coord.y);
+  return gameState.map.find(
+    (p) => p.coord.x === coord.x && p.coord.y === coord.y
+  );
 }
