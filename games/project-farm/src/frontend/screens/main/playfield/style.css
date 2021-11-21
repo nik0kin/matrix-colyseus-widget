@@ -36,7 +36,6 @@
 /* https://stackoverflow.com/a/56664704/346485 */
 
 .Playfield .Plot,
-.Playfield .Plot .Plant,
 .Playfield .Character {
   background-image: url('../../../images/ClassicRPG_Sheet.png');
   background-size: 2000% 800%; /* 20x8 sprites */
@@ -78,13 +77,13 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  background-image: url('../../../images/ClassicRPG_Sheet.png');
+  background-image: url('../../../images/Crop_Spritesheet.png');
 }
 
 .Plot .Plant.type-Potato,
 .Plot .Plant.type-TestPotato {
-  background-position: -574% -358%;
-  background-size: 2000% 791%;
+  background-position: -621.5% -252%;
+  background-size: 2000% 1160%;
   top: 2vh;
   left: 2vh;
   width: 4vh;
@@ -92,9 +91,26 @@
 }
 
 .Plot .Plant.type-Sunflower {
-  background-image: url('../../../images/Crop_Spritesheet.png');
-  background-position: -568.5% -353%;
-  background-size: 2000% 846%;
+  background-position: -568.5% -350%;
+  background-size: 2000% 890%;
+  top: 2vh;
+  left: 2vh;
+  width: 4vh;
+  height: 4vh;
+}
+
+.Plot .Plant.type-SeedlessWatermelon {
+  background-position: -568.5% -194%;
+  background-size: 2000% 1299%;
+  top: 2vh;
+  left: 2vh;
+  width: 4vh;
+  height: 4vh;
+}
+
+.Plot .Plant.type-QuickCorn {
+  background-position: -726.5% -334%;
+  background-size: 2000% 1358%;
   top: 2vh;
   left: 2vh;
   width: 4vh;
@@ -105,8 +121,8 @@
 .Plot .Plant.harvestable.withered {
   top: 0;
   left: 0;
-  width: 8vh;
-  height: 8vh;
+  width: 6vh;
+  height: 6vh;
 }
 
 .Plot .Plant.withered {

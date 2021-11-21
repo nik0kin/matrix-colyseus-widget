@@ -14,6 +14,7 @@ import {
   BuySeedMessage,
   UnlockSeedMessage,
   getPlantConfigs,
+  DEFAULT_HARVEST_LENGTH,
 } from '../../../../common';
 import './style.css';
 import { toMinutesSeconds } from '../../../format';
@@ -70,13 +71,19 @@ const ShopModal: FC<{ closeModal?: () => void }> = () => {
                 <h4>{type}</h4>
                 <div>Cost: {config.cost}</div>
                 <div>Grow time: {toMinutesSeconds(config.growTime)}</div>
+                <div>
+                  Harvest time:{' '}
+                  {toMinutesSeconds(
+                    config.harvestTime || DEFAULT_HARVEST_LENGTH
+                  )}
+                </div>
                 <div>Feeds: {config.feeds}</div>
                 {config.requirement && (
                   <Fragment>
                     <div
                       style={{
                         textDecoration: isSeedUnlocked(type)
-                          ? 'strikethrough'
+                          ? 'line-through'
                           : '',
                       }}
                     >

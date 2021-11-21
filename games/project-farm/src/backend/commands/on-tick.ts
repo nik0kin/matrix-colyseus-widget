@@ -2,11 +2,9 @@ import { Command } from '@colyseus/command';
 
 import { Coord, areCoordsEqual, getRandomInt } from 'utils';
 
-import { GameState, CharacterSchema, CHARACTER_SPEED, PlotSchema, getPlotAtLocation, ActionType, PlantSchema, PlantStageType, getPlantConfig, getPlantFromPlot, removePlantFromPlot } from '../../common';
+import { GameState, CharacterSchema, CHARACTER_SPEED, DEFAULT_HARVEST_LENGTH, PlotSchema, getPlotAtLocation, ActionType, PlantSchema, PlantStageType, getPlantConfig, getPlantFromPlot, removePlantFromPlot } from '../../common';
 
 const ACTION_LENGTH = 1000;
-
-const HARVEST_LENGTH = 30 * 60 * 1000;
 
 export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
   execute({ deltaTime }: { deltaTime: number }) {
@@ -108,7 +106,7 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
         if (plant.timeLeft <= 0 && plant.stage === PlantStageType.Growing) {
           // Harvest
           plant.stage = PlantStageType.Harvestable;
-          plant.timeLeft = HARVEST_LENGTH;
+          plant.timeLeft = getPlantConfig(plant.type).harvestTime || DEFAULT_HARVEST_LENGTH;
         } else if (plant.timeLeft <= 0 && plant.stage === PlantStageType.Harvestable) {
           plant.stage = PlantStageType.Withered;
           plant.timeLeft = 0;

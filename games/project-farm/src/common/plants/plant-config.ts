@@ -9,6 +9,7 @@ export interface PlantConfig {
   };
 
   growTime: number;
+  harvestTime?: number;
 
   feeds: number;
   seedsOnHarvest: [number, number];
