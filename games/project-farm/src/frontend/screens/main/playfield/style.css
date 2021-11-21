@@ -72,57 +72,67 @@
 
 .Plot .Plant {
   position: absolute;
-  width: var(--plot-size);
+  /* width: var(--plot-size);
   height: var(--plot-size);
   top: 0;
-  left: 0;
+  left: 0; */
+  top: 2.5vh;
+  left: 2.5vh;
+  width: 3vh;
+  height: 3vh;
+
   pointer-events: none;
   background-image: url('../../../images/Crop_Spritesheet.png');
 }
 
 .Plot .Plant.type-Potato,
 .Plot .Plant.type-TestPotato {
-  background-position: -621.5% -252%;
+  background-position: -612.5% -252%; /* growing */
   background-size: 2000% 1160%;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: 4vh;
+}
+
+.Plot .Plant.type-Potato.harvestable,
+.Plot .Plant.type-TestPotato.harvestable,
+.Plot .Plant.type-Potato.withered,
+.Plot .Plant.type-TestPotato.withered {
+  background-position: -621.5% -252%;
 }
 
 .Plot .Plant.type-Sunflower {
-  background-position: -568.5% -350%;
-  background-size: 2000% 890%;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: 4vh;
+  background-position: -559.5% -344%;
+  background-size: 2000% 1022%;
+}
+
+.Plot .Plant.type-Sunflower.harvestable,
+.Plot .Plant.type-Sunflower.withered {
+  background-position: -568.5% -344%;
 }
 
 .Plot .Plant.type-SeedlessWatermelon {
-  background-position: -568.5% -194%;
+  background-position: -559.5% -194%;
   background-size: 2000% 1299%;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: 4vh;
+}
+
+.Plot .Plant.type-SeedlessWatermelon.harvestable,
+.Plot .Plant.type-SeedlessWatermelon.withered {
+  background-position: -568.5% -194%;
 }
 
 .Plot .Plant.type-QuickCorn {
-  background-position: -726.5% -334%;
+  background-position: -717.5% -334%;
   background-size: 2000% 1358%;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: 4vh;
 }
 
-.Plot .Plant.harvestable,
-.Plot .Plant.harvestable.withered {
-  top: 0;
-  left: 0;
-  width: 6vh;
-  height: 6vh;
+.Plot .Plant.type-QuickCorn.harvestable,
+.Plot .Plant.type-QuickCorn.withered {
+  background-position: -726.5% -334%;
+}
+
+.Plot .Plant.harvestable {
+  top: 2.25vh;
+  left: 2.25vh;
+  width: 3.5vh;
+  height: 3.5vh;
 }
 
 .Plot .Plant.withered {
@@ -130,10 +140,10 @@
 }
 
 .Plot .Plant.seed {
-  top: 3vh;
-  left: 3vh;
-  width: 2vh;
-  height: 2vh;
+  top: 2.75vh;
+  left: 2.75vh;
+  width: 2.5vh;
+  height: 2.5vh;
   border-radius: 50%;
   background-color: saddlebrown;
   background-image: none;
