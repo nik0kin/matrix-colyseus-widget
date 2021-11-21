@@ -2,13 +2,14 @@ import React, { FC } from 'react';
 
 import { getPlantFromPlot } from '../../../common';
 import { useServerState, useClientState } from '../../contexts';
+import { toMinutesSeconds } from '../../format';
 
+import { OpenHelp } from './help';
 import { Playfield } from './playfield';
 import { OpenShop } from './shop';
 import { OpenToolBox } from './tool-box';
 
 import './style.css';
-import { toMinutesSeconds } from '../../format';
 
 export const MainScreen: FC = () => {
   const { serverRoomId, sessionId } = useServerState();
@@ -40,6 +41,7 @@ const Info: FC = () => {
     <div className="Info">
       <div className="section">
         People Fed: {gameState?.peopleFed || 0}, Karma: {gameState?.karma || 0}
+        <HelpButton />
       </div>
       <div className="section">
         {selectedPlot && plot && (
@@ -81,5 +83,17 @@ const ShopButton: FC = () => {
         </div>
       )}
     </OpenShop>
+  );
+};
+
+const HelpButton: FC = () => {
+  return (
+    <OpenHelp>
+      {(openModal) => (
+        <button className="HelpButton" onClick={openModal}>
+          <small>Help</small>
+        </button>
+      )}
+    </OpenHelp>
   );
 };
