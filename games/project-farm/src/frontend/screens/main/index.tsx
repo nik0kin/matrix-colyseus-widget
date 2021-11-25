@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { formatNumber } from 'utils';
 
 import { getPlantFromPlot } from '../../../common';
 import { useServerState, useClientState } from '../../contexts';
@@ -40,8 +41,8 @@ const Info: FC = () => {
   return (
     <div className="Info">
       <div className="section">
-        People Fed: {gameState?.peopleFed || 0}, Karma: {gameState?.karma || 0}
-        <HelpButton />
+        People Fed: {formatNumber(gameState?.peopleFed || 0)} Karma:{' '}
+        {formatNumber(gameState?.karma || 0)} <HelpButton />
       </div>
       <div className="section">
         {selectedPlot && plot && (

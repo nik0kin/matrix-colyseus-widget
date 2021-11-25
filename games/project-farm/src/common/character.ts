@@ -5,6 +5,7 @@ export const CHARACTER_SPEED = 1; // 1 plot per second
 
 export enum ToolType {
   Hoe = 'Hoe',
+  Axe = 'Axe',
   WateringCan = 'WateringCan',
   Shovel = 'Shovel',
 }
@@ -20,7 +21,8 @@ export enum ActionType {
 
 export class CharacterActionSchema extends Schema {
   @type('string')
-  type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' | 'ClearWithered' = 'Plow';
+  type: 'Move' | 'Plow' | 'Plant' | 'Harvest' | 'Water' | 'ClearWithered' =
+    'Plow';
 
   @type(CoordSchema)
   coord = new CoordSchema();

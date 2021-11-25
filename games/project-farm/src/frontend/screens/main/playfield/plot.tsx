@@ -1,21 +1,31 @@
 import c from 'classnames';
 import React, { FC, useState, useEffect, useCallback } from 'react';
 
-
 import {
-  PlotSchema, MOVE_CHARACTER_REQUEST, MoveCharacterMessage, DoActionMessage, DO_ACTION_REQUEST, PlantSchema, getPlantConfig, PlantStageType, getPlantFromPlot
+  PlotSchema,
+  MOVE_CHARACTER_REQUEST,
+  MoveCharacterMessage,
+  DoActionMessage,
+  DO_ACTION_REQUEST,
+  PlantSchema,
+  getPlantConfig,
+  PlantStageType,
+  getPlantFromPlot,
 } from '../../../../common';
 import { useSendMessage, useClientState } from '../../../contexts';
 
-export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?: boolean }> = ({ plot, selectedForAction, selected }) => {
+export const Plot: FC<{
+  plot: PlotSchema;
+  selectedForAction?: boolean;
+  selected?: boolean;
+}> = ({ plot, selectedForAction, selected }) => {
   const plant = getPlantFromPlot(plot);
   const sendMessage = useSendMessage();
   const { setSelectedPlot } = useClientState();
 
   const onSingleClick = useCallback(() => {
-    console.log('single click', plot.coord)
+    console.log('single click', plot.coord);
     const message: DoActionMessage = {
-      // tool: 'Hoe',
       coord: plot.coord,
     };
     sendMessage(DO_ACTION_REQUEST, message);
@@ -24,7 +34,7 @@ export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?
   const onDoubleClick = useCallback(() => {
     console.log('double click', plot.coord);
     const message: MoveCharacterMessage = {
-      coord: plot.coord
+      coord: plot.coord,
     };
     sendMessage(MOVE_CHARACTER_REQUEST, message);
   }, [plot, sendMessage]);
@@ -32,19 +42,33 @@ export const Plot: FC<{ plot: PlotSchema; selectedForAction?: boolean; selected?
   const onClick = useSimpleAndDoubleClick(onSingleClick, onDoubleClick);
 
   return (
-    <div className={c('Plot', `type-${plot.dirt}`, { selected, selectedForAction })} onClick={onClick}>
+    <div
+      className={c('Plot', `type-${plot.dirt}`, {
+        selected,
+        selectedForAction,
+      })}
+      onClick={onClick}
+    >
       <span />
-      {plant && <span className={c('Plant', `type-${plant.type}`, {
-        seed: isSeed(plant),
-        harvestable: plant.stage === PlantStageType.Harvestable,
-        withered: plant.stage === PlantStageType.Withered,
-      })} />}
+      {plant && (
+        <span
+          className={c('Plant', `type-${plant.type}`, {
+            seed: isSeed(plant),
+            harvestable: plant.stage === PlantStageType.Harvestable,
+            withered: plant.stage === PlantStageType.Withered,
+          })}
+        />
+      )}
       {!!plot.actionTime && <span>{plot.actionTime - Date.now()}</span>}
     </div>
   );
 };
 
-function useSimpleAndDoubleClick(actionSimpleClick: () => void, actionDoubleClick: () => void, delay = 250) {
+function useSimpleAndDoubleClick(
+  actionSimpleClick: () => void,
+  actionDoubleClick: () => void,
+  delay = 250
+) {
   const [click, setClick] = useState(0);
 
   useEffect(() => {
@@ -59,13 +83,15 @@ function useSimpleAndDoubleClick(actionSimpleClick: () => void, actionDoubleClic
     if (click === 2) actionDoubleClick();
 
     return () => clearTimeout(timer);
-
   }, [click, actionSimpleClick, actionDoubleClick, delay]);
 
-  return () => setClick(prev => prev + 1);
+  return () => setClick((prev) => prev + 1);
 }
 
 function isSeed(plant: PlantSchema) {
   const plantConfig = getPlantConfig(plant.type);
-  return plant.stage === PlantStageType.Growing && plant.timeLeft > plantConfig.growTime * .75;
+  return (
+    plant.stage === PlantStageType.Growing &&
+    plant.timeLeft > plantConfig.growTime * 0.75
+  );
 }
