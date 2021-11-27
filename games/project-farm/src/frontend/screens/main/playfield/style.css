@@ -135,6 +135,35 @@
   height: 3.5vh;
 }
 
+.Plot .Plant.type-NonFruitTree {
+  top: 0.5vh;
+  left: 0.5vh;
+  width: 7vh;
+  height: 7vh;
+  background-image: url('../../../images/AppleTree_allSeasons.png');
+  background-position: 0% 100%;
+  background-size: 500% 317%;
+}
+
+.Plot .Plant.type-AppleTree {
+  top: 0.5vh;
+  left: 0.5vh;
+  width: 7vh;
+  height: 7vh;
+  background-image: url('../../../images/AppleTree_allSeasons.png');
+  background-size: 500% 317%;
+}
+
+.Plot .Plant.type-AppleTree.growing {
+  background-position: 0% 0%;
+}
+.Plot .Plant.type-AppleTree.fruiting {
+  background-position: 75% 0%;
+}
+.Plot .Plant.type-AppleTree.harvestable {
+  background-position: 100% 0%;
+}
+
 .Plot .Plant.withered {
   filter: grayscale(100%);
 }

@@ -7,7 +7,7 @@ const SeedlessWatermelon: PlantConfig = {
   requirement: {
     karma: 150,
   },
-  feeds: 10,
+  feeds: 12,
   seedsOnHarvest: [0, 0],
 };
 

@@ -5,9 +5,9 @@ export const CHARACTER_SPEED = 1; // 1 plot per second
 
 export enum ToolType {
   Hoe = 'Hoe',
-  Axe = 'Axe',
   WateringCan = 'WateringCan',
   Shovel = 'Shovel',
+  Axe = 'Axe',
 }
 
 export enum ActionType {
@@ -17,6 +17,7 @@ export enum ActionType {
   Harvest = 'Harvest',
   Water = 'Water',
   ClearWithered = 'ClearWithered',
+  Chop = 'Chop',
 }
 
 export class CharacterActionSchema extends Schema {

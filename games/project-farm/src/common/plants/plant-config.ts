@@ -2,6 +2,7 @@ import configs from './_config-map';
 
 export interface PlantConfig {
   type: string;
+  subtype?: 'Crop' | 'Tree'; // defaults to Crop
 
   cost: number;
   requirement?: {

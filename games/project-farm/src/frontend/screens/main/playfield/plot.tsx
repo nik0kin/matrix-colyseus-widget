@@ -52,11 +52,14 @@ export const Plot: FC<{
       <span />
       {plant && (
         <span
-          className={c('Plant', `type-${plant.type}`, {
-            seed: isSeed(plant),
-            harvestable: plant.stage === PlantStageType.Harvestable,
-            withered: plant.stage === PlantStageType.Withered,
-          })}
+          className={c(
+            'Plant',
+            `type-${plant.type}`,
+            plant.stage.toLowerCase(),
+            {
+              seed: isSeed(plant),
+            }
+          )}
         />
       )}
       {!!plot.actionTime && <span>{plot.actionTime - Date.now()}</span>}

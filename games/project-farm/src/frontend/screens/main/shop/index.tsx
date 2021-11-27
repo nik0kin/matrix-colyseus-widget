@@ -71,10 +71,22 @@ const ShopModal: FC<{ closeModal?: () => void }> = () => {
                 <h4>{type}</h4>
                 <div>Cost: {config.cost}</div>
                 <div>Grow time: {formatDuration(config.growTime)}</div>
-                <div>
-                  Harvest time:{' '}
-                  {formatDuration(config.harvestTime || DEFAULT_HARVEST_LENGTH)}
-                </div>
+                {config.subtype !== 'Tree' && (
+                  <div>
+                    Harvest time:{' '}
+                    {formatDuration(
+                      config.harvestTime || DEFAULT_HARVEST_LENGTH
+                    )}
+                  </div>
+                )}
+                {config.subtype === 'Tree' && (
+                  <div>
+                    Fruiting time:{' '}
+                    {formatDuration(
+                      config.harvestTime || DEFAULT_HARVEST_LENGTH
+                    )}
+                  </div>
+                )}
                 <div>Feeds: {config.feeds}</div>
                 {config.requirement && (
                   <Fragment>

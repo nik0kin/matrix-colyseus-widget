@@ -11,10 +11,13 @@ const HelpModal: FC<{ closeModal?: () => void }> = ({ closeModal }) => {
         When harvesting a plant, you gain Karma depending on how many people
         that it will feed
       </p>
+      <p>If you don't harvest the plant in time, it will wither</p>
+      <p>Trees take longer to grow fruit, but they don't wither.</p>
       <p>You can exchange Karma for more seeds from the Shop.</p>
       <h4>Tools</h4>
       <ul>
         <li>Hoe - Remove weeds and plow dirt. Also removes withered plants</li>
+        <li>Axe - Cutdown trees you don't want</li>
       </ul>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   authWithMatrix,
   WidgetMatrixAuth,
 } from 'common';
-import { getRandomInt } from 'utils';
+import { getRandomInt, MINUTE_IN_MS } from 'utils';
 
 import {
   GameState,
@@ -121,12 +121,12 @@ export class GameRoom extends Room<GameState, RoomMetadata> {
       // Randomly Turn Dirt into Weeds
       this.state.map.forEach((plot) => {
         if (plot.dirt === 'Normal') {
-          if (getRandomInt(0, 10000) > 9964) {
+          if (getRandomInt(0, 10000) > 9980) {
             plot.dirt = 'Weeded';
           }
         }
       });
-    }, 30 * 1000); // every 30 seconds
+    }, MINUTE_IN_MS);
   }
 
   onJoin(client: Client, options: any, matrixName: string) {

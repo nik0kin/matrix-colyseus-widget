@@ -4,6 +4,8 @@ import SunflowerConfig from './config/Sunflower';
 import TestPotatoConfig from './config/TestPotato';
 import QuickCornConfig from './config/QuickCorn';
 import SeedlessWatermelonConfig from './config/SeedlessWatermelon';
+import NonFruitTreeConfig from './config/NonFruitTree';
+import AppleTreeConfig from './config/AppleTree';
 
 const configs = {
   Potato: PotatoConfig,
@@ -11,5 +13,8 @@ const configs = {
   Sunflower: SunflowerConfig,
   QuickCorn: QuickCornConfig,
   SeedlessWatermelon: SeedlessWatermelonConfig,
+
+  NonFruitTree: NonFruitTreeConfig,
+  AppleTree: AppleTreeConfig,
 };
 export default configs;
