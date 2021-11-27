@@ -53,5 +53,5 @@ jobs:
           port: 22
           script: |
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master
-            docker stop mcw-staging && docker rm mcw-staging || echo 'staging not running'
+            docker stop mcw-staging && docker rm mcw-staging || echo 'staging container not running'
             docker run --name mcw-staging -p 2560:2560 -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master

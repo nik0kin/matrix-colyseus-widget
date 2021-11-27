@@ -5,6 +5,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import { formatNumber } from 'utils';
 
 import { ModalLaunch } from '../../../components';
 import { useSendMessage, useServerState } from '../../../contexts';
@@ -50,7 +51,7 @@ const ShopModal: FC<{ closeModal?: () => void }> = () => {
 
   return (
     <div className="Shop">
-      <h3> Shop - Current Karma: {gameState?.karma} </h3>
+      <h3> Shop - Current Karma: {formatNumber(gameState?.karma || 0, 1)} </h3>
       <div className="talking-text-container">
         <div className="portrait type-ShopOwner" />
         <p>

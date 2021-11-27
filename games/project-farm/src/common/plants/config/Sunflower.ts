@@ -9,7 +9,7 @@ const Sunflower: PlantConfig = {
     karma: 50,
   },
   feeds: 3,
-  seedsOnHarvest: [3, 6],
+  seedsOnHarvest: [0, 3],
 };
 
 export default Sunflower;
