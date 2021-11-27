@@ -97,7 +97,16 @@ export class OnTickCommand extends Command<GameState, { deltaTime: number }> {
               this.state.seedInventory.set(plantConfig.type, seedsLeft);
               this.state.karma += plantConfig.feeds;
               this.state.peopleFed += plantConfig.feeds;
-              removePlantFromPlot(plot);
+
+              if (plantConfig.subtype === 'Tree') {
+                const plant = getPlantFromPlot(plot);
+                if (!plant) throw new Error('Expected tree at plot');
+
+                plant.stage = PlantStageType.Fruiting;
+                plant.timeLeft = getFruitingTime(plantConfig, isDebug);
+              } else {
+                removePlantFromPlot(plot);
+              }
             }
             break;
           case ActionType.ClearWithered:
